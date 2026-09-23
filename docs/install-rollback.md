@@ -6,6 +6,17 @@
 
 手机包名 `tv.danmaku.bili`，8.99.0。本地备份签名为 BiliRoamingX；本项目未来将使用不同的自有签名。Android 常规安装不能以不同证书覆盖同包名应用。
 
+可审查的包清单：
+
+| 用途 | 本地文件 / 版本 | SHA-256 |
+| --- | --- | --- |
+| 现有回滚候选 | `E:\software\bili-airborne\installed-backup.apk`，8.99.0 | `a8784d0622f49357857d4a9fd75df1a90c19b0aee31cc30e87a846cdf9672fc5` |
+| 新实验候选 | `E:\software\bili-clean-patch\local\candidate.apk`，9.12.0 / candidate 9 | `596209c6969ceec8149f92263b53093b9b8e50276dc46f09c440296304cb54a6` |
+
+现有备份证书指纹 `4ac19c0edb79427fa4f31b71dc32f362336e6f5e56b1fdfcde639b30176a7f08`；新实验包证书指纹 `c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8`。回滚候选并未现场恢复到手机验收，执行前仍需核对它与手机当前包/拆分包完整性，不能把“有 APK”当作账号与私有数据已备份。
+
+目前空降和播放的 AVD 验证通过，线上广告场景仍有缺口，因此暂不进入手机替换选择。方案 A 持续生效。
+
 ## 方案 A：保留手机现状（默认）
 
 只在 AVD 使用独立测试实例。保留手机应用、登录和下载数据，不承诺尚未验证的并行包名方案可用。

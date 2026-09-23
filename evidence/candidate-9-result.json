@@ -1,0 +1,8 @@
+{
+  "candidate": 9,
+  "sourceCommit": "55f002e",
+  "sha256": "596209c6969ceec8149f92263b53093b9b8e50276dc46f09c440296304cb54a6",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "runtimeAcceptance": "AVD preview: startup/playback/settings toggle/dark labels/marked-video prompt and auto skip/pause/rewatch/no-marker passed; controlled host-model ad filtering passed; live commercial-ad removal, splash/video-page coverage not fully verified. No phone installation.",
+  "generatedAt": "2026-09-23T14:54:37.8318318+08:00"
+}

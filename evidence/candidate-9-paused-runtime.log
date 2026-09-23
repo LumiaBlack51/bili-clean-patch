@@ -1,0 +1,7 @@
+--------- beginning of main
+09-23 06:55:36.089  4042  4167 I BiliClean: modern-feed items=9 ads=0 placeholders=1 removed=0 enabled=true
+09-23 06:55:39.127  4042  4169 I BiliClean: modern-feed items=9 ads=0 placeholders=1 removed=0 enabled=true
+09-23 06:55:41.442  4042  4042 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:56:40.532  4042  4042 I BiliClean: play-metadata aid=116085366071050 cid=36122397322 type=BIZ_TYPE_UGC
+09-23 06:56:41.748  4042  4042 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:56:43.184  4042  4042 I BiliClean: markers video=BV1YpZkBDEVo:36122397322 count=1 status=1 段广告标记

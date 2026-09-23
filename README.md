@@ -1,6 +1,6 @@
-# bili-clean-patch（开发中，未通过客户端验收）
+# bili-clean-patch（AVD 实验预览版）
 
-独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**当前不是可用发布版，已产出实验 APK，但尚无通过运行验收的支持版本。**
+独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**实验适配官方 9.12.0 (9120300)：AVD 启动、播放、设置和真实视频空降已通过；去广告通过真实宿主模型的受控测试，但线上真实广告样本、开屏和视频页覆盖尚未全面验收。不是稳定版。**
 
 ## 当前实现
 
@@ -32,12 +32,15 @@ PowerShell 7.4+、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、NDK
 ./scripts/patch-experimental.ps1
 ```
 
-脚本核验 CLI 和宿主 SHA-256，显式选择首批补丁，检测失败日志，使用 `local/avd-test.keystore` 生成测试签名。不得用手机备份的已改包 APK 替代原版输入。正式交付前必须完成运行验收并明确长期签名策略。
+脚本核验 CLI 和宿主 SHA-256，显式选择首批补丁，检测失败日志，使用 `local/avd-test.keystore` 生成测试签名。不得用手机备份的已改包 APK 替代原版输入。本次交付使用同一测试签名保持更新连续性；新建密钥会导致同包名无法覆盖更新。
 
 ## 验证和交付
 
 - [调查和方案](docs/investigation.md)
-- [实际测试记录](docs/test-record.md)
+- [交付 APK 的实际测试与支持边界](docs/candidate-9.md)
+- [历次测试记录](docs/test-record.md)
+- [推荐流适配与误删修正](docs/feed-investigation.md)
+- [真实宿主模型的受控测试](docs/host-model-tests.md)
 - [重签名运行兼容及对照证据](docs/native-compat.md)
 - [手机安装与回滚方案](docs/install-rollback.md)
 - `evidence/` 保存公开片段接口的实际返回。

@@ -1,0 +1,154 @@
+信息: Loading patches 
+信息: Deleting existing temporary files directory 
+信息: Decoding app manifest 
+信息: Export all activities excluded 
+信息: Predictive back gesture excluded 
+信息: Enable Android debugging excluded 
+信息: Change package name excluded 
+信息: Spoof SIM country excluded 
+信息: Hide follow button excluded 
+信息: Remove vip section excluded 
+信息: App icon excluded 
+信息: Config excluded 
+信息: Copy enhance excluded 
+信息: Dark switch excluded 
+信息: Drawer excluded 
+信息: Blkv excluded 
+信息: Brotli excluded 
+信息: Config integration excluded 
+信息: Dpi excluded 
+信息: Main activity patch excluded 
+信息: Modify modifier excluded 
+信息: Anti RecyclerView obfuscation excluded 
+信息: ProtoBuf print excluded 
+信息: Pegasus hook excluded 
+信息: Override certificate pinning excluded 
+信息: Music notification excluded 
+信息: OkHttp excluded 
+信息: Search type excluded 
+信息: Append signature info for LSPatch excluded 
+信息: Auto like excluded 
+信息: BL route intercept excluded 
+信息: BLog excluded 
+信息: Bili adjust layout excluded 
+信息: Bili library patch excluded 
+信息: Fix app setting preference layout excluded 
+信息: Block thai comment excluded 
+信息: Cache redirect excluded 
+信息: Channel model fix excluded 
+信息: Crash handler excluded 
+信息: Custom splash excluded 
+信息: Fake not in multi window mode excluded 
+信息: Forbid auto subscribe excluded 
+信息: Forbid live room auto float excluded 
+信息: Forbid live room slide left excluded 
+信息: Forbid switch live room excluded 
+信息: Force comment time navigable excluded 
+信息: Inject DocumentsProvider excluded 
+信息: Inject more scheme excluded 
+信息: Keep data when uninstall excluded 
+信息: Disable live room double click excluded 
+信息: Make text selectable excluded 
+信息: Prevent pre download module excluded 
+信息: Remove managerSpaceActivity excluded 
+信息: Notification icon excluded 
+信息: Number format excluded 
+信息: Per app language excluded 
+信息: Disable auto select excluded 
+信息: Save comment images excluded 
+信息: Share excluded 
+信息: Teenager mode excluded 
+信息: Text fold excluded 
+信息: Trial quality excluded 
+信息: Uid copy no prefix excluded 
+信息: Upgrade excluded 
+信息: Comment word search url excluded 
+信息: Moss excluded 
+信息: Unlock ProtoBuf excluded 
+信息: Fix preference manager excluded 
+信息: Splash excluded 
+信息: Custom theme color excluded 
+信息: Toast excluded 
+信息: Webview excluded 
+信息: Add back danmaku system font excluded 
+信息: Default playback speed excluded 
+信息: Force hardware codec excluded 
+信息: Long press playback speed excluded 
+信息: Override playback speed excluded 
+信息: Play url excluded 
+信息: Player gesture detector hook excluded 
+信息: Player core excluded 
+信息: Player toast excluded 
+信息: Remember playback speed excluded 
+信息: Video default quality excluded 
+信息: Subtitle import and save excluded 
+信息: Subtitle style excluded 
+信息: Setting patch options 
+信息: Merging integrations 
+信息: Deleting existing temporary files directory 
+信息: Decoding resources 
+信息: Executing patches 
+信息: BiliRoamingX settings entrance succeeded 
+信息: Block up recommend ads succeeded 
+信息: Clean feed succeeded 
+信息: Clean metadata succeeded 
+信息: Clean player succeeded 
+信息: Integrations succeeded 
+信息: Json succeeded 
+信息: Lib bili succeeded 
+信息: Compiling patched dex files 
+信息: Compiled classes.dex 
+信息: Compiled classes2.dex 
+信息: Compiled classes3.dex 
+信息: Compiled classes4.dex 
+信息: Compiled classes5.dex 
+信息: Compiled classes6.dex 
+信息: Compiled classes7.dex 
+信息: Compiled classes8.dex 
+信息: Compiled classes9.dex 
+信息: Compiled classes10.dex 
+信息: Compiled classes11.dex 
+信息: Compiled classes12.dex 
+信息: Compiled classes13.dex 
+信息: Compiled classes14.dex 
+信息: Compiled classes15.dex 
+信息: Compiled classes16.dex 
+信息: Compiled classes17.dex 
+信息: Compiled classes18.dex 
+信息: Compiled classes19.dex 
+信息: Compiled classes20.dex 
+信息: Compiled classes21.dex 
+信息: Compiled classes22.dex 
+信息: Compiled classes23.dex 
+信息: Compiled classes24.dex 
+信息: Compiled classes25.dex 
+信息: Compiled classes26.dex 
+信息: Compiled classes27.dex 
+信息: Compiled classes28.dex 
+信息: Compiled classes29.dex 
+信息: Compiled classes30.dex 
+信息: Compiled classes31.dex 
+信息: Compiled classes32.dex 
+信息: Compiled classes33.dex 
+信息: Compiled classes34.dex 
+信息: Compiled classes35.dex 
+信息: Compiled classes36.dex 
+信息: Compiled classes37.dex 
+信息: Compiling modified resources 
+信息: Aligning APK 
+信息: Signing APK 
+信息: Saved to E:\software\bili-clean-patch\local\candidate-stage.apk 
+Experimental candidate only. Runtime acceptance tests are still required.
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+
+Algorithm       Hash                                                                   Path
+---------       ----                                                                   ----
+SHA256          596209C6969CEEC8149F92263B53093B9B8E50276DC46F09C440296304CB54A6       E:\software\bili-clean-patch\loc…
+
