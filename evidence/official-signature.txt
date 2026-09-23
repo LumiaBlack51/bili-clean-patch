@@ -1,0 +1,4 @@
+Signer #1 certificate DN: CN=Bbcallen, OU=danmaku.tv, O=danmaku.tv, L=Zhuhai, ST=Guangdong, C=CN
+Signer #1 certificate SHA-256 digest: 93ba270f5521139ecafe4bb638ac5b1198bc548f62d9fd8f8580a079faf5910e
+Signer #1 certificate SHA-1 digest: 96dc605b9519bab94eddbeaaa059a669fba2c211
+Signer #1 certificate MD5 digest: 7194d531cbe7960a22007b9f6bdaa38b

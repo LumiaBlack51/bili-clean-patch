@@ -1,0 +1,14 @@
+{
+  "source": "E:\\software\\bili-airborne\\installed-backup.apk",
+  "package": "tv.danmaku.bili",
+  "versionName": "8.99.0",
+  "versionCode": 8990400,
+  "minSdk": 24,
+  "targetSdk": 35,
+  "abis": ["arm64-v8a"],
+  "sha256": "a8784d0622f49357857d4a9fd75df1a90c19b0aee31cc30e87a846cdf9672fc5",
+  "signerDn": "CN=BiliRoamingX",
+  "signerSha256": "4ac19c0edb79427fa4f31b71dc32f362336e6f5e56b1fdfcde639b30176a7f08",
+  "isOfficialBaseline": false,
+  "verification": "aapt dump badging; apksigner verify --print-certs; Get-FileHash"
+}

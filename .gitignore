@@ -1,0 +1,9 @@
+/local/
+/upstream/
+/build/
+*.apk
+*.jks
+*.keystore
+*.p12
+*.key
+local.properties

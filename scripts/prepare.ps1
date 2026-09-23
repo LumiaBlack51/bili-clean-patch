@@ -1,0 +1,85 @@
+$ErrorActionPreference = 'Stop'
+$root = Split-Path $PSScriptRoot -Parent
+$upstream = Join-Path $root 'upstream'
+$pin = 'ae58109f3acdd53ec2d2b3fb439c2a2ef1886221'
+if (!(Test-Path "$upstream/.git")) {
+    & git clone https://github.com/BiliRoamingX/BiliRoamingX.git $upstream
+    if ($LASTEXITCODE) { throw 'Clone failed' }
+    & git -C $upstream checkout --detach $pin
+    if ($LASTEXITCODE) { throw 'Checkout failed' }
+}
+if ((& git -C $upstream rev-parse HEAD) -ne $pin) { throw 'Unexpected upstream revision' }
+& git -C $upstream submodule update --init --recursive
+if ($LASTEXITCODE) { throw 'Submodule checkout failed' }
+
+function Replace-Once([string]$relative, [string]$before, [string]$after) {
+    $path = Join-Path $upstream $relative
+    $text = [IO.File]::ReadAllText($path)
+    if ($text.Contains($after) -and ($after.Contains($before) -or !$text.Contains($before))) { return }
+    if (!$text.Contains($before)) { throw "Source mismatch: $relative" }
+    [IO.File]::WriteAllText($path, $text.Replace($before, $after), [Text.UTF8Encoding]::new($false))
+}
+$java = 'integrations/app/src/main/java/app/revanced/bilibili'
+$logging = Join-Path $upstream 'integrations/libs/Dobby/external/logging/logging.c'
+$loggingText = [IO.File]::ReadAllText($logging)
+if (!$loggingText.Contains('/* BiliClean: Android headers belong at file scope. */')) {
+    $loggingText = $loggingText.Replace('#include <android/log.h>', '')
+    $loggingText = "/* BiliClean: Android headers belong at file scope. */`n#if defined(__ANDROID__)`n#include <android/log.h>`n#endif`n" + $loggingText
+    [IO.File]::WriteAllText($logging,$loggingText,[Text.UTF8Encoding]::new($false))
+}
+Replace-Once 'build-logic/src/main/kotlin/Versions.kt' 'const val NDK = "26.3.11579264"' 'const val NDK = "28.2.13676358"'
+Replace-Once 'build-logic/src/main/kotlin/Versions.kt' 'const val JVM_TARGET_PATCHES = 11' 'const val JVM_TARGET_PATCHES = 17'
+Replace-Once 'build-logic/src/main/kotlin/Projects.kt' '        compileSdkVersion(Versions.COMPILE_SDK)' "        compileSdkVersion(Versions.COMPILE_SDK)`n        buildToolsVersion = `"35.0.0`""
+Replace-Once 'patches/build.gradle.kts' 'implementation(libs.revanced.patcher)' 'implementation(files(rootProject.file("../local/revanced-cli.jar")))'
+$target = Join-Path $upstream "$java/clean"
+New-Item -ItemType Directory -Force $target | Out-Null
+Copy-Item "$root/src/app/revanced/bilibili/clean/*" $target -Force
+
+$settings = @'
+object Settings {
+    @JvmField val CleanAds = BooleanSetting(key = "clean_ads", defValue = true, onChange = { value, _ ->
+        if (value) Utils.async { clearSplashConfigCache() }
+    })
+    @JvmField val CleanAirborne = BooleanSetting(key = "clean_airborne", defValue = true)
+    @JvmField val CleanAutoSkip = BooleanSetting(key = "clean_auto_skip", defValue = true)
+    @JvmField val CleanNotice = BooleanSetting(key = "clean_notice", defValue = true)
+'@
+Replace-Once "$java/settings/Settings.kt" 'object Settings {' $settings
+Replace-Once "$java/settings/Setting.kt" 'Accounts.userBlocked || (dependency != null && !dependency.get())' 'dependency != null && !dependency.get()'
+
+$patch = 'patches/src/main/kotlin/app/revanced/patches/bilibili/video/player/patch/DefaultPlaybackSpeedPatch.kt'
+$hook = @'
+            if (parameterTypes.firstOrNull()?.toString() != "Ltv/danmaku/ijk/media/player/IMediaPlayer;") throw PatchException("Unsupported onPrepared signature")
+            addInstructions(0, "invoke-static/range {p1 .. p1}, Lapp/revanced/bilibili/clean/CleanRuntime;->onPrepared(Ltv/danmaku/ijk/media/player/IMediaPlayer;)V")
+            val instructions = implementation!!.instructions
+'@
+Replace-Once $patch '            val instructions = implementation!!.instructions' $hook
+
+$xml = @'
+    <androidx.preference.PreferenceCategory android:title="去广告与空降助手">
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_ads" android:title="过滤界面广告" android:summary="开屏、推荐流及已适配的视频页广告；覆盖范围见测试记录" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_airborne" android:title="空降助手" android:summary="显示社区广告标记，无账号等级或大会员门槛" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_auto_skip" android:title="自动跳过广告片段" android:summary="只跳过 sponsor 分类；已跳过片段允许手动回看" android:dependency="clean_airborne" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_notice" android:title="显示跳过提示" android:defaultValue="true" />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory>
+'@
+$xmlPath = Join-Path $upstream 'patches/src/main/resources/bilibili/xml/biliroaming_settings.xml'
+$xmlText = [IO.File]::ReadAllText($xmlPath)
+if (!$xmlText.Contains('clean_airborne')) {
+    $needle = '    <androidx.preference.PreferenceCategory>'
+    $at = $xmlText.IndexOf($needle)
+    if ($at -lt 0) { throw 'Settings XML mismatch' }
+    $xmlText = $xmlText.Substring(0,$at) + $xml + $xmlText.Substring($at+$needle.Length)
+    [IO.File]::WriteAllText($xmlPath,$xmlText,[Text.UTF8Encoding]::new($false))
+}
+Replace-Once "$java/patches/json/PegasusPatch.java" 'var filterSet = Settings.FilterHomeRecommend.get();' @'
+var filterSet = new java.util.HashSet<>(Settings.FilterHomeRecommend.get());
+        if (Settings.CleanAds.get()) filterSet.add("advertisement");
+'@
+Get-ChildItem (Join-Path $upstream "$java/patches") -Recurse -File | Where-Object Extension -In '.kt','.java' | ForEach-Object {
+    $text = [IO.File]::ReadAllText($_.FullName)
+    $changed = $text.Replace('Settings.PurifySplash()', 'Settings.CleanAds()').Replace('Settings.PurifySplash.get()', 'Settings.CleanAds.get()').Replace('Settings.BlockUpRcmdAds()', 'Settings.CleanAds()').Replace('Settings.BlockBangumiPageAds()', 'Settings.CleanAds()')
+    if ($text -ne $changed) { [IO.File]::WriteAllText($_.FullName,$changed,[Text.UTF8Encoding]::new($false)) }
+}
+Write-Output "Prepared pinned upstream $pin; player binding remains unverified until AVD playback tests pass."

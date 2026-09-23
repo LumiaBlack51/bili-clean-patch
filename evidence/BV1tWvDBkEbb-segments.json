@@ -1,0 +1,6 @@
+{
+  "bvid": "BV1tWvDBkEbb",
+  "fetchedAt": "2026-09-23T12:41:48.8471948+08:00",
+  "status": 200,
+  "body": "[{\"cid\":\"35126969291\",\"category\":\"intro\",\"actionType\":\"skip\",\"segment\":[0,8],\"UUID\":\"5497deb3aaac3a4f65df671367636f1f12b8afad98cd8db8efe7e22a85ecaea37\",\"videoDuration\":2066.76,\"locked\":0,\"votes\":0,\"description\":\"\"},{\"cid\":\"35126969291\",\"category\":\"outro\",\"actionType\":\"skip\",\"segment\":[1993.046,2066.73],\"UUID\":\"58efba5bdb650c026b5775480b34196b776c992ba6f4fd06034e5e445298fa187\",\"videoDuration\":2066.7302,\"locked\":0,\"votes\":0,\"description\":\"\"}]"
+}

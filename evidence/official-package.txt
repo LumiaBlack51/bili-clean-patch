@@ -1,0 +1,4 @@
+package: name='tv.danmaku.bili' versionCode='9120300' versionName='9.12.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'35'
+native-code: 'arm64-v8a'
