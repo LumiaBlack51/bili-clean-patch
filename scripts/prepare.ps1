@@ -55,12 +55,15 @@ Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/setting
 $settings = @'
 object Settings {
     @JvmField val CleanAds = BooleanSetting(key = "clean_ads", defValue = true, onChange = { value, _ ->
-        if (value) Utils.async { clearSplashConfigCache() }
+        if (value) Utils.async { runCatching { java.io.File(Utils.getContext().filesDir, "splash2/splash.json").delete() } }
     })
     @JvmField val CleanAirborne = BooleanSetting(key = "clean_airborne", defValue = true)
     @JvmField val CleanAutoSkip = BooleanSetting(key = "clean_auto_skip", defValue = true)
     @JvmField val CleanNotice = BooleanSetting(key = "clean_notice", defValue = true)
 '@
+if ([IO.File]::ReadAllText((Join-Path $upstream "$java/settings/Settings.kt")).Contains('if (value) Utils.async { clearSplashConfigCache() }')) {
+    Replace-Once "$java/settings/Settings.kt" 'if (value) Utils.async { clearSplashConfigCache() }' 'if (value) Utils.async { runCatching { java.io.File(Utils.getContext().filesDir, "splash2/splash.json").delete() } }'
+}
 Replace-Once "$java/settings/Settings.kt" 'object Settings {' $settings
 Replace-Once "$java/settings/Setting.kt" 'Accounts.userBlocked || (dependency != null && !dependency.get())' 'dependency != null && !dependency.get()'
 

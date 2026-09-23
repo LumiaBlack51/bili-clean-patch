@@ -1,6 +1,8 @@
 package app.revanced.bilibili.clean
 
 import android.os.Bundle
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +32,12 @@ class CleanSettingsFragment : Fragment() {
         fun toggle(title: String, summary: String, setting: BooleanSetting): Switch {
             val control = Switch(context).apply {
                 text = title; textSize = 17f; minHeight = padding * 3
+                // Host dark mode updates TextView defaults but not the platform Switch style.
+                setTextColor(TextView(context).textColors)
+                val states = arrayOf(intArrayOf(-android.R.attr.state_enabled),
+                    intArrayOf(android.R.attr.state_checked), intArrayOf())
+                thumbTintList = ColorStateList(states, intArrayOf(Color.GRAY, Color.rgb(251, 91, 145), Color.LTGRAY))
+                trackTintList = ColorStateList(states, intArrayOf(Color.DKGRAY, Color.rgb(154, 72, 103), Color.GRAY))
                 isChecked = setting.get()
                 setOnCheckedChangeListener { _, enabled -> setting.save(enabled) }
             }
