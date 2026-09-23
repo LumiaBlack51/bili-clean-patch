@@ -24,5 +24,21 @@ object CleanFeedPatch : BytecodePatch(setOf(PegasusParserFingerprint)) {
             return-object p1
         """.trimIndent())
         result.mutableClass.methods.add(wrapper)
+        // 9.12 switched the active home feed to Gson; the legacy parser above is fallback only.
+        val modern = context.findClass("Lcom/bilibili/pegasus/request/PegasusResponseTypeAdapter;")?.mutableClass
+            ?: throw PatchException("Unsupported modern feed parser")
+        val read = modern.methods.singleOrNull { it.name == "e" &&
+            it.parameterTypes.map { p -> p.toString() } == listOf("LOR0/a;") &&
+            it.returnType == "Ljava/lang/Object;" }
+            ?: throw PatchException("Unsupported modern feed signature")
+        val modernWrapper = read.cloneMutable(registerCount = 2, clearImplementation = true)
+        read.name += "_BiliCleanOriginal"
+        modernWrapper.addInstructions("""
+            invoke-virtual {p0, p1}, $read
+            move-result-object p1
+            invoke-static {p1}, Lapp/revanced/bilibili/clean/CleanFeed;->filterModern(Ljava/lang/Object;)V
+            return-object p1
+        """.trimIndent())
+        modern.methods.add(modernWrapper)
     }
 }

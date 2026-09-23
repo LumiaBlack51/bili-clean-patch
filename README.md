@@ -12,7 +12,7 @@
 
 ## 构建
 
-Windows PowerShell、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、NDK 28.2.13676358、CMake 3.22.1）。本项目将上游的 Java 11 补丁编译目标更新到 17，运行 CLI 也需要 JDK 17。依赖源包括 Google、Maven Central、JitPack。
+PowerShell 7.4+、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、NDK 28.2.13676358、CMake 3.22.1）。本项目将上游的 Java 11 补丁编译目标更新到 17，运行 CLI 也需要 JDK 17。依赖源包括 Google、Maven Central、JitPack。
 
 ```powershell
 ./scripts/fetch-original.ps1
@@ -42,6 +42,12 @@ Windows PowerShell、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、
 - [手机安装与回滚方案](docs/install-rollback.md)
 - `evidence/` 保存公开片段接口的实际返回。
 
-`local/`、`upstream/`、APK、密钥文件均忽略。账号数据和签名私钥不放入源码 Git 历史；如需异地备份，应另行设计加密备份和密钥保管方式。
+`local/`、`upstream/`、APK、密钥文件均忽略。`scripts/backup-signing-key.ps1` 生成 AES-256-GCM 加密的 BKS 签名备份，并验证解密一致性。可单独上传 `local/signing-key.encrypted.json`；恢复密钥 `local/signing-recovery-key.bin` 保留本地并另外保管，不与加密文件一起上传。恢复方法：
+
+```powershell
+./scripts/restore-signing-key.ps1 -BackupPath ./signing-key.encrypted.json -RecoveryKeyPath ./signing-recovery-key.bin -OutputKeystore ./local/avd-test.keystore
+```
+
+恢复脚本拒绝覆盖已有密钥。重新构建前应恢复同一签名密钥，否则 CLI 会生成另一把密钥，Android 无法将其作为原测试包的更新。当前证书是测试用途，不是官方签名。没有导出手机的账号数据库、cookie 或令牌；APK 本身不包含这些账号数据。
 
 本项目代码按 GPL-3.0 提供；上游代码许可见 LICENSE。PiliPlus 仅用于研究空降接口约定，没有修改或转换其客户端代码。

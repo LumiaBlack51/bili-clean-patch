@@ -16,6 +16,7 @@ public class DexInspect {
                     for (Instruction i : m.getImplementation().getInstructions())
                         if (i instanceof ReferenceInstruction r && r.getReference() instanceof StringReference s && s.getString().contains(args[2])) match = true;
                 }
+                if (!match && args.length > 3) for (Method m : c.getMethods()) { if (m.getImplementation() == null) continue; for (Instruction i : m.getImplementation().getInstructions()) if (i instanceof ReferenceInstruction r && r.getReference().toString().contains(args[3])) match = true; }
                 if (!match) continue;
                 System.out.println("CLASS " + c.getType() + " EXTENDS " + c.getSuperclass());
                 for (Field f : c.getFields()) System.out.println(" FIELD " + f);

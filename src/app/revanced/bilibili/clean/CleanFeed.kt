@@ -5,6 +5,30 @@ import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 
 object CleanFeed {
+    @Keep @JvmStatic
+    fun filterModern(response: Any?) {
+        if (response == null || response.javaClass.name != "com.bilibili.pegasus.data.base.PegasusResponse") return
+        try {
+            val itemsField = response.javaClass.getDeclaredField("a").apply { isAccessible = true }
+            val items = itemsField.get(response) as? List<*> ?: return
+            val base = Class.forName("com.bilibili.pegasus.data.base.BasePegasusData")
+            val adGetter = base.getMethod("getAdInfo")
+            val gotoGetter = base.getMethod("getCardGoto")
+            val filtered = ArrayList<Any?>()
+            var ads = 0
+            for (item in items) {
+                val ad = if (item != null && base.isInstance(item)) {
+                    val type = gotoGetter.invoke(item) as? String
+                    adGetter.invoke(item) != null || type in setOf("ad", "cm", "special_s") ||
+                        type?.startsWith("ad_") == true || type?.startsWith("cm_") == true
+                } else false
+                if (ad) ads++
+                if (!ad || !Settings.CleanAds()) filtered.add(item)
+            }
+            if (Settings.CleanAds() && ads > 0) itemsField.set(response, filtered)
+            Log.i("BiliClean", "modern-feed items=${items.size} ads=$ads removed=${items.size - filtered.size} enabled=${Settings.CleanAds()}")
+        } catch (e: Exception) { Log.w("BiliClean", "modern-feed unchanged: ${e.javaClass.simpleName}") }
+    }
     private fun field(value: Any?, name: String): Any? {
         if (value == null) return null
         var type: Class<*>? = value.javaClass
