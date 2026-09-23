@@ -1,0 +1,13 @@
+--------- beginning of main
+09-23 06:06:26.060  3726  3726 I BiliClean: play-metadata aid=116085366071050 cid=36122397322 type=BIZ_TYPE_UGC
+09-23 06:06:28.039  3726  3726 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:06:30.129  3726  3726 I BiliClean: markers video=BV1YpZkBDEVo:36122397322 count=1 status=1 段广告标记
+09-23 06:12:46.392  3726  3726 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=884180 to=1035468 uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-23 06:13:51.373  8896  8896 I BiliClean: play-metadata aid=116085366071050 cid=36122397322 type=BIZ_TYPE_UGC
+09-23 06:13:52.918  8896  8896 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:13:54.470  8896  8896 I BiliClean: markers video=BV1YpZkBDEVo:36122397322 count=1 status=1 段广告标记
+09-23 06:14:40.032  8896  8896 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:15:33.732  8896  8896 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:17:01.891  8896  8896 I BiliClean: play-metadata aid=473686263 cid=851563379 type=BIZ_TYPE_UGC
+09-23 06:17:02.670  8896  8896 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:17:03.659  8896  8896 I BiliClean: markers video=BV1zT411K7Y9:851563379 count=0 status=此视频暂无匹配的广告标记

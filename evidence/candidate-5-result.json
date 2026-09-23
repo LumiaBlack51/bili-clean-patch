@@ -1,0 +1,8 @@
+{
+  "candidate": 5,
+  "sourceCommit": "c2a7e9c",
+  "sha256": "aecf5413d819defb57d7ae78a4531514a84f611064e0304468e2c9ac38a32038",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "runtimeAcceptance": "partial: startup/playback/settings/marked-video auto-skip/no-marker passed; modern feed hook missing; see docs/candidate-5.md",
+  "generatedAt": "2026-09-23T14:06:32.5364245+08:00"
+}
