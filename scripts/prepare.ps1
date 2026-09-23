@@ -9,6 +9,11 @@ if (!(Test-Path "$upstream/.git")) {
     if ($LASTEXITCODE) { throw 'Checkout failed' }
 }
 if ((& git -C $upstream rev-parse HEAD) -ne $pin) { throw 'Unexpected upstream revision' }
+$sdkPath = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } elseif ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { Join-Path $env:LOCALAPPDATA 'Android/Sdk' }
+foreach ($part in @('platforms/android-35/android.jar','build-tools/35.0.0/aapt2.exe','ndk/28.2.13676358/source.properties','cmake/3.22.1/bin/cmake.exe')) {
+    if (!(Test-Path (Join-Path $sdkPath $part))) { throw "Required SDK component missing: $sdkPath/$part" }
+}
+[IO.File]::WriteAllText((Join-Path $upstream 'local.properties'), 'sdk.dir=' + $sdkPath.Replace('\','/'), [Text.UTF8Encoding]::new($false))
 & git -C $upstream submodule update --init --recursive
 if ($LASTEXITCODE) { throw 'Submodule checkout failed' }
 

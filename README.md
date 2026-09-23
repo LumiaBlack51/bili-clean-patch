@@ -15,9 +15,12 @@
 Windows PowerShell、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、NDK 28.2.13676358、CMake 3.22.1）。本项目将上游的 Java 11 补丁编译目标更新到 17，运行 CLI 也需要 JDK 17。依赖源包括 Google、Maven Central、JitPack。
 
 ```powershell
+./scripts/fetch-original.ps1
 ./scripts/test.ps1
 ./scripts/build.ps1
 ```
+
+下载脚本只接受已调查的 9.12.0 原包哈希；官方 latest 一旦改变便停止。也可自行将相同哈希的原包放到 `local/official.apk`。构建时优先使用 `ANDROID_HOME`，其次 `ANDROID_SDK_ROOT`，否则使用 Windows 默认 SDK 目录；脚本检查 SDK 组件并生成未入库的 `upstream/local.properties`。首次下载 CLI 需要 GitHub CLI（`gh`）。
 
 `prepare.ps1` 核验上游提交并覆盖本项目源文件；重复运行不会重复插入设置和 hook。上游依赖 `kofua.app.revanced:revanced-patcher:19.3.1` 的 GitHub Packages 地址实测匿名 HTTP 401；本项目改从公开 CLI v4.6.0.2 的 fat JAR 引用引擎（该 CLI 源码声明 19.3.1.2），已通过完整构建和静态补丁试验。
 
