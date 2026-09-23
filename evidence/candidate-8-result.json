@@ -1,0 +1,8 @@
+{
+  "candidate": 8,
+  "sourceCommit": "902490d",
+  "sha256": "4934bb6e7d7ce4a6c617f4110ae721e3b726a91a11a10b5560e522d5e716544e",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "runtimeAcceptance": "partial: controlled host-model fixtures pass; live feed ads=0 and non-ad placeholders retained; discovered dark Switch labels and legacy cache-clear crash on enabling ads; both fixed for candidate 9",
+  "generatedAt": "2026-09-23T14:43:50.6481266+08:00"
+}

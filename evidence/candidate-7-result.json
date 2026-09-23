@@ -1,0 +1,8 @@
+{
+  "candidate": 7,
+  "sourceCommit": "70c45d3",
+  "sha256": "5d3861ae01190ae7c2d67020d71d9a0ec5f4eeb378dfbf5f16c6bb42a9d9a1aa",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "runtimeAcceptance": "rejected: active feed hook confirmed; removed=1 used overly broad non-null ad_info predicate and is not proof of real ad removal. Candidate 8 requires isAd or explicit ad card type. Host-model test runner also needed R8 mappings.",
+  "generatedAt": "2026-09-23T14:33:51.8621124+08:00"
+}

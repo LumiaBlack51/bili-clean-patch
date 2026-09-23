@@ -1,0 +1,12 @@
+--------- beginning of main
+09-23 06:44:47.376  3897  4039 I BiliClean: modern-feed items=9 ads=0 placeholders=1 removed=0 enabled=false
+09-23 06:44:50.333  3897  4072 I BiliClean: modern-feed items=9 ads=0 placeholders=1 removed=0 enabled=false
+09-23 06:44:52.665  3897  3897 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-23 06:45:05.354  3897  4152 I BiliClean: modern-feed items=9 ads=0 placeholders=1 removed=0 enabled=false
+09-23 06:46:35.067  5712  5843 I BiliClean: modern-feed items=9 ads=0 placeholders=1 removed=0 enabled=true
+09-23 06:46:38.737  5712  5843 I BiliClean: modern-feed items=10 ads=0 placeholders=0 removed=0 enabled=true
+09-23 06:46:43.050  5712  5937 I BiliClean: modern-feed items=10 ads=0 placeholders=0 removed=0 enabled=true
+09-23 06:46:46.267  5712  5942 I BiliClean: modern-feed items=10 ads=0 placeholders=0 removed=0 enabled=true
+09-23 06:46:48.526  5712  5843 I BiliClean: modern-feed items=10 ads=0 placeholders=0 removed=0 enabled=true
+09-23 06:46:53.010  5712  5937 I BiliClean: modern-feed items=10 ads=0 placeholders=0 removed=0 enabled=true
+09-23 06:46:55.945  5712  5912 I BiliClean: modern-feed items=10 ads=0 placeholders=0 removed=0 enabled=true

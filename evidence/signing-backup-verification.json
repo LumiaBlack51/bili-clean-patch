@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-09-23T14:41:38.7891358+08:00",
+  "encryptedBackup": "signing-key.encrypted.json",
+  "algorithm": "AES-256-GCM",
+  "roundTripSha256Equal": true,
+  "recoveryKeyUploaded": false,
+  "accountDataExported": false
+}
