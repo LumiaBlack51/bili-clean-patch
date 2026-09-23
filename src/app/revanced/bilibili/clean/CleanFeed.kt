@@ -5,6 +5,11 @@ import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 
 object CleanFeed {
+    private fun markedAd(info: Any?): Boolean {
+        if (info == null) return false
+        return try { info.javaClass.getMethod("isAd").invoke(info) == true }
+        catch (_: NoSuchMethodException) { field(info, "isAd") == true }
+    }
     @Keep @JvmStatic
     fun filterModern(response: Any?) {
         if (response == null || response.javaClass.name != "com.bilibili.pegasus.data.base.PegasusResponse") return
@@ -16,17 +21,21 @@ object CleanFeed {
             val gotoGetter = base.getMethod("getCardGoto")
             val filtered = ArrayList<Any?>()
             var ads = 0
+            var placeholders = 0
             for (item in items) {
                 val ad = if (item != null && base.isInstance(item)) {
                     val type = gotoGetter.invoke(item) as? String
-                    adGetter.invoke(item) != null || type in setOf("ad", "cm", "special_s") ||
+                    val info = adGetter.invoke(item)
+                    val realAd = markedAd(info)
+                    if (info != null && !realAd) placeholders++
+                    realAd || type in setOf("ad", "cm", "special_s") ||
                         type?.startsWith("ad_") == true || type?.startsWith("cm_") == true
                 } else false
                 if (ad) ads++
                 if (!ad || !Settings.CleanAds()) filtered.add(item)
             }
             if (Settings.CleanAds() && ads > 0) itemsField.set(response, filtered)
-            Log.i("BiliClean", "modern-feed items=${items.size} ads=$ads removed=${items.size - filtered.size} enabled=${Settings.CleanAds()}")
+            Log.i("BiliClean", "modern-feed items=${items.size} ads=$ads placeholders=$placeholders removed=${items.size - filtered.size} enabled=${Settings.CleanAds()}")
         } catch (e: Exception) { Log.w("BiliClean", "modern-feed unchanged: ${e.javaClass.simpleName}") }
     }
     private fun field(value: Any?, name: String): Any? {
@@ -55,7 +64,7 @@ object CleanFeed {
             while (iterator.hasNext()) {
                 val item = iterator.next() ?: continue
                 val type = (field(item, "cardGoto") ?: field(item, "card_goto")) as? String
-                if (field(item, "adInfo") != null || type in setOf("ad", "cm", "special_s") ||
+                if (markedAd(field(item, "adInfo")) || type in setOf("ad", "cm", "special_s") ||
                     type?.startsWith("cm_") == true || type?.startsWith("ad_") == true) {
                     iterator.remove(); removed++
                 }

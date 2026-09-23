@@ -5,7 +5,28 @@ $bt = Join-Path $sdk 'build-tools/35.0.0'
 $android = Join-Path $sdk 'platforms/android-35/android.jar'
 $out = Join-Path $root 'build/host-tests'
 New-Item -ItemType Directory -Force "$out/classes", "$out/dex" | Out-Null
-& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java"
+$mapping = Get-Content "$root/upstream/integrations/app/build/outputs/mapping/release/mapping.txt" -Raw
+function MappingBlock([string]$name) {
+    # R8 metadata comments may start at column zero; stop only at the next class header.
+    $match = [regex]::Match($mapping,'(?ms)^'+[regex]::Escape($name)+' -> (?<name>[^:]+):\r?\n(?<body>.*?)(?=^[^ #\r\n][^\r\n]* -> [^:]+:|\z)')
+    if (!$match.Success) { throw "Missing mapping for $name" }
+    return $match
+}
+$settingsMap = MappingBlock 'app.revanced.bilibili.settings.Settings'
+$settingMap = MappingBlock 'app.revanced.bilibili.settings.Setting'
+$ads = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanAds -> (\w+)').Groups[1].Value
+$value = [regex]::Match($settingMap.Groups['body'].Value,'java.lang.Object value -> (\w+)').Groups[1].Value
+if (!$ads -or !$value) { throw 'Missing settings field mappings' }
+@"
+package app.biliclean.tests;
+final class GeneratedNames {
+static final String SETTINGS = "$($settingsMap.Groups['name'].Value)";
+static final String SETTING = "$($settingMap.Groups['name'].Value)";
+static final String ADS = "$ads";
+static final String VALUE = "$value";
+}
+"@ | Set-Content "$out/GeneratedNames.java"
+& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java" "$out/GeneratedNames.java"
 if ($LASTEXITCODE) { throw 'Test compilation failed' }
 & jar cf "$out/classes.jar" -C "$out/classes" .
 & "$bt/d8.bat" --lib $android --min-api 24 --output "$out/dex" "$out/classes.jar"
