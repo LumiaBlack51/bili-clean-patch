@@ -1,0 +1,10 @@
+{
+  "candidate": 2,
+  "sourceCommit": "57738cd",
+  "sha256": "7201279f8a24de01ad27dd071072a834db8439175624c44da8e23506fd0d8be9",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "install": "success on emulator-5580",
+  "startup": "failed after accepting guest mode",
+  "failure": "NoClassDefFoundError SplashData in old JSON hook",
+  "timestamp": "2026-09-23T13:28:31.4286651+08:00"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://www.bsbsb.top/api/skipSegments?videoID=BV1YpZkBDEVo&cid=36122397322",
+  "fetchedAt": "2026-09-23T13:29:03.8206841+08:00",
+  "status": 200,
+  "body": "[{\"cid\":\"36122397322\",\"category\":\"intro\",\"actionType\":\"skip\",\"segment\":[0,8],\"UUID\":\"41261902e63bf95c94a9a59de0a9e8aa4fff2eba98ae67dd27e2984b6ee695727\",\"videoDuration\":1973.56,\"locked\":0,\"votes\":0,\"description\":\"\"},{\"cid\":\"36122397322\",\"category\":\"selfpromo\",\"actionType\":\"skip\",\"segment\":[883.479,1036.008],\"UUID\":\"eb2945e0d2d9c702eeed23f33d9783db86349354673cb0b2360ae0fb387a89147\",\"videoDuration\":1974,\"locked\":0,\"votes\":0,\"description\":\"\"},{\"cid\":\"36122397322\",\"category\":\"sponsor\",\"actionType\":\"skip\",\"segment\":[884.079,1035.468],\"UUID\":\"bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7\",\"videoDuration\":1974,\"locked\":0,\"votes\":0,\"description\":\"\"},{\"cid\":\"36122397322\",\"category\":\"outro\",\"actionType\":\"skip\",\"segment\":[1964.435,1973.525],\"UUID\":\"52a90ab1edd9fa4aeafc8b0db46e11df289d12b65eda6ede070807b9d89bc9df7\",\"videoDuration\":1973.525,\"locked\":0,\"votes\":0,\"description\":\"\"}]"
+}

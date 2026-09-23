@@ -80,3 +80,11 @@ Get-ChildItem (Join-Path $upstream "$java/patches") -Recurse -File | Where-Objec
     if ($text -ne $changed) { [IO.File]::WriteAllText($_.FullName,$changed,[Text.UTF8Encoding]::new($false)) }
 }
 Write-Output "Prepared pinned upstream $pin; player binding remains unverified until AVD playback tests pass."
+$jsonPath = Join-Path $upstream "$java/patches/json/JSONPatch.java"
+$jsonText = [IO.File]::ReadAllText($jsonPath)
+if (!$jsonText.Contains('BiliClean exact models')) {
+    $pattern = '(?s)    public static Object parseObjectHook\(Object obj\) \{.*?\r?\n    \}\r?\n'
+    if ([regex]::Matches($jsonText,$pattern).Count -ne 1) { throw 'JSON entry source mismatch' }
+    $jsonText = [regex]::Replace($jsonText,$pattern,"    public static Object parseObjectHook(Object obj) {`n        // BiliClean exact models; do not resolve removed host classes.`n        return app.revanced.bilibili.clean.CleanJson.filter(obj);`n    }`n")
+    [IO.File]::WriteAllText($jsonPath,$jsonText,[Text.UTF8Encoding]::new($false))
+}

@@ -1,0 +1,98 @@
+--------- beginning of crash
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: FATAL EXCEPTION: pool-5-thread-10
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: Process: tv.danmaku.bili, PID: 3606
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Ltv/danmaku/bili/ui/splash/ad/model/SplashData;
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.b(:24)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.parseObjectHook(:1)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:16)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at zp0.a.convert(BL:14)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at com.bilibili.okretro.call.BiliCall.execute(BL:595)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at tv.danmaku.bili.ui.main2.resource.o.call(BL:126)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at bolts.Task$h.run(BL:21)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	at java.lang.Thread.run(Thread.java:1563)
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: tv.danmaku.bili.ui.splash.ad.model.SplashData
+09-23 05:26:31.828  3606  4105 E AndroidRuntime: 	... 10 more
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: FATAL EXCEPTION: pool-5-thread-11
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: Process: tv.danmaku.bili, PID: 3606
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Ltv/danmaku/bili/ui/splash/ad/model/SplashData;
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.b(:24)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.parseObjectHook(:1)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:9)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:30)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at Tq1.f.call(BL:43)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at bolts.Task$h.run(BL:21)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	at java.lang.Thread.run(Thread.java:1563)
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: tv.danmaku.bili.ui.splash.ad.model.SplashData
+09-23 05:26:31.995  3606  4135 E AndroidRuntime: 	... 9 more
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: FATAL EXCEPTION: pool-5-thread-9
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: Process: tv.danmaku.bili, PID: 3606
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Ltv/danmaku/bili/ui/splash/ad/model/SplashData;
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.b(:24)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.parseObjectHook(:1)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:9)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:30)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at Tq1.h.call(BL:17)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at bolts.Task$h.run(BL:21)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	at java.lang.Thread.run(Thread.java:1563)
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: tv.danmaku.bili.ui.splash.ad.model.SplashData
+09-23 05:26:31.998  3606  4101 E AndroidRuntime: 	... 9 more
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: FATAL EXCEPTION: main
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: Process: tv.danmaku.bili, PID: 3606
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Ltv/danmaku/bili/ui/splash/ad/model/SplashData;
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.b(:24)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.parseObjectHook(:1)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:39)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at tv.danmaku.bili.ui.garb.z.onReceive(BL:62)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1931)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.$r8$lambda$mcNAAl1SQ4MyJPyDg8TJ2x2h0Rk(Unknown Source:0)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:1070)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:125)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.os.Looper.dispatchMessage(Looper.java:333)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:263)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:367)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9287)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:566)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:929)
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: tv.danmaku.bili.ui.splash.ad.model.SplashData
+09-23 05:26:32.164  3606  3606 E AndroidRuntime: 	... 16 more
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: FATAL EXCEPTION: main
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: Process: tv.danmaku.bili, PID: 4274
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Ltv/danmaku/bili/ui/splash/ad/model/SplashData;
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.b(:24)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.parseObjectHook(:1)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:39)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at Lr.a.c(BL:5)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at Rr.c$a$c.run(BL:5)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:1070)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:125)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at android.os.Looper.dispatchMessage(Looper.java:333)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:263)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:367)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9287)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:566)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:929)
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: tv.danmaku.bili.ui.splash.ad.model.SplashData
+09-23 05:26:37.459  4274  4274 E AndroidRuntime: 	... 14 more
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: FATAL EXCEPTION: pool-9-thread-4
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: Process: tv.danmaku.bili, PID: 4688
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Ltv/danmaku/bili/ui/splash/ad/model/SplashData;
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.b(:24)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at app.revanced.bilibili.patches.json.JSONPatch.parseObjectHook(:1)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at com.alibaba.fastjson.JSON.parseObject(BL:39)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at iQ.e.b(BL:27)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at iQ.d.call(BL:6)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at bolts.Task$h.run(BL:21)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	at java.lang.Thread.run(Thread.java:1563)
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: tv.danmaku.bili.ui.splash.ad.model.SplashData
+09-23 05:26:50.236  4688  4808 E AndroidRuntime: 	... 9 more
