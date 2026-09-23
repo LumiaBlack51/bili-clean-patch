@@ -40,9 +40,13 @@ object CleanFeed {
     }
     @Keep @JvmStatic
     fun filter(response: Any?) {
-        if (!Settings.CleanAds()) return
         try {
             val data = field(response, "data")
+            if (data?.javaClass?.name == "com.bilibili.pegasus.data.base.PegasusResponse") {
+                filterModern(data)
+                return
+            }
+            if (!Settings.CleanAds()) return
             val list = field(data, "items") as? MutableList<*>
             Log.i("BiliClean", "feed-response type=${data?.javaClass?.name} items=${list?.size ?: -1}")
             if (list == null) return

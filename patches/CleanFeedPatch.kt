@@ -40,5 +40,22 @@ object CleanFeedPatch : BytecodePatch(setOf(PegasusParserFingerprint)) {
             return-object p1
         """.trimIndent())
         modern.methods.add(modernWrapper)
+        // The default Gson configuration reflects PegasusResponse directly instead of registering
+        // PegasusResponseTypeAdapter. Filter the concrete transport converter as well.
+        val transport = context.findClass("Lcom/bilibili/pegasus/request/PegasusGsonParser;")?.mutableClass
+            ?: throw PatchException("Unsupported Gson feed transport")
+        val convert = transport.methods.singleOrNull { it.name == "g" &&
+            it.parameterTypes.map { p -> p.toString() } == listOf("Lokhttp3/ResponseBody;") &&
+            it.returnType == "Lcom/bilibili/okretro/GeneralResponse;" }
+            ?: throw PatchException("Unsupported Gson feed transport signature")
+        val transportWrapper = convert.cloneMutable(registerCount = 2, clearImplementation = true)
+        convert.name += "_BiliCleanOriginal"
+        transportWrapper.addInstructions("""
+            invoke-virtual {p0, p1}, $convert
+            move-result-object p1
+            invoke-static {p1}, Lapp/revanced/bilibili/clean/CleanFeed;->filter(Ljava/lang/Object;)V
+            return-object p1
+        """.trimIndent())
+        transport.methods.add(transportWrapper)
     }
 }
