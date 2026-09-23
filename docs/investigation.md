@@ -27,11 +27,11 @@
 
 ## 官方基线和 AVD
 
-[官方客户端下载页面](https://app.bilibili.com/)指向 `https://dl.hdslb.com/mobile/latest/android64/iBiliPlayer-bili.apk`。已开始下载；下载完成前不能宣称版本或签名验证成功。
+[官方客户端下载页面](https://app.bilibili.com/)指向 `https://dl.hdslb.com/mobile/latest/android64/iBiliPlayer-bili.apk`。下载、签名校验完成：9.12.0 / 9120300，ARM64，证书 SHA-256 `93ba270f5521139ecafe4bb638ac5b1198bc548f62d9fd8f8580a079faf5910e`，包 SHA-256 `b9c62efed1452c21a070919a9d937428ab6b7308a4d9e066d282392f50333f31`。
 
-发现 SDK `E:\software\androidsdk` 内有 emulator 36.3.10 和 Android 36.1 Google Play x86_64 系统镜像。`emulator -accel-check` 返回 WHPX 可用。创建 AVD `bili-clean-api36`，路径 `E:\software\bili-clean-avd`。ARM64 翻译播放能力尚未验证。
+发现 SDK `E:\software\androidsdk` 内有 emulator 36.3.10 和 Android 36.1 Google Play x86_64 系统镜像。`emulator -accel-check` 返回 WHPX 可用。创建 AVD `bili-clean-api36`，路径 `E:\software\bili-clean-avd`。设备报告 ABI `x86_64,arm64-v8a`，原版 ARM64 包已成功安装并播放。
 
-后台启动模拟器与下载源码的组合命令被自动审批拒绝，工具仅返回 `blocked by policy`，没有进一步原因。后续改为工具直接托管的单独无窗口模拟器命令，该方式获准执行。修正进程级 SDK 路径后进入冷启动；安装和播放尚未执行。
+后台启动模拟器与下载源码的组合命令被自动审批拒绝，工具仅返回 `blocked by policy`，没有进一步原因。后续改为工具直接托管的单独无窗口模拟器命令，该方式获准执行。修正进程级 SDK 路径后进入冷启动。低内存并行构建时原版发生 ANR，关闭构建、AVD 调为 3 GB / 4 核 / host GPU / 禁用 Vulkan 后，启动与所选视频播放复测通过。
 
 ## 签名
 

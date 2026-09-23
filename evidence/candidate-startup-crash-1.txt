@@ -1,0 +1,14 @@
+--------- beginning of crash
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: FATAL EXCEPTION: UtilsAsyncThread
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: Process: tv.danmaku.bili, PID: 3728
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: java.lang.IllegalAccessError: Field 'com.bilibili.search2.result.pages.BiliMainSearchResultPage$PageTypes.$VALUES' is inaccessible to class 'kofua.U' (declaration of 'kofua.U' appears in /data/app/~~vYT8tNncYFTBLzxJXOBiMw==/tv.danmaku.bili-a-dGVKjs5nf0UvVriXjQJQ==/base.apk!classes32.dex)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at kofua.U.a(:559)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at kofua.va.getValue(:18)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.b(:38)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at kofua.V.run(:923)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:1070)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:125)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at android.os.Looper.dispatchMessage(Looper.java:333)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:263)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:367)
+09-23 05:15:35.574  3728  3817 E AndroidRuntime: 	at android.os.HandlerThread.run(HandlerThread.java:139)

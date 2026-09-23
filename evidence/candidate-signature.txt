@@ -1,0 +1,4 @@
+Signer #1 certificate DN: CN=ReVanced
+Signer #1 certificate SHA-256 digest: c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8
+Signer #1 certificate SHA-1 digest: ca2f7c7c74fa88d2149d807cd8a55cadc9a83a18
+Signer #1 certificate MD5 digest: 5e3e0e450ccb5f33529610362434c67f

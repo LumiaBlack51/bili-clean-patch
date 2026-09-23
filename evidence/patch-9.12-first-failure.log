@@ -1,0 +1,272 @@
+信息: Loading patches 
+信息: Decoding app manifest 
+信息: Export all activities excluded 
+信息: Predictive back gesture excluded 
+信息: Enable Android debugging excluded 
+信息: Change package name excluded 
+信息: Spoof SIM country excluded 
+信息: Hide follow button excluded 
+信息: Remove vip section excluded 
+信息: App icon excluded 
+信息: Config excluded 
+信息: Copy enhance excluded 
+信息: Dark switch excluded 
+信息: Drawer excluded 
+信息: Blkv excluded 
+信息: Brotli excluded 
+信息: Config integration excluded 
+信息: Dpi excluded 
+信息: Anti RecyclerView obfuscation excluded 
+信息: ProtoBuf print excluded 
+信息: Override certificate pinning excluded 
+信息: Music notification excluded 
+信息: Search type excluded 
+信息: Append signature info for LSPatch excluded 
+信息: Auto like excluded 
+信息: BL route intercept excluded 
+信息: BLog excluded 
+信息: Bili adjust layout excluded 
+信息: Fix app setting preference layout excluded 
+信息: Block thai comment excluded 
+信息: Cache redirect excluded 
+信息: Channel model fix excluded 
+信息: Crash handler excluded 
+信息: Custom splash excluded 
+信息: Fake not in multi window mode excluded 
+信息: Forbid auto subscribe excluded 
+信息: Forbid live room auto float excluded 
+信息: Forbid live room slide left excluded 
+信息: Forbid switch live room excluded 
+信息: Force comment time navigable excluded 
+信息: Inject DocumentsProvider excluded 
+信息: Inject more scheme excluded 
+信息: Keep data when uninstall excluded 
+信息: Disable live room double click excluded 
+信息: Make text selectable excluded 
+信息: Prevent pre download module excluded 
+信息: Remove managerSpaceActivity excluded 
+信息: Notification icon excluded 
+信息: Number format excluded 
+信息: Per app language excluded 
+信息: Disable auto select excluded 
+信息: Save comment images excluded 
+信息: Share excluded 
+信息: Teenager mode excluded 
+信息: Text fold excluded 
+信息: Trial quality excluded 
+信息: Uid copy no prefix excluded 
+信息: Upgrade excluded 
+信息: Comment word search url excluded 
+信息: Splash excluded 
+信息: Custom theme color excluded 
+信息: Toast excluded 
+信息: Webview excluded 
+信息: Add back danmaku system font excluded 
+信息: Force hardware codec excluded 
+信息: Long press playback speed excluded 
+信息: Override playback speed excluded 
+信息: Play url excluded 
+信息: Player gesture detector hook excluded 
+信息: Player core excluded 
+信息: Player toast excluded 
+信息: Remember playback speed excluded 
+信息: Video default quality excluded 
+信息: Subtitle import and save excluded 
+信息: Subtitle style excluded 
+信息: Setting patch options 
+信息: Merging integrations 
+信息: Deleting existing temporary files directory 
+信息: Decoding resources 
+信息: Executing patches 
+信息: Bili library patch succeeded 
+信息: BiliRoamingX settings entrance succeeded 
+信息: Block up recommend ads succeeded 
+严重: Default playback speed failed:
+app.revanced.patcher.patch.PatchException: Failed to resolve PlaySpeedManagerImplFingerprint
+	at app.revanced.util.BytecodeUtilsKt.getException(BytecodeUtils.kt:25)
+	at app.revanced.patches.bilibili.video.player.patch.DefaultPlaybackSpeedPatch.execute(DefaultPlaybackSpeedPatch.kt:56)
+	at app.revanced.patches.bilibili.video.player.patch.DefaultPlaybackSpeedPatch.execute(DefaultPlaybackSpeedPatch.kt:17)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend$executePatch(Patcher.kt:173)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend(Patcher.kt:205)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at kotlinx.coroutines.flow.SafeFlow.collectSafely(Builders.kt:61)
+	at kotlinx.coroutines.flow.AbstractFlow.collect(Flow.kt:230)
+	at app.revanced.cli.command.PatchCommand$run$4$1$1.invokeSuspend(PatchCommand.kt:313)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:38)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at app.revanced.cli.command.PatchCommand.run(PatchCommand.kt:312)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2026)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+	at picocli.CommandLine.execute(CommandLine.java:2170)
+	at app.revanced.cli.command.MainCommandKt.main(MainCommand.kt:12)
+ 
+严重: Fix preference manager failed:
+app.revanced.patcher.patch.PatchException: Failed to resolve PreferenceManagerFingerprint
+	at app.revanced.util.BytecodeUtilsKt.getException(BytecodeUtils.kt:25)
+	at app.revanced.patches.bilibili.misc.settings.patch.FixPreferenceManagerPatch.execute(FixPreferenceManagerPatch.kt:29)
+	at app.revanced.patches.bilibili.misc.settings.patch.FixPreferenceManagerPatch.execute(FixPreferenceManagerPatch.kt:17)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend$executePatch(Patcher.kt:173)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend(Patcher.kt:205)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at kotlinx.coroutines.flow.SafeFlow.collectSafely(Builders.kt:61)
+	at kotlinx.coroutines.flow.AbstractFlow.collect(Flow.kt:230)
+	at app.revanced.cli.command.PatchCommand$run$4$1$1.invokeSuspend(PatchCommand.kt:313)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:38)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at app.revanced.cli.command.PatchCommand.run(PatchCommand.kt:312)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2026)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+	at picocli.CommandLine.execute(CommandLine.java:2170)
+	at app.revanced.cli.command.MainCommandKt.main(MainCommand.kt:12)
+ 
+信息: Integrations succeeded 
+信息: Json succeeded 
+信息: Lib bili succeeded 
+[6,8] Invalid register: v17. Must be between v0 and v15, inclusive.
+信息: Main activity patch succeeded 
+信息: Modify modifier succeeded 
+严重: Moss failed:
+app.revanced.patcher.patch.PatchException: null cannot be cast to non-null type com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction35c
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend$executePatch(Patcher.kt:187)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend(Patcher.kt:205)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at kotlinx.coroutines.flow.SafeFlow.collectSafely(Builders.kt:61)
+	at kotlinx.coroutines.flow.AbstractFlow.collect(Flow.kt:230)
+	at app.revanced.cli.command.PatchCommand$run$4$1$1.invokeSuspend(PatchCommand.kt:313)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:38)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at app.revanced.cli.command.PatchCommand.run(PatchCommand.kt:312)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2026)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+	at picocli.CommandLine.execute(CommandLine.java:2170)
+	at app.revanced.cli.command.MainCommandKt.main(MainCommand.kt:12)
+Caused by: java.lang.NullPointerException: null cannot be cast to non-null type com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction35c
+	at app.revanced.patches.bilibili.misc.protobuf.patch.MossPatch.execute(MossPatch.kt:49)
+	at app.revanced.patches.bilibili.misc.protobuf.patch.MossPatch.execute(MossPatch.kt:17)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend$executePatch(Patcher.kt:173)
+	... 24 more
+ 
+严重: OkHttp failed:
+app.revanced.patcher.patch.PatchException: Collection contains no element matching the predicate.
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend$executePatch(Patcher.kt:187)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend(Patcher.kt:205)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at kotlinx.coroutines.flow.SafeFlow.collectSafely(Builders.kt:61)
+	at kotlinx.coroutines.flow.AbstractFlow.collect(Flow.kt:230)
+	at app.revanced.cli.command.PatchCommand$run$4$1$1.invokeSuspend(PatchCommand.kt:313)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:38)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at app.revanced.cli.command.PatchCommand.run(PatchCommand.kt:312)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2026)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+	at picocli.CommandLine.execute(CommandLine.java:2170)
+	at app.revanced.cli.command.MainCommandKt.main(MainCommand.kt:12)
+Caused by: java.util.NoSuchElementException: Collection contains no element matching the predicate.
+	at app.revanced.patches.bilibili.misc.okhttp.patch.OkHttpPatch.execute(OkHttpPatch.kt:428)
+	at app.revanced.patches.bilibili.misc.okhttp.patch.OkHttpPatch.execute(OkHttpPatch.kt:15)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend$executePatch(Patcher.kt:173)
+	... 24 more
+ 
+严重: Pegasus hook failed:
+app.revanced.patcher.patch.PatchException: not found banner item field
+	at app.revanced.patches.bilibili.misc.json.patch.PegasusPatch.execute(PegasusPatch.kt:61)
+	at app.revanced.patches.bilibili.misc.json.patch.PegasusPatch.execute(PegasusPatch.kt:21)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend$executePatch(Patcher.kt:173)
+	at app.revanced.patcher.Patcher$apply$1.invokeSuspend(Patcher.kt:205)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at app.revanced.patcher.Patcher$apply$1.invoke(Patcher.kt)
+	at kotlinx.coroutines.flow.SafeFlow.collectSafely(Builders.kt:61)
+	at kotlinx.coroutines.flow.AbstractFlow.collect(Flow.kt:230)
+	at app.revanced.cli.command.PatchCommand$run$4$1$1.invokeSuspend(PatchCommand.kt:313)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:38)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at app.revanced.cli.command.PatchCommand.run(PatchCommand.kt:312)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2026)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+	at picocli.CommandLine.execute(CommandLine.java:2170)
+	at app.revanced.cli.command.MainCommandKt.main(MainCommand.kt:12)
+ 
+信息: Unlock ProtoBuf succeeded 
+信息: Compiling patched dex files 
+信息: Compiled classes.dex 
+信息: Compiled classes2.dex 
+信息: Compiled classes3.dex 
+信息: Compiled classes4.dex 
+信息: Compiled classes5.dex 
+信息: Compiled classes6.dex 
+信息: Compiled classes7.dex 
+信息: Compiled classes8.dex 
+信息: Compiled classes9.dex 
+信息: Compiled classes10.dex 
+信息: Compiled classes11.dex 
+信息: Compiled classes12.dex 
+信息: Compiled classes13.dex 
+信息: Compiled classes14.dex 
+信息: Compiled classes15.dex 
+信息: Compiled classes16.dex 
+信息: Compiled classes17.dex 
+信息: Compiled classes18.dex 
+信息: Compiled classes19.dex 
+信息: Compiled classes20.dex 
+信息: Compiled classes21.dex 
+信息: Compiled classes22.dex 
+信息: Compiled classes23.dex 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.PreferenceCategory android:title="去广告与空降助手">
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_ads" android:title="过滤界面广告" android:summary="过滤已适配位置；实际覆盖范围见测试记录" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_airborne" android:title="空降助手" android:summary="显示社区广告标记，无账号等级或大会员门槛" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_auto_skip" android:title="自动跳过广告片段" android:summary="只跳过广告分类；手动回看已跳过片段不会再次跳走" android:dependency="clean_airborne" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_notice" android:title="显示跳过提示" android:defaultValue="true" />
+        <androidx.preference.Preference android:title="社区标记说明" android:summary="无标记时保持正常播放；服务故障与无标记分别提示。不会上传账号数据。" android:selectable="false" />
+        <androidx.preference.Preference android:key="reboot" android:title="重新启动客户端" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

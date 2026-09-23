@@ -1,0 +1,22 @@
+[
+  {
+    "file": "local/candidate.apk",
+    "size": 227452222,
+    "sha256": "bcfe6fd12a7bc7013400f230998b2bcfc8ec39ca24a173e0d341aa2e5bcaf192"
+  },
+  {
+    "file": "upstream/build/BiliRoamingX-integrations-1.23.3.apk",
+    "size": 493317,
+    "sha256": "5ef9bcec6771968b2152013e3e65b16c8250e01f0bcc2e54f77fa22e1a7b7f49"
+  },
+  {
+    "file": "upstream/build/BiliRoamingX-patches-1.23.3.jar",
+    "size": 1277229,
+    "sha256": "eaae07e2f8d9caf9c79d07445f6a210ebc72837bdfcc16ca9afd9737d9a87030"
+  },
+  {
+    "file": "local/revanced-cli.jar",
+    "size": 64484058,
+    "sha256": "f2e396c9e631334098daf10e2c31525158180a4887ee99d37192110ffad171a0"
+  }
+]

@@ -34,6 +34,14 @@ Replace-Once 'patches/build.gradle.kts' 'implementation(libs.revanced.patcher)' 
 $target = Join-Path $upstream "$java/clean"
 New-Item -ItemType Directory -Force $target | Out-Null
 Copy-Item "$root/src/app/revanced/bilibili/clean/*" $target -Force
+$delegate = Join-Path $upstream "$java/patches/main/ApplicationDelegate.java"
+$delegateText = [IO.File]::ReadAllText($delegate)
+if (!$delegateText.Contains('BiliClean minimal startup')) {
+    $pattern = '(?s)        long start = System.currentTimeMillis\(\);.*?Logger\.debug\(\(\) -> String\.format\("Initializing BiliRoamingX.*?;\r?\n'
+    if ([regex]::Matches($delegateText,$pattern).Count -ne 1) { throw 'Startup source mismatch' }
+    $delegateText = [regex]::Replace($delegateText,$pattern,"        // BiliClean minimal startup: retain lifecycle tracking only.`n        registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());`n")
+    [IO.File]::WriteAllText($delegate,$delegateText,[Text.UTF8Encoding]::new($false))
+}
 
 $settings = @'
 object Settings {
@@ -47,34 +55,23 @@ object Settings {
 Replace-Once "$java/settings/Settings.kt" 'object Settings {' $settings
 Replace-Once "$java/settings/Setting.kt" 'Accounts.userBlocked || (dependency != null && !dependency.get())' 'dependency != null && !dependency.get()'
 
-$patch = 'patches/src/main/kotlin/app/revanced/patches/bilibili/video/player/patch/DefaultPlaybackSpeedPatch.kt'
-$hook = @'
-            if (parameterTypes.firstOrNull()?.toString() != "Ltv/danmaku/ijk/media/player/IMediaPlayer;") throw PatchException("Unsupported onPrepared signature")
-            addInstructions(0, "invoke-static/range {p1 .. p1}, Lapp/revanced/bilibili/clean/CleanRuntime;->onPrepared(Ltv/danmaku/ijk/media/player/IMediaPlayer;)V")
-            val instructions = implementation!!.instructions
+$patchTarget = Join-Path $upstream 'patches/src/main/kotlin/app/revanced/patches/bilibili/clean'
+New-Item -ItemType Directory -Force $patchTarget | Out-Null
+Copy-Item "$root/patches/*.kt" $patchTarget -Force
+$mainPatch = Join-Path $upstream 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/integrations/patch/MainActivityPatch.kt'
+$mainText = [IO.File]::ReadAllText($mainPatch)
+$mainText = $mainText.Replace('invoke-static {p0},', 'invoke-static/range {p0 .. p0},').Replace('invoke-static {p0, p1},', 'invoke-static/range {p0 .. p1},')
+[IO.File]::WriteAllText($mainPatch,$mainText,[Text.UTF8Encoding]::new($false))
+Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/settings/patch/FixPreferenceManagerPatch.kt' 'val preferenceManagerDef = PreferenceManagerFingerprint.result?.classDef' @'
+val preferenceManagerDef = PreferenceManagerFingerprint.result?.classDef
+            ?: context.findClass("Landroidx/preference/Preference;")?.immutableClass?.fields
+                ?.singleOrNull { it.name == "mPreferenceManager" }?.type?.let { context.findClass(it)?.immutableClass }
 '@
-Replace-Once $patch '            val instructions = implementation!!.instructions' $hook
 
-$xml = @'
-    <androidx.preference.PreferenceCategory android:title="去广告与空降助手">
-        <androidx.preference.SwitchPreferenceCompat android:key="clean_ads" android:title="过滤界面广告" android:summary="开屏、推荐流及已适配的视频页广告；覆盖范围见测试记录" android:defaultValue="true" />
-        <androidx.preference.SwitchPreferenceCompat android:key="clean_airborne" android:title="空降助手" android:summary="显示社区广告标记，无账号等级或大会员门槛" android:defaultValue="true" />
-        <androidx.preference.SwitchPreferenceCompat android:key="clean_auto_skip" android:title="自动跳过广告片段" android:summary="只跳过 sponsor 分类；已跳过片段允许手动回看" android:dependency="clean_airborne" android:defaultValue="true" />
-        <androidx.preference.SwitchPreferenceCompat android:key="clean_notice" android:title="显示跳过提示" android:defaultValue="true" />
-    </androidx.preference.PreferenceCategory>
-    <androidx.preference.PreferenceCategory>
-'@
 $xmlPath = Join-Path $upstream 'patches/src/main/resources/bilibili/xml/biliroaming_settings.xml'
-$xmlText = [IO.File]::ReadAllText($xmlPath)
-if (!$xmlText.Contains('clean_airborne')) {
-    $needle = '    <androidx.preference.PreferenceCategory>'
-    $at = $xmlText.IndexOf($needle)
-    if ($at -lt 0) { throw 'Settings XML mismatch' }
-    $xmlText = $xmlText.Substring(0,$at) + $xml + $xmlText.Substring($at+$needle.Length)
-    [IO.File]::WriteAllText($xmlPath,$xmlText,[Text.UTF8Encoding]::new($false))
-}
+Copy-Item "$root/resources/clean-settings.xml" $xmlPath -Force
 Replace-Once "$java/patches/json/PegasusPatch.java" 'var filterSet = Settings.FilterHomeRecommend.get();' @'
-var filterSet = new java.util.HashSet<>(Settings.FilterHomeRecommend.get());
+var filterSet = new java.util.HashSet<String>(Settings.FilterHomeRecommend.get());
         if (Settings.CleanAds.get()) filterSet.add("advertisement");
 '@
 Get-ChildItem (Join-Path $upstream "$java/patches") -Recurse -File | Where-Object Extension -In '.kt','.java' | ForEach-Object {

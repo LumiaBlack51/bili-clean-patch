@@ -1,6 +1,6 @@
 # bili-clean-patch（开发中，未通过客户端验收）
 
-独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**当前不是可用发布版，尚无经过验证的支持版本或完整 APK。**
+独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**当前不是可用发布版，已产出实验 APK，但尚无通过运行验收的支持版本。**
 
 ## 当前实现
 
@@ -16,22 +16,20 @@ Windows PowerShell、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、
 
 ```powershell
 ./scripts/test.ps1
-gh release download v4.6.0.2 --repo zjns/revanced-cli --pattern revanced-cli.jar --dir local
-./scripts/prepare.ps1
-git -C upstream submodule update --init --recursive
-cd upstream
-./gradlew.bat dist --console=plain
+./scripts/build.ps1
 ```
 
-`prepare.ps1` 核验上游提交并覆盖本项目源文件；重复运行不会重复插入设置和 hook。上游依赖 `kofua.app.revanced:revanced-patcher:19.3.1` 的 GitHub Packages 地址实测匿名 HTTP 401；本项目改从公开 CLI v4.6.0.2 的 fat JAR 引用引擎（该 CLI 源码声明 19.3.1.2），尚需完整构建验证二进制兼容性。
+`prepare.ps1` 核验上游提交并覆盖本项目源文件；重复运行不会重复插入设置和 hook。上游依赖 `kofua.app.revanced:revanced-patcher:19.3.1` 的 GitHub Packages 地址实测匿名 HTTP 401；本项目改从公开 CLI v4.6.0.2 的 fat JAR 引用引擎（该 CLI 源码声明 19.3.1.2），已通过完整构建和静态补丁试验。
 
-上游文档中的补丁命令如下，**本项目尚未运行到该步骤；不是已验证的发布命令**：
+构建脚本限制两个 worker，结束后退出 Gradle daemon。在 16 GB 主机上应先构建，再启动 AVD；同时运行两者曾导致内存压力和原版 ANR。Dobby 的 Android 日志头文件已移到文件作用域以兼容 NDK 28。
+
+对固定哈希的原版 9.12.0 生成实验候选：
 
 ```text
-java -jar revanced-cli.jar patch --merge integrations.apk --patch-bundle patches.jar --signing-levels 1,2,3 official.apk
+./scripts/patch-experimental.ps1
 ```
 
-工具版本、补丁选择、宿主 SHA-256 和自己的签名证书必须进一步固定。现阶段不能把上游任意版本或已改包的 APK 当成合格输入；不能将所有上游增强功能默认纳入正式发布。
+脚本核验 CLI 和宿主 SHA-256，显式选择首批补丁，检测失败日志，使用 `local/avd-test.keystore` 生成测试签名。不得用手机备份的已改包 APK 替代原版输入。正式交付前必须完成运行验收并明确长期签名策略。
 
 ## 验证和交付
 
