@@ -18,8 +18,10 @@ object CleanFeed {
     fun filter(response: Any?) {
         if (!Settings.CleanAds()) return
         try {
-            val data = field(response, "data") ?: return
-            val list = field(data, "items") as? MutableList<*> ?: return
+            val data = field(response, "data")
+            val list = field(data, "items") as? MutableList<*>
+            Log.i("BiliClean", "feed-response type=${data?.javaClass?.name} items=${list?.size ?: -1}")
+            if (list == null) return
             val iterator = list.iterator()
             var removed = 0
             while (iterator.hasNext()) {

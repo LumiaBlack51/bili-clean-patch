@@ -1,0 +1,22 @@
+[
+  {
+    "file": "candidate.apk",
+    "sha256": "87cff115dd00c0c1f5f53ec2768b4d586902b8fa9211de02346d7b888cbb8e21",
+    "bytes": 227296515
+  },
+  {
+    "file": "candidate-native-compat.apk",
+    "sha256": "1a7275eac2223f000003d06df1d7f8c96cdb1b7a2293bd61a0d8014b8f06179f",
+    "bytes": 227701941
+  },
+  {
+    "file": "official-resigned.apk",
+    "sha256": "9f0b328269e3da46b4bbfba1b25b0b93c89d37b34cc285f064d85bbd87c76819",
+    "bytes": 218925185
+  },
+  {
+    "file": "official-native-compat.apk",
+    "sha256": "da61ea79380af07ef8693fbc3f7674e67888373291110c809d46201e8ef2592d",
+    "bytes": 219322497
+  }
+]

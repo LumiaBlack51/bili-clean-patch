@@ -38,6 +38,7 @@ Windows PowerShell、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、
 
 - [调查和方案](docs/investigation.md)
 - [实际测试记录](docs/test-record.md)
+- [重签名运行兼容及对照证据](docs/native-compat.md)
 - [手机安装与回滚方案](docs/install-rollback.md)
 - `evidence/` 保存公开片段接口的实际返回。
 

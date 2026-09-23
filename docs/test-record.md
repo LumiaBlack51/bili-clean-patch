@@ -18,6 +18,8 @@
 | 首个完整候选安装 / 启动 | 安装通过，启动失败 | `candidate-startup-crash-1.txt`：旧框架番剧搜索注入访问私有字段；已修改源码移除该启动功能，待重测 |
 | 第二个完整候选安装 / 启动 | 安装通过，启动失败 | 已越过第一个崩溃点，接受游客协议后旧 JSON 钩子引用不存在的 SplashData；`candidate-2-start-errors.txt` 和 `candidate-2-result.json` 记录错误及 APK 指纹 |
 | 第三个完整候选安装 / 启动 | 安装通过，启动失败 | `candidate-3-errors.txt`：上游 Unlock ProtoBuf 将 BroadcastEvent.setShared 改成 virtual 后未匹配调用指令；已从选择列表移除该无关补丁，下一候选待测 |
+| 第四候选 / 重签名对照 | 定位到延迟退出；局部兼容修改后播放恢复 | 详见 [本地兼容调查](native-compat.md)，含只重签原包的对照，不能把最初播放数秒算作通过 |
+| 第四候选设置 | 入口可见，打开失败 | 原版设置页顶部有入口；旧 PreferenceManager 的 final 方法冲突已记录，改用独立轻量设置页后待复测 |
 | 手机安装测试 | 未执行 | 需 AVD 通过后另选安装方案 |
 
 ## 已确认的马督工样本

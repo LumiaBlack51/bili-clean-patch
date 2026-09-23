@@ -11,12 +11,12 @@ if ((Get-FileHash $cli -Algorithm SHA256).Hash.ToLowerInvariant() -ne 'f2e396c9e
 $bundle = Join-Path $root 'upstream/build/BiliRoamingX-patches-1.23.3.jar'
 $integrations = Join-Path $root 'upstream/build/BiliRoamingX-integrations-1.23.3.apk'
 $params = @('-Xmx3072m','-jar',$cli,'patch','--exclusive','--merge',$integrations,'--patch-bundle',$bundle,
-    '--out',(Join-Path $local 'candidate.apk'),'--keystore',(Join-Path $local 'avd-test.keystore'),
+    '--out',(Join-Path $local 'candidate-stage.apk'),'--keystore',(Join-Path $local 'avd-test.keystore'),
     '--temporary-files-path',(Join-Path $local 'patch-work'),'--signing-levels','1,2,3')
 # Explicit selections keep unrelated enhancements outside this experiment.
-foreach ($name in @('Integrations','Lib bili','Bili library patch','Main activity patch',
+foreach ($name in @('Integrations','Lib bili',
     'Clean metadata','Json','Clean feed','BiliRoamingX settings entrance',
-    'Fix preference manager','Clean player','Block up recommend ads')) {
+    'Clean player','Block up recommend ads')) {
     $params += @('--include',$name)
 }
 $params += $apk
@@ -27,3 +27,4 @@ if ($code -or (Select-String -Path $log -Pattern 'failed:|Invalid register|Excep
     throw 'Patching failed: candidate is not approved for installation'
 }
 Write-Output 'Experimental candidate only. Runtime acceptance tests are still required.'
+& (Join-Path $PSScriptRoot 'native-compat.ps1') -InputApk (Join-Path $local 'candidate-stage.apk') -OutputApk (Join-Path $local 'candidate.apk')

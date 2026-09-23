@@ -41,12 +41,16 @@ New-Item -ItemType Directory -Force $target | Out-Null
 Copy-Item "$root/src/app/revanced/bilibili/clean/*" $target -Force
 $delegate = Join-Path $upstream "$java/patches/main/ApplicationDelegate.java"
 $delegateText = [IO.File]::ReadAllText($delegate)
+$delegateText = $delegateText.Replace('System.loadLibrary("biliroamingx");', '// Native compatibility is a pinned static patch; no global exit hook.')
 if (!$delegateText.Contains('BiliClean minimal startup')) {
     $pattern = '(?s)        long start = System.currentTimeMillis\(\);.*?Logger\.debug\(\(\) -> String\.format\("Initializing BiliRoamingX.*?;\r?\n'
     if ([regex]::Matches($delegateText,$pattern).Count -ne 1) { throw 'Startup source mismatch' }
     $delegateText = [regex]::Replace($delegateText,$pattern,"        // BiliClean minimal startup: retain lifecycle tracking only.`n        registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());`n")
     [IO.File]::WriteAllText($delegate,$delegateText,[Text.UTF8Encoding]::new($false))
 }
+[IO.File]::WriteAllText($delegate,$delegateText,[Text.UTF8Encoding]::new($false))
+Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/settings/patch/SettingsResourcePatch.kt' '"app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment"' '"app.revanced.bilibili.clean.CleanSettingsFragment"'
+Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/settings/patch/SettingsResourcePatch.kt' '"@string/biliroaming_settings_title"' '"去广告与空降助手"'
 
 $settings = @'
 object Settings {

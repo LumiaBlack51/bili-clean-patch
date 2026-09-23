@@ -1,0 +1,10 @@
+--------- beginning of crash
+09-23 05:40:34.663  3617  3723 F libc    : FORTIFY: pthread_mutex_lock called on a destroyed mutex (0x743632abb0c8)
+09-23 05:40:34.663  3617  3723 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 3723 (RenderThread), pid 3617 (tv.danmaku.bili)
+09-23 05:40:34.729  3617  4498 F libc    : FORTIFY: pthread_mutex_lock called on a destroyed mutex (0x7436d20a09d0)
+09-23 05:40:49.904  4523  4953 F libc    : FORTIFY: pthread_mutex_lock called on a destroyed mutex (0x74361f2bf0c8)
+09-23 05:40:49.905  4523  4953 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 4953 (MediaCodec_loop), pid 4523 (tv.danmaku.bili)
+09-23 05:40:49.957  4523  4950 F libc    : FORTIFY: pthread_mutex_lock called on a destroyed mutex (0x74374e3bc500)
+09-23 05:40:49.967  4523  5002 F libc    : FORTIFY: pthread_mutex_lock called on a destroyed mutex (0x74374e3bc500)
+09-23 05:40:49.970  4523  5004 F libc    : FORTIFY: pthread_mutex_lock called on a destroyed mutex (0x74374e3bc500)
+09-23 05:40:49.980  4523  5056 F libc    : FORTIFY: pthread_mutex_lock called on a destroyed mutex (0x74356e766b68)

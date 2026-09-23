@@ -1,0 +1,35 @@
+--------- beginning of crash
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: FATAL EXCEPTION: main
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: Process: tv.danmaku.bili, PID: 21838
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: androidx.fragment.app.Fragment$InstantiationException: Unable to instantiate fragment app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment: calling Fragment constructor caused an exception
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at androidx.fragment.app.Fragment.instantiate(BL:10)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at com.bilibili.app.preferences.BiliPreferencesActivity.X7(BL:4)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at com.bilibili.app.preferences.BiliPreferencesActivity.onPreferenceStartFragment(BL:25)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at androidx.preference.PreferenceFragmentCompat.onPreferenceTreeClick(BL:65)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at com.bilibili.app.preferences.BiliPreferencesActivity$BiliPreferencesFragment.onPreferenceTreeClick(BL:39)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at androidx.preference.Preference.performClick(BL:7)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at androidx.preference.Preference.performClick(BL:1)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at androidx.preference.Preference$a.onClick(BL:3)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.view.View.performClick(View.java:8204)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.view.View.performClickInternal(View.java:8181)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.view.View.-$$Nest$mperformClickInternal(Unknown Source:0)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.view.View$PerformClick.run(View.java:31919)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:1070)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:125)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.os.Looper.dispatchMessage(Looper.java:333)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:263)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:367)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9287)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:566)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:929)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: Caused by: java.lang.reflect.InvocationTargetException
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at java.lang.reflect.Constructor.newInstance0(Native Method)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at java.lang.reflect.Constructor.newInstance(Constructor.java:343)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at androidx.fragment.app.Fragment.instantiate(BL:5)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	... 20 more
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: Caused by: java.lang.LinkageError: Method android.content.SharedPreferences app.revanced.bilibili.settings.ModulePreferenceManager.b() overrides final method in class Landroidx/preference/g; (declaration of 'app.revanced.bilibili.settings.ModulePreferenceManager' appears in /data/app/~~PZSASEy01eKUcLkdCTHDvw==/tv.danmaku.bili-o8SW9_aBU_V6eu6lDX5J5w==/base.apk!classes35.dex)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at kofua.e1.<init>(:4)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at kofua.e1.<init>(:1)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	at app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment.<init>(:1)
+09-23 05:55:16.244 21838 21838 E AndroidRuntime: 	... 23 more

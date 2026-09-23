@@ -38,6 +38,7 @@ object CleanRuntime {
 
     @Keep @JvmStatic
     fun onPrepared(value: IMediaPlayer) {
+        Log.i("BiliClean", "player-prepared type=${value.javaClass.name}")
         main.post {
             detach()
             player = WeakReference(value)
@@ -57,17 +58,9 @@ object CleanRuntime {
     }
 
     private fun identity(): Pair<String, Long>? {
-        val info = VideoInfoHolder.current ?: return null
-        if (info.cid <= 0) return null
-        val aid = when (val view = info.view) {
-            is com.bapis.bilibili.app.view.v1.ViewReply -> view.arc.aid
-            is com.bapis.bilibili.app.viewunite.v1.ViewReply -> {
-                if (view.viewBase.bizType != BizType.BIZ_TYPE_UGC) return null
-                view.arc.aid
-            }
-            else -> return null
-        }
-        return if (aid > 0) av2bv(aid) to info.cid else null
+        val owner = activity.get() ?: return null
+        val (aid, cid) = CleanMetadata.current(owner) ?: return null
+        return av2bv(aid) to cid
     }
 
     private val tick: Runnable = object : Runnable {
@@ -202,7 +195,7 @@ object CleanRuntime {
             text.setOnClickListener {
                 val marks = engine.markers().joinToString("\n") { "广告：${it.start / 1000.0}–${it.end / 1000.0} 秒" }
                 AlertDialog.Builder(host).setTitle("空降助手")
-                    .setMessage("$status\n$marks\n设置入口：哔哩漫游 → 去广告与空降助手")
+                    .setMessage("$status\n$marks\n设置入口：我的 → 设置 → 去广告与空降助手")
                     .setPositiveButton("确定", null).show()
             }
             marker = text

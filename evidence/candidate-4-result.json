@@ -1,0 +1,8 @@
+{
+  "candidate": 4,
+  "sourceCommit": "3309eea",
+  "sha256": "87cff115dd00c0c1f5f53ec2768b4d586902b8fa9211de02346d7b888cbb8e21",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "runtimeAcceptance": "failed: delayed native exit; callback compatibility restores playback but old settings fragment crashes",
+  "generatedAt": "2026-09-23T13:40:27.6284742+08:00"
+}
