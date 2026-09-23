@@ -1,0 +1,8 @@
+{
+  "candidate": 3,
+  "sourceCommit": "57447a3",
+  "sha256": "b8b3a81b892444b1ff2333a79dee8e1c481f1387888da8a1717bf5083a6cc17f",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "runtimeAcceptance": "failed: IncompatibleClassChangeError from upstream Unlock ProtoBuf",
+  "generatedAt": "2026-09-23T13:34:25.8811513+08:00"
+}

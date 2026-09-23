@@ -14,8 +14,8 @@ $params = @('-Xmx3072m','-jar',$cli,'patch','--exclusive','--merge',$integration
     '--out',(Join-Path $local 'candidate.apk'),'--keystore',(Join-Path $local 'avd-test.keystore'),
     '--temporary-files-path',(Join-Path $local 'patch-work'),'--signing-levels','1,2,3')
 # Explicit selections keep unrelated enhancements outside this experiment.
-foreach ($name in @('Integrations','Lib bili','Bili library patch','Main activity patch','Modify modifier',
-    'Unlock ProtoBuf','Clean metadata','Json','Clean feed','BiliRoamingX settings entrance',
+foreach ($name in @('Integrations','Lib bili','Bili library patch','Main activity patch',
+    'Clean metadata','Json','Clean feed','BiliRoamingX settings entrance',
     'Fix preference manager','Clean player','Block up recommend ads')) {
     $params += @('--include',$name)
 }

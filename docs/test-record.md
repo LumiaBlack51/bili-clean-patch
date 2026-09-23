@@ -17,6 +17,7 @@
 | 客户端标记显示 / 自动跳过 | 未执行 | seek-request 日志不能作为成功跳过证据 |
 | 首个完整候选安装 / 启动 | 安装通过，启动失败 | `candidate-startup-crash-1.txt`：旧框架番剧搜索注入访问私有字段；已修改源码移除该启动功能，待重测 |
 | 第二个完整候选安装 / 启动 | 安装通过，启动失败 | 已越过第一个崩溃点，接受游客协议后旧 JSON 钩子引用不存在的 SplashData；`candidate-2-start-errors.txt` 和 `candidate-2-result.json` 记录错误及 APK 指纹 |
+| 第三个完整候选安装 / 启动 | 安装通过，启动失败 | `candidate-3-errors.txt`：上游 Unlock ProtoBuf 将 BroadcastEvent.setShared 改成 virtual 后未匹配调用指令；已从选择列表移除该无关补丁，下一候选待测 |
 | 手机安装测试 | 未执行 | 需 AVD 通过后另选安装方案 |
 
 ## 已确认的马督工样本

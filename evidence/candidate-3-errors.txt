@@ -1,0 +1,18 @@
+--------- beginning of crash
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: FATAL EXCEPTION: gripper-root-single-1
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: Process: tv.danmaku.bili, PID: 3583
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: java.lang.IncompatibleClassChangeError: The method 'void com.bilibili.lib.rpc.track.model.broadcast.BroadcastEvent.setShared(boolean)' was expected to be of type direct but instead was found to be of type virtual (declaration of 'com.bilibili.lib.rpc.track.model.broadcast.BroadcastEvent' appears in /data/app/~~58arYPYfCu5O4l0xFgo3iQ==/tv.danmaku.bili-GmnEb2znAf2-E-jws6WaCg==/base.apk!classes32.dex)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at com.bilibili.lib.rpc.track.model.broadcast.BroadcastEvent.y(BL:2)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at com.bilibili.lib.rpc.track.model.broadcast.BroadcastEvent$b.y(BL:8)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at Xf0.a.a(BL:86)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at Mf0.d.<init>(BL:98)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at Mf0.d.<clinit>(BL:8)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at com.bilibili.lib.moss.utils.RuntimeHelper$b.bizEnabled(BL:1)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at com.bilibili.lib.moss.api.MossBroadcast.bizEnabled(BL:5)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at tv.danmaku.bili.push.innerpush.v2.AppInnerPushManagerV2.init(BL:51)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at com.bilibili.gripper.app.InnerPush_CompatProducer.doExecute(BL:7)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at com.bilibili.lib.gripper.api.TaskCompat$execute$2.invokeSuspend(BL:15)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(BL:9)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at kotlinx.coroutines.F.run(BL:124)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$b.run(BL:134)
+09-23 05:34:19.510  3583  3615 E AndroidRuntime: 	Suppressed: kotlinx.coroutines.internal.DiagnosticCoroutineContextException: [m0{Cancelling}@4010d53, java.util.concurrent.Executors$DelegatedScheduledExecutorService@7b42690]
