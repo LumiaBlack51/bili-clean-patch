@@ -45,7 +45,7 @@ class CleanSettingsFragment : Fragment() {
             rows.addView(text(summary))
             return control
         }
-        toggle("过滤界面广告", "过滤已适配的开屏、推荐流和视频页广告。", Settings.CleanAds)
+        toggle("过滤界面广告", "过滤已适配的开屏、推荐流、视频页和暂停广告。", Settings.CleanAds)
         toggle("空降助手", "显示详情页分类标签、彩色进度条和片段详情，无账号门槛。", Settings.CleanAirborne)
         toggle("显示跳过提示", "跳过时显示目标时间。", Settings.CleanNotice)
         rows.addView(AirborneConfigDialog.rows(context))

@@ -2,14 +2,15 @@
 
 独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**实验适配官方 9.12.0 (9120300)：AVD 启动、播放、设置和真实视频空降已通过；去广告通过真实宿主模型的受控测试，但线上真实广告样本、开屏和视频页覆盖尚未全面验收。不是稳定版。**
 
-[新版完整 APK 下载：0.2.0 空降助手分类预览版](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.2.0-airborne-preview)（私有仓库登录后可见）。加密签名备份保留在 [0.1.0 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)。
+[新版完整 APK 下载：0.2.1 手动跳过与暂停广告修正版](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.2.1-manual-pause-preview)（私有仓库登录后可见）。加密签名备份保留在 [0.1.0 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)。
 
 ## 当前实现
 
 - 固定 BiliRoamingX GPL-3.0 源码提交，使用 ReVanced 静态补丁和现有设置入口。
 - 设置页展示去广告、空降助手和提示开关，以及 11 类片段的独立行为选择：总是跳过、跳过一次、手动跳过、仅显示、禁用；不查询账号等级或大会员状态。
 - 独立推荐流和 JSON 广告过滤，按 9.12.0 实际模型适配开屏；复用部分视频页面过滤。尚未证明覆盖所有界面广告。
-- 独立空降策略引擎、只读社区接口客户端、BV/CID/时长校验；详情页分类标签、横竖屏及收起进度条的彩色区间、片段列表、手动按钮和原生播放器 seek。全片标签与精彩时刻不自动跳过，静音标记仅显示。
+- 独立空降策略引擎、只读社区接口客户端、BV/CID/时长校验；详情页分类标签、横竖屏及收起进度条的彩色区间、片段列表、手动按钮和原生播放器 seek。全片标签与精彩时刻不自动跳过，静音区间支持手动跳过，不自动静音。
+- 9.12.0 暂停广告请求与预载解析入口过滤，跟随“过滤界面广告”开关；已适配入口的验证与线上广告覆盖边界见下方专项记录。
 - 网络请求不携带账号 cookie，不写入社区数据库。HTTP 404/空列表、请求错误、播放器异常分别处理。
 
 ## 构建
@@ -38,7 +39,8 @@ PowerShell 7.4+、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、NDK
 
 ## 验证和交付
 
-- [空降助手分类、设置与最终 AVD 验收（2026-09-24）](docs/airborne-categories.md)：新版 APK、SHA-256 校验文件与 manifest 见上方 0.2.0 发布页。
+- [手动按钮、1047 期回归与暂停广告验证](docs/manual-and-pause-ads.md)：新版 APK、SHA-256 校验文件与 manifest 见上方 0.2.1 发布页。
+- [0.2.0 空降助手分类、设置与 AVD 验收（2026-09-24）](docs/airborne-categories.md)。
 - [调查和方案](docs/investigation.md)
 - [交付 APK 的实际测试与支持边界](docs/candidate-9.md)
 - [历次测试记录](docs/test-record.md)

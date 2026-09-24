@@ -1,0 +1,14 @@
+{
+  "validatedAt": "2026-09-24T13:44:56.5087533+08:00",
+  "apkSha256": "674cb398f8c13be1b2c628663a963bf235749f7cd461cf35b3f98c9f35996b97",
+  "package": "tv.danmaku.bili",
+  "version": "9.12.0",
+  "versionCode": 9120300,
+  "release": "v0.2.1-manual-pause-preview",
+  "serial": "emulator-5580",
+  "playbackAssertions": 20,
+  "video": "BV1DuZFB8EZi",
+  "pauseAdValidation": "installed host entrypoints; no live ad creative captured",
+  "testRecord": "docs/manual-and-pause-ads.md",
+  "phoneModified": false
+}

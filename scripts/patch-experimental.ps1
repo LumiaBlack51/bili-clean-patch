@@ -16,7 +16,7 @@ $params = @('-Xmx3072m','-jar',$cli,'patch','--exclusive','--merge',$integration
 # Explicit selections keep unrelated enhancements outside this experiment.
 foreach ($name in @('Integrations','Lib bili',
     'Clean metadata','Json','Clean feed','BiliRoamingX settings entrance',
-    'Clean player','Block up recommend ads')) {
+    'Clean player','Clean pause ads','Block up recommend ads')) {
     $params += @('--include',$name)
 }
 $params += $apk

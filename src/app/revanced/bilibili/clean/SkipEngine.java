@@ -41,6 +41,15 @@ public final class SkipEngine {
         return true;
     }
     public List<Segment> markers() { return segments; }
+    /** Manual mode applies to every timed interval, including a community mute annotation.
+     * Full-video labels and zero-length points cannot be skipped as intervals. */
+    public Segment manualAt(long position, java.util.function.Function<Segment, Mode> policy) {
+        for (Segment s : segments) {
+            if (("skip".equals(s.action) || "mute".equals(s.action)) && s.start <= position && position < s.end &&
+                policy.apply(s) == Mode.MANUAL) return s;
+        }
+        return null;
+    }
     public Segment at(long position, boolean playing, boolean enabled) {
         return at(position, playing, enabled, s -> Mode.ONCE);
     }

@@ -17,6 +17,12 @@ $settingMap = MappingBlock 'app.revanced.bilibili.settings.Setting'
 $ads = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanAds -> (\w+)').Groups[1].Value
 $value = [regex]::Match($settingMap.Groups['body'].Value,'java.lang.Object value -> (\w+)').Groups[1].Value
 if (!$ads -or !$value) { throw 'Missing settings field mappings' }
+$runtimeMap = MappingBlock 'app.revanced.bilibili.clean.CleanRuntime'
+$segmentMap = MappingBlock 'app.revanced.bilibili.clean.SkipEngine$Segment'
+$engineField = [regex]::Match($runtimeMap.Groups['body'].Value,'SkipEngine engine -> (\w+)').Groups[1].Value
+$segmentCategory = [regex]::Match($segmentMap.Groups['body'].Value,'java.lang.String category -> (\w+)').Groups[1].Value
+$segmentAction = [regex]::Match($segmentMap.Groups['body'].Value,'java.lang.String action -> (\w+)').Groups[1].Value
+if (!$engineField -or !$segmentCategory -or !$segmentAction) { throw 'Missing manual fixture mappings' }
 @"
 package app.biliclean.tests;
 final class GeneratedNames {
@@ -24,6 +30,10 @@ static final String SETTINGS = "$($settingsMap.Groups['name'].Value)";
 static final String SETTING = "$($settingMap.Groups['name'].Value)";
 static final String ADS = "$ads";
 static final String VALUE = "$value";
+static final String ENGINE_FIELD = "$engineField";
+static final String SEGMENT = "$($segmentMap.Groups['name'].Value)";
+static final String SEGMENT_CATEGORY = "$segmentCategory";
+static final String SEGMENT_ACTION = "$segmentAction";
 }
 "@ | Set-Content "$out/GeneratedNames.java"
 & javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java" "$root/tests/android/AirbornePlaybackTest.java" "$out/GeneratedNames.java"

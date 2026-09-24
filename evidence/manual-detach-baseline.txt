@@ -1,0 +1,16 @@
+PASS real-video detail category
+PASS show-only does not seek position=887642
+PASS disabled does not seek position=888296
+PASS once skips first encounter position=1035089
+PASS once allows rewind after first skip position=888661
+PASS manual waits for click position=888342
+PASS manual button moves actual player position=1035468
+PASS once retains already handled marker position=888512
+PASS always skips marked interval position=1035468
+PASS always skips again after rewind position=1035468
+PASS once allows rewind position=889272
+PASS paused playback never auto-skips position=890079
+PASS resume triggers auto-skip position=1035468
+PASS manual 过场/开场动画 portrait-intro actual touch position=8000
+FAIL java.lang.AssertionError: Manual button lost after host detaches overlay cause=null
+

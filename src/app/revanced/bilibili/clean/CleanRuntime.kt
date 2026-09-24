@@ -106,14 +106,17 @@ object CleanRuntime {
                     status = "读取片段标记…"
                     fetch(id.first, id.second, generation, requestEpoch, media.duration)
                 }
-                showMarker(host)
-                ui.update(host, engine.markers(), media.duration)
-                val segment = engine.at(media.currentPosition, media.isPlaying,
+                val position = media.currentPosition
+                val segment = engine.at(position, media.isPlaying,
                     !failedSeek && android.os.SystemClock.uptimeMillis() >= pendingSeekUntil) {
                     AirborneConfig.mode(host, it.category)
                 }
                 if (segment != null) seek(host, media, segment, true)
-                showManual(host, media, media.currentPosition)
+                showManual(host, media, position)
+                // A host title/progress-view failure must not prevent the actionable button.
+                showMarker(host)
+                runCatching { ui.update(host, engine.markers(), media.duration) }
+                    .onFailure { Log.w("BiliClean", "marker-ui type=${it.javaClass.simpleName}") }
             } catch (e: Exception) {
                 status = "播放器暂不可用"
                 Log.w("BiliClean", "player-state type=${e.javaClass.simpleName}")
@@ -188,8 +191,12 @@ object CleanRuntime {
     }
 
     private fun showMarker(host: Activity) {
+        val root = host.findViewById<ViewGroup>(android.R.id.content) ?: return
+        if (marker?.parent !== root) {
+            (marker?.parent as? ViewGroup)?.removeView(marker)
+            marker = null
+        }
         if (marker == null) {
-            val root = host.findViewById<ViewGroup>(android.R.id.content) ?: return
             val text = TextView(host)
             text.textSize = 12f
             text.setTextColor(0xffffffff.toInt())
@@ -202,6 +209,7 @@ object CleanRuntime {
             marker = text
         }
         marker?.visibility = android.view.View.VISIBLE
+        marker?.bringToFront()
         val visible = engine.markers().filter { AirborneConfig.mode(host, it.category) != SkipEngine.Mode.DISABLED }
         marker?.text = if (visible.isEmpty()) {
             if (engine.markers().isEmpty()) "空降助手 · $status" else "空降助手 · 分类已禁用 ›"
@@ -228,25 +236,33 @@ object CleanRuntime {
     }
 
     private fun showManual(host: Activity, media: IMediaPlayer, position: Long) {
-        val current = engine.markers().firstOrNull {
-            it.action == "skip" && it.start <= position && position < it.end &&
-                AirborneConfig.mode(host, it.category) == SkipEngine.Mode.MANUAL
-        }
+        val current = engine.manualAt(position) { AirborneConfig.mode(host, it.category) }
         if (current == null) { manual?.visibility = android.view.View.GONE; return }
+        val root = host.findViewById<ViewGroup>(android.R.id.content) ?: return
+        if (manual?.parent !== root) {
+            (manual?.parent as? ViewGroup)?.removeView(manual)
+            manual = null
+        }
         if (manual == null) {
-            val root = host.findViewById<ViewGroup>(android.R.id.content) ?: return
             manual = TextView(host).apply {
                 textSize = 15f; setTextColor(0xffffffff.toInt()); setBackgroundColor(0xee303030.toInt())
                 setPadding(24, 16, 24, 16)
+                elevation = 24 * host.resources.displayMetrics.density
                 root.addView(this, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply {
                     topMargin = (96 * host.resources.displayMetrics.density).toInt()
                 })
             }
         }
+        val selectedKey = key
         manual?.apply {
             visibility = android.view.View.VISIBLE
+            bringToFront()
             text = "跳过${AirborneConfig.title(current.category)} → ${time(current.end)}"
-            setOnClickListener { seek(host, media, current, false) }
+            setOnClickListener {
+                if (key == selectedKey && player.get() === media && Settings.CleanAirborne() &&
+                    AirborneConfig.mode(host, current.category) == SkipEngine.Mode.MANUAL &&
+                    media.currentPosition in current.start until current.end) seek(host, media, current, false)
+            }
         }
     }
 
@@ -255,7 +271,9 @@ object CleanRuntime {
         val marks = engine.markers().filter { AirborneConfig.mode(host, it.category) != SkipEngine.Mode.DISABLED }
         val labels = marks.map {
             val range = if (it.action == "full") "全片标签" else "${time(it.start)}–${time(it.end)}"
-            val mode = if (it.action == "full") "全片标签（仅显示）" else if (it.action == "mute") "静音标记（仅显示）" else if (it.action == "poi") "点击跳至精彩时刻" else
+            val mode = if (it.action == "full") "全片标签（仅显示）" else if (it.action == "mute")
+                if (AirborneConfig.mode(host, it.category) == SkipEngine.Mode.MANUAL) "静音标记 · 手动跳过" else "静音标记（仅显示）"
+            else if (it.action == "poi") "点击跳至精彩时刻" else
                 AirborneConfig.labels[AirborneConfig.mode(host, it.category).ordinal]
             "● ${AirborneConfig.title(it.category)}  $range\n$mode"
         }.toTypedArray()
@@ -265,7 +283,7 @@ object CleanRuntime {
         if (marks.isEmpty()) dialog.setMessage(status)
         else dialog.setItems(labels) { _, index ->
             val s = marks[index]
-            if (s.action == "full" || s.action == "mute") return@setItems
+            if (s.action == "full") return@setItems
             AlertDialog.Builder(host).setTitle(AirborneConfig.title(s.category))
                 .setMessage("${time(s.start)}–${time(s.end)}")
                 .setPositiveButton(if (s.action == "poi") "跳至此处" else "跳过此片段") { _, _ ->

@@ -42,6 +42,23 @@ public final class SkipEngineTest {
         check(e.at(0, true, true, s -> SkipEngine.Mode.ALWAYS) == null);
         check(e.at(6500, true, true, s -> SkipEngine.Mode.ALWAYS) == null);
         check(e.at(8000, true, true, s -> SkipEngine.Mode.ALWAYS) == null);
+        check(e.manualAt(4500, s -> s.category.equals("intro") ? SkipEngine.Mode.MANUAL : SkipEngine.Mode.ALWAYS) == intro);
+        check(e.manualAt(6500, s -> SkipEngine.Mode.MANUAL) == mute);
+        check(e.manualAt(7000, s -> SkipEngine.Mode.MANUAL) == null);
+        check(e.manualAt(0, s -> SkipEngine.Mode.MANUAL) == null);
+        check(e.manualAt(8000, s -> SkipEngine.Mode.MANUAL) == null);
+        check(e.manualAt(4500, s -> SkipEngine.Mode.DISABLED) == null);
+        check(e.manualAt(4500, s -> SkipEngine.Mode.SHOW) == null);
+        for (String category : Arrays.asList("sponsor", "selfpromo", "interaction", "intro", "outro", "preview", "padding", "filler", "music_offtopic")) {
+            e.reset(); long generation = e.select(category);
+            SkipEngine.Segment marked = new SkipEngine.Segment(category, 1000, 9000, category, "skip");
+            check(e.load(generation, Arrays.asList(marked), 10000));
+            check(e.manualAt(1000, s -> SkipEngine.Mode.MANUAL) == marked);
+            check(e.manualAt(8999, s -> SkipEngine.Mode.MANUAL) == marked);
+            check(e.manualAt(9000, s -> SkipEngine.Mode.MANUAL) == null);
+            check(e.at(2000, true, true, s -> SkipEngine.Mode.MANUAL) == null);
+        }
+        System.out.println("PASS: manual intro/mute intervals, exact end, no full/point/disabled/show button");
         System.out.println("PASS: per-category modes, always/once rewind, manual/show/disabled, full/poi/mute safety");
         System.out.println("PASS: boundaries, paused/disabled, rewind, stale replies, duration, reset, invalid ranges");
     }

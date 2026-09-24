@@ -42,7 +42,29 @@ public final class HostModelTest extends Instrumentation {
                 if (output.size() != (enabled ? 2 : 4) || output.get(0) != normal || output.get(1) != placeholder)
                     throw new AssertionError("Unexpected filter output, enabled=" + enabled);
             }
-            result.putString("stream", "PASS controlled host-model fixtures: actual Gson annotations, ad type, is_ad, ordinary and non-ad placeholder retention, disabled pass-through. Not live-ad/UI acceptance.\n");
+            StringBuilder checks = new StringBuilder("PASS controlled host-model fixtures: actual Gson annotations, ad type, is_ad, ordinary and non-ad placeholder retention, disabled pass-through. Not live-ad/UI acceptance.\n");
+            Class<?> pauseType = loader.loadClass("com.bilibili.ad.adview.videodetail.pausedpage.VDPausedPage");
+            Object service = pauseType.getField("INSTANCE").get(null);
+            valueField.set(setting, true);
+            int pausedEntries = 0;
+            for (Method entry : pauseType.getMethods()) {
+                if (!entry.getName().equals("requestPausedPage") && !entry.getName().equals("decodeViewEndPagePausedPage")) continue;
+                Object[] args = new Object[entry.getParameterCount()];
+                Class<?>[] types = entry.getParameterTypes();
+                for (int i=0;i<types.length;i++) {
+                    if (types[i] == long.class) args[i] = 0L;
+                    else if (types[i] == int.class) args[i] = 0;
+                }
+                if (entry.invoke(service, args) != null) throw new AssertionError("Pause ad not suppressed: " + entry.getName());
+                pausedEntries++;
+                checks.append("PASS installed host pause-ad entry blocked: ").append(entry.getName()).append('\n');
+            }
+            if (pausedEntries != 2) throw new AssertionError("Missing pause-ad entrypoints");
+            valueField.set(setting, false);
+            Method guard = loader.loadClass("app.revanced.bilibili.clean.CleanPauseAds").getMethod("block");
+            if (!Boolean.FALSE.equals(guard.invoke(null))) throw new AssertionError("Pause-ad disabled guard failed");
+            checks.append("PASS pause-ad guard respects disabled ads setting\n");
+            result.putString("stream", checks.toString());
         } catch (Throwable failure) {
             result.putString("stream", "FAIL " + failure + " cause=" + failure.getCause() + "\n");
             result.putString("failure", failure.toString());

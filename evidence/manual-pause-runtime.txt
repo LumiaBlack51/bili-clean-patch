@@ -1,0 +1,25 @@
+--------- beginning of main
+09-24 05:41:38.704 21737 21829 I BiliClean: modern-feed items=4 ads=2 placeholders=1 removed=2 enabled=true
+09-24 05:41:38.704 21737 21829 I BiliClean: modern-feed items=4 ads=2 placeholders=1 removed=0 enabled=false
+09-24 05:41:38.705 21737 21829 I BiliClean: pause-ad blocked
+09-24 05:41:38.705 21737 21829 I BiliClean: pause-ad blocked
+09-24 05:41:45.424 21847 21963 I BiliClean: modern-feed items=10 ads=0 placeholders=1 removed=0 enabled=true
+09-24 05:41:48.624 21847 21847 I BiliClean: play-metadata aid=116470722010516 cid=37848154233 type=BIZ_TYPE_UGC
+09-24 05:41:50.985 21847 21847 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-24 05:41:53.392 21847 21847 I BiliClean: markers video=BV1DuZFB8EZi:37848154233 count=3 status=3 个片段标记
+09-24 05:42:10.137 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=208911 to=298888 category=sponsor automatic=true uuid=3dea9f62a6f31d67848234ddef88eba0eeb1638093c138cc37af961c4c8db3987
+09-24 05:42:16.324 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=210598 to=298888 category=sponsor automatic=false uuid=3dea9f62a6f31d67848234ddef88eba0eeb1638093c138cc37af961c4c8db3987
+09-24 05:42:19.123 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=209989 to=298888 category=sponsor automatic=true uuid=3dea9f62a6f31d67848234ddef88eba0eeb1638093c138cc37af961c4c8db3987
+09-24 05:42:20.674 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=209218 to=298888 category=sponsor automatic=true uuid=3dea9f62a6f31d67848234ddef88eba0eeb1638093c138cc37af961c4c8db3987
+09-24 05:42:22.184 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=208810 to=298888 category=sponsor automatic=true uuid=3dea9f62a6f31d67848234ddef88eba0eeb1638093c138cc37af961c4c8db3987
+09-24 05:42:25.499 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=210156 to=298888 category=sponsor automatic=true uuid=3dea9f62a6f31d67848234ddef88eba0eeb1638093c138cc37af961c4c8db3987
+09-24 05:42:28.816 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=211005 to=298888 category=sponsor automatic=true uuid=3dea9f62a6f31d67848234ddef88eba0eeb1638093c138cc37af961c4c8db3987
+09-24 05:42:31.293 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=2000 to=8026 category=intro automatic=false uuid=84a270a87fa68a6f019338b0dca6f951352a7f157faf31193838241f373b3bdb7
+09-24 05:42:34.456 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=1078837 to=1101120 category=outro automatic=false uuid=f970e671c9130bb377cd2dd4e0d57c093174927e73f79a4052476f80cd28ac2b7
+09-24 05:42:38.230 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=1995 to=8026 category=intro automatic=false uuid=84a270a87fa68a6f019338b0dca6f951352a7f157faf31193838241f373b3bdb7
+09-24 05:42:41.485 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=2055 to=8026 category=intro automatic=false uuid=84a270a87fa68a6f019338b0dca6f951352a7f157faf31193838241f373b3bdb7
+09-24 05:42:50.089 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=2055 to=8026 category=intro automatic=false uuid=84a270a87fa68a6f019338b0dca6f951352a7f157faf31193838241f373b3bdb7
+09-24 05:42:53.409 21847 21847 I BiliClean: seek-request video=BV1DuZFB8EZi:37848154233 from=1078790 to=1101120 category=outro automatic=false uuid=f970e671c9130bb377cd2dd4e0d57c093174927e73f79a4052476f80cd28ac2b7
+09-24 05:42:56.867 21847 21847 I BiliClean: play-metadata aid=473686263 cid=851563379 type=BIZ_TYPE_UGC
+09-24 05:42:58.040 21847 21847 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-24 05:42:59.013 21847 21847 I BiliClean: markers video=BV1zT411K7Y9:851563379 count=0 status=此视频暂无匹配的片段标记
