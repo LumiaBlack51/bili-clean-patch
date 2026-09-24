@@ -1,0 +1,16 @@
+--------- beginning of main
+09-24 00:07:51.061  4447  4545 I BiliClean: modern-feed items=9 ads=0 placeholders=1 removed=0 enabled=true
+09-24 00:07:53.625  4447  4447 I BiliClean: play-metadata aid=116085366071050 cid=36122397322 type=BIZ_TYPE_UGC
+09-24 00:07:56.210  4447  4447 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-24 00:07:58.557  4447  4447 I BiliClean: markers video=BV1YpZkBDEVo:36122397322 count=4 status=4 个片段标记
+09-24 00:08:14.489  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=888079 to=1035468 category=sponsor automatic=true uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:22.616  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=889212 to=1035468 category=sponsor automatic=false uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:25.485  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=889345 to=1035468 category=sponsor automatic=true uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:27.157  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=888138 to=1035468 category=sponsor automatic=true uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:28.801  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=1034199 to=1035468 category=sponsor automatic=true uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:30.421  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=888815 to=1035468 category=sponsor automatic=true uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:33.072  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=889433 to=1035468 category=sponsor automatic=true uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:36.175  4447  4447 I BiliClean: seek-request video=BV1YpZkBDEVo:36122397322 from=887511 to=1035468 category=sponsor automatic=true uuid=bd8ce8f7bf80d9eae6a2563cc2b793ca78eaa4679a6479162547f6f5aa7486ca7
+09-24 00:08:37.366  4447  4447 I BiliClean: play-metadata aid=473686263 cid=851563379 type=BIZ_TYPE_UGC
+09-24 00:08:38.552  4447  4447 I BiliClean: player-prepared type=tv.danmaku.ijk.media.player.IjkMediaPlayer
+09-24 00:08:39.776  4447  4447 I BiliClean: markers video=BV1zT411K7Y9:851563379 count=0 status=此视频暂无匹配的片段标记

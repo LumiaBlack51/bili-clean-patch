@@ -12,10 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.Keep
 import app.revanced.bilibili.patches.main.ApplicationDelegate
-import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.av2bv
-import com.bapis.bilibili.playershared.BizType
 import org.json.JSONArray
 import tv.danmaku.ijk.media.player.IMediaPlayer
 import java.lang.ref.WeakReference
@@ -35,6 +33,9 @@ object CleanRuntime {
     private var epoch = 0L
     private var status = "等待视频信息"
     private var failedSeek = false
+    private val ui = AirborneUi()
+    private var manual: TextView? = null
+    private var pendingSeekUntil = 0L
 
     @Keep @JvmStatic
     fun onPrepared(value: IMediaPlayer) {
@@ -51,6 +52,10 @@ object CleanRuntime {
         main.removeCallbacks(tick)
         (marker?.parent as? ViewGroup)?.removeView(marker)
         marker = null
+        (manual?.parent as? ViewGroup)?.removeView(manual)
+        manual = null
+        ui.clear()
+        pendingSeekUntil = 0L
         engine.reset()
         key = ""
         epoch++
@@ -70,19 +75,24 @@ object CleanRuntime {
             if (host == null || host.isDestroyed || media == null) { detach(); return }
             if (ApplicationDelegate.getTopActivity() !== host) {
                 marker?.visibility = android.view.View.GONE
+                manual?.visibility = android.view.View.GONE
+                ui.clear()
                 main.postDelayed(this, 500)
                 return
             }
             try {
                 if (!Settings.CleanAirborne()) {
                     marker?.visibility = android.view.View.GONE
+                    manual?.visibility = android.view.View.GONE
+                    ui.clear()
                     main.postDelayed(this, 500)
                     return
                 }
                 val id = identity()
                 if (id == null) {
-                    if (key.isNotEmpty()) { key = ""; engine.reset(); epoch++ }
+                    if (key.isNotEmpty()) { key = ""; engine.reset(); epoch++; ui.clear() }
                     marker?.visibility = android.view.View.GONE
+                    manual?.visibility = android.view.View.GONE
                     main.postDelayed(this, 250)
                     return
                 }
@@ -92,27 +102,18 @@ object CleanRuntime {
                     failedSeek = false
                     val generation = engine.select(selected)
                     val requestEpoch = ++epoch
-                    status = "读取广告标记…"
+                    ui.clear()
+                    status = "读取片段标记…"
                     fetch(id.first, id.second, generation, requestEpoch, media.duration)
                 }
                 showMarker(host)
+                ui.update(host, engine.markers(), media.duration)
                 val segment = engine.at(media.currentPosition, media.isPlaying,
-                    Settings.CleanAutoSkip() && !failedSeek)
-                if (segment != null) {
-                    try {
-                        val from = media.currentPosition
-                        media.seekTo(segment.end)
-                        engine.acknowledge(segment)
-                        // This records a request, never claims actual playback arrived there.
-                        Log.i("BiliClean", "seek-request video=$key from=$from to=${segment.end} uuid=${segment.id}")
-                        if (Settings.CleanNotice()) Toast.makeText(host,
-                            "空降助手：跳过广告至 ${segment.end / 1000} 秒", Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        failedSeek = true
-                        status = "跳转失败，自动跳过已暂停"
-                        Log.w("BiliClean", "seek-failed type=${e.javaClass.simpleName}")
-                    }
+                    !failedSeek && android.os.SystemClock.uptimeMillis() >= pendingSeekUntil) {
+                    AirborneConfig.mode(host, it.category)
                 }
+                if (segment != null) seek(host, media, segment, true)
+                showManual(host, media, media.currentPosition)
             } catch (e: Exception) {
                 status = "播放器暂不可用"
                 Log.w("BiliClean", "player-state type=${e.javaClass.simpleName}")
@@ -127,14 +128,17 @@ object CleanRuntime {
             var message: String
             var connection: HttpURLConnection? = null
             try {
-                connection = URL("https://www.bsbsb.top/api/skipSegments?videoID=$bvid&cid=$cid")
+                connection = URL("https://www.bsbsb.top/api/skipSegments?videoID=$bvid&cid=$cid&categories=" +
+                    java.net.URLEncoder.encode(JSONArray(AirborneConfig.categories.map { it.key }).toString(), "UTF-8"))
                     .openConnection() as HttpURLConnection
                 connection.connectTimeout = 8000
                 connection.readTimeout = 8000
                 connection.instanceFollowRedirects = false
-                connection.setRequestProperty("User-Agent", "BiliCleanPatch/0.1")
+                connection.setRequestProperty("User-Agent", "BiliCleanPatch/0.2")
+                connection.setRequestProperty("origin", "BiliCleanPatch")
+                connection.setRequestProperty("x-ext-version", "0.2.0")
                 val code = connection.responseCode
-                if (code == 404) message = "此视频暂无广告标记"
+                if (code == 404) message = "此视频暂无片段标记"
                 else if (code != 200) message = "标记服务请求失败（HTTP $code）"
                 else {
                     val bytes = connection.inputStream.use { stream ->
@@ -153,20 +157,22 @@ object CleanRuntime {
                         val item = data.getJSONObject(i)
                         val range = item.optJSONArray("segment") ?: return@mapNotNull null
                         if (item.optString("cid") != cid.toString() ||
-                            item.optString("category") != "sponsor" ||
-                            item.optString("actionType") != "skip" || range.length() != 2)
+                            AirborneConfig.category(item.optString("category")) == null ||
+                            item.optString("actionType") !in setOf("skip", "full", "poi", "mute") || range.length() != 2)
                             return@mapNotNull null
                         val start = range.optDouble(0)
                         val end = range.optDouble(1)
                         val videoDuration = item.optDouble("videoDuration")
-                        if (!start.isFinite() || !end.isFinite() || start < 0 || end <= start ||
-                            end * 1000 > duration || !videoDuration.isFinite() ||
-                            kotlin.math.abs(videoDuration * 1000 - duration) > 3000) return@mapNotNull null
+                        val action = item.optString("actionType")
+                        if (!start.isFinite() || !end.isFinite() || start < 0 || end < start ||
+                            (end == start && action !in setOf("full", "poi")) ||
+                            end * 1000 > duration || !videoDuration.isFinite() || videoDuration < 0 ||
+                            (videoDuration != 0.0 && kotlin.math.abs(videoDuration * 1000 - duration) > 3000)) return@mapNotNull null
                         val uuid = item.optString("UUID")
                         if (uuid.isEmpty()) null else SkipEngine.Segment(uuid,
-                            (start * 1000).toLong(), (end * 1000).toLong())
+                            (start * 1000).toLong(), (end * 1000).toLong(), item.optString("category"), action)
                     }
-                    message = if (result.isEmpty()) "此视频暂无匹配的广告标记" else "${result.size} 段广告标记"
+                    message = if (result.isEmpty()) "此视频暂无匹配的片段标记" else "${result.size} 个片段标记"
                 }
             } catch (e: Exception) {
                 message = "标记读取失败，正常播放不受影响"
@@ -192,15 +198,80 @@ object CleanRuntime {
             val layout = FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END)
             layout.topMargin = (56 * host.resources.displayMetrics.density).toInt()
             root.addView(text, layout)
-            text.setOnClickListener {
-                val marks = engine.markers().joinToString("\n") { "广告：${it.start / 1000.0}–${it.end / 1000.0} 秒" }
-                AlertDialog.Builder(host).setTitle("空降助手")
-                    .setMessage("$status\n$marks\n设置入口：我的 → 设置 → 去广告与空降助手")
-                    .setPositiveButton("确定", null).show()
-            }
+            text.setOnClickListener { showDetails(host) }
             marker = text
         }
         marker?.visibility = android.view.View.VISIBLE
-        marker?.text = "空降助手 · $status"
+        val visible = engine.markers().filter { AirborneConfig.mode(host, it.category) != SkipEngine.Mode.DISABLED }
+        marker?.text = if (visible.isEmpty()) {
+            if (engine.markers().isEmpty()) "空降助手 · $status" else "空降助手 · 分类已禁用 ›"
+        } else "空降助手 · ${visible.size}处标记 ›"
+    }
+
+    private fun time(ms: Long): String = "%02d:%02d".format(ms / 60000, ms / 1000 % 60)
+
+    private fun seek(host: Activity, media: IMediaPlayer, segment: SkipEngine.Segment, automatic: Boolean) {
+        try {
+            val from = media.currentPosition
+            val target = if (segment.action == "poi") segment.start else segment.end
+            media.seekTo(target)
+            engine.acknowledge(segment)
+            pendingSeekUntil = android.os.SystemClock.uptimeMillis() + 1500
+            Log.i("BiliClean", "seek-request video=$key from=$from to=$target category=${segment.category} automatic=$automatic uuid=${segment.id}")
+            if (Settings.CleanNotice()) Toast.makeText(host,
+                "空降助手：${if (segment.action == "poi") "跳至" else "跳过"}${AirborneConfig.title(segment.category)} ${time(target)}", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            failedSeek = true
+            status = "跳转失败，自动跳过已暂停"
+            Log.w("BiliClean", "seek-failed type=${e.javaClass.simpleName}")
+        }
+    }
+
+    private fun showManual(host: Activity, media: IMediaPlayer, position: Long) {
+        val current = engine.markers().firstOrNull {
+            it.action == "skip" && it.start <= position && position < it.end &&
+                AirborneConfig.mode(host, it.category) == SkipEngine.Mode.MANUAL
+        }
+        if (current == null) { manual?.visibility = android.view.View.GONE; return }
+        if (manual == null) {
+            val root = host.findViewById<ViewGroup>(android.R.id.content) ?: return
+            manual = TextView(host).apply {
+                textSize = 15f; setTextColor(0xffffffff.toInt()); setBackgroundColor(0xee303030.toInt())
+                setPadding(24, 16, 24, 16)
+                root.addView(this, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply {
+                    topMargin = (96 * host.resources.displayMetrics.density).toInt()
+                })
+            }
+        }
+        manual?.apply {
+            visibility = android.view.View.VISIBLE
+            text = "跳过${AirborneConfig.title(current.category)} → ${time(current.end)}"
+            setOnClickListener { seek(host, media, current, false) }
+        }
+    }
+
+    private fun showDetails(host: Activity) {
+        val selectedKey = key
+        val marks = engine.markers().filter { AirborneConfig.mode(host, it.category) != SkipEngine.Mode.DISABLED }
+        val labels = marks.map {
+            val range = if (it.action == "full") "全片标签" else "${time(it.start)}–${time(it.end)}"
+            val mode = if (it.action == "full") "全片标签（仅显示）" else if (it.action == "mute") "静音标记（仅显示）" else if (it.action == "poi") "点击跳至精彩时刻" else
+                AirborneConfig.labels[AirborneConfig.mode(host, it.category).ordinal]
+            "● ${AirborneConfig.title(it.category)}  $range\n$mode"
+        }.toTypedArray()
+        val dialog = AlertDialog.Builder(host).setTitle("空降助手 · 片段详情")
+            .setNegativeButton("关闭", null)
+            .setNeutralButton("分类行为设置") { _, _ -> AirborneConfigDialog.show(host) }
+        if (marks.isEmpty()) dialog.setMessage(status)
+        else dialog.setItems(labels) { _, index ->
+            val s = marks[index]
+            if (s.action == "full" || s.action == "mute") return@setItems
+            AlertDialog.Builder(host).setTitle(AirborneConfig.title(s.category))
+                .setMessage("${time(s.start)}–${time(s.end)}")
+                .setPositiveButton(if (s.action == "poi") "跳至此处" else "跳过此片段") { _, _ ->
+                    if (key == selectedKey && Settings.CleanAirborne()) player.get()?.let { seek(host, it, s, false) }
+                }.setNegativeButton("取消", null).show()
+        }
+        dialog.show()
     }
 }

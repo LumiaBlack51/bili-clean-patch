@@ -1,0 +1,12 @@
+{
+  "validatedAt": "2026-09-24T08:27:21.0310466+08:00",
+  "apkSha256": "49cdb3c1d57c5509a5d6ea5e6910bd068f9dd18d71ee3d8b5bb7a272f2a3f4bc",
+  "package": "tv.danmaku.bili",
+  "version": "9.12.0",
+  "versionCode": 9120300,
+  "serial": "emulator-5580",
+  "playbackAssertions": 14,
+  "testRecord": "docs/airborne-categories.md",
+  "phoneModified": false,
+  "published": false
+}

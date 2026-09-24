@@ -1,0 +1,2 @@
+PASS: per-category modes, always/once rewind, manual/show/disabled, full/poi/mute safety
+PASS: boundaries, paused/disabled, rewind, stale replies, duration, reset, invalid ranges

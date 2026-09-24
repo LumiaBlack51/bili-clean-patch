@@ -26,7 +26,7 @@ static final String ADS = "$ads";
 static final String VALUE = "$value";
 }
 "@ | Set-Content "$out/GeneratedNames.java"
-& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java" "$out/GeneratedNames.java"
+& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java" "$root/tests/android/AirbornePlaybackTest.java" "$out/GeneratedNames.java"
 if ($LASTEXITCODE) { throw 'Test compilation failed' }
 & jar cf "$out/classes.jar" -C "$out/classes" .
 & "$bt/d8.bat" --lib $android --min-api 24 --output "$out/dex" "$out/classes.jar"

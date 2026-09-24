@@ -4,13 +4,20 @@ import java.util.*;
 
 /** Pure playback policy. Time units are milliseconds; no account or network dependency. */
 public final class SkipEngine {
+    public enum Mode { ALWAYS, ONCE, MANUAL, SHOW, DISABLED }
     public static final class Segment {
         public final String id;
+        public final String category, action;
         public final long start, end;
         public Segment(String id, long start, long end) {
-            if (id == null || id.isEmpty() || start < 0 || end <= start)
+            this(id, start, end, "sponsor", "skip");
+        }
+        public Segment(String id, long start, long end, String category, String action) {
+            if (id == null || id.isEmpty() || start < 0 || end < start ||
+                (end == start && !"full".equals(action) && !"poi".equals(action)))
                 throw new IllegalArgumentException("Invalid segment");
             this.id = id; this.start = start; this.end = end;
+            this.category = category; this.action = action;
         }
     }
     private String video = "";
@@ -35,11 +42,18 @@ public final class SkipEngine {
     }
     public List<Segment> markers() { return segments; }
     public Segment at(long position, boolean playing, boolean enabled) {
+        return at(position, playing, enabled, s -> Mode.ONCE);
+    }
+    public Segment at(long position, boolean playing, boolean enabled,
+                      java.util.function.Function<Segment, Mode> policy) {
         if (!playing || !enabled) return null;
-        for (Segment s : segments)
-            if (s.start <= position && position < s.end && !handled.contains(s.id)) return s;
+        for (Segment s : segments) {
+            Mode mode = policy.apply(s);
+            if ("skip".equals(s.action) && s.start <= position && position < s.end &&
+                (mode == Mode.ALWAYS || (mode == Mode.ONCE && !handled.contains(s.id)))) return s;
+        }
         return null;
     }
-    /** Call only after successful seek. Rewinding is then allowed without a skip loop. */
+    /** Call after an accepted seek request. ONCE permits rewind; ALWAYS deliberately ignores this set. */
     public void acknowledge(Segment segment) { handled.add(segment.id); }
 }
