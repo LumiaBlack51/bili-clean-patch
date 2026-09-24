@@ -2,7 +2,7 @@
 
 独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**实验适配官方 9.12.0 (9120300)：AVD 启动、播放、设置和真实视频空降已通过；去广告通过真实宿主模型的受控测试，但线上真实广告样本、开屏和视频页覆盖尚未全面验收。不是稳定版。**
 
-[完整 APK 与加密签名备份下载](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)（私有仓库登录后可见）。发布资产的远端 SHA-256 已逐一与本地核对。
+[新版完整 APK 下载：0.2.0 空降助手分类预览版](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.2.0-airborne-preview)（私有仓库登录后可见）。加密签名备份保留在 [0.1.0 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)。
 
 ## 当前实现
 
@@ -38,7 +38,7 @@ PowerShell 7.4+、JDK 17、Git、Android SDK（API 35、Build Tools 35.0.0、NDK
 
 ## 验证和交付
 
-- [空降助手分类、设置与最终 AVD 验收（2026-09-24）](docs/airborne-categories.md)：本地新版完整 APK 为 `local/airborne-release/bili-clean-9.12.0-airborne-categories.apk`；上方远程 release 链接仍为 0.1.0 旧预览版。
+- [空降助手分类、设置与最终 AVD 验收（2026-09-24）](docs/airborne-categories.md)：新版 APK、SHA-256 校验文件与 manifest 见上方 0.2.0 发布页。
 - [调查和方案](docs/investigation.md)
 - [交付 APK 的实际测试与支持边界](docs/candidate-9.md)
 - [历次测试记录](docs/test-record.md)
