@@ -91,6 +91,33 @@ public final class AirbornePlaybackTest extends Instrumentation {
         getUiAutomation().injectInputEvent(down, true); getUiAutomation().injectInputEvent(up, true);
         down.recycle(); up.recycle();
     }
+    private void tapPlayer() {
+        Rect bounds = new Rect();
+        runOnMainSync(() -> {
+            View container = findId(activity.getWindow().getDecorView(), "control_container");
+            if (container != null) container.getGlobalVisibleRect(bounds);
+        });
+        check(!bounds.isEmpty(), "Player controls container absent");
+        tap(bounds.centerX(), bounds.centerY());
+    }
+    private boolean markerVisible() {
+        boolean[] visible = {false};
+        runOnMainSync(() -> visible[0] = findText(activity.getWindow().getDecorView(), "空降助手 ·") != null);
+        return visible[0];
+    }
+    private void revealMarker() {
+        if (!markerVisible()) { tapPlayer(); SystemClock.sleep(600); }
+        check(markerVisible(), "Details entry missing while native controls shown");
+    }
+    private void quietOverlay(String orientation) throws Exception {
+        seek(20000); control("start"); SystemClock.sleep(6500);
+        check(!markerVisible(), orientation + " details entry obscures playback");
+        snapshot("airborne-quiet-" + orientation);
+        revealMarker(); snapshot("airborne-controls-" + orientation);
+        SystemClock.sleep(6500);
+        check(!markerVisible(), orientation + " details entry remains after controls fade");
+        evidence.append("PASS details entry follows native controls ").append(orientation).append('\n');
+    }
     private void manualCategory(String title, long from, long target, String screen) throws Exception {
         control("pause"); seek(from); SystemClock.sleep(800); control("start"); SystemClock.sleep(600);
         Rect bounds = new Rect();
@@ -99,7 +126,8 @@ public final class AirbornePlaybackTest extends Instrumentation {
             TextView button = findText(activity.getWindow().getDecorView(), "跳过" + title);
             visible[0] = button != null && button.getGlobalVisibleRect(bounds);
         });
-        check(visible[0], screen + " manual " + title + " missing");
+        check(visible[0], screen + " manual " + title + " missing position=" + position() +
+            " duration=" + call("getDuration") + " mode=" + prefs.getString(screen.contains("outro") ? "outro" : "intro", "unset"));
         // Freeze natural playback so reaching target proves the touch actually caused a seek.
         control("pause"); SystemClock.sleep(500);
         if (screen.contains("reattach")) {
@@ -199,6 +227,7 @@ public final class AirbornePlaybackTest extends Instrumentation {
             for (String category : Arrays.asList("selfpromo", "interaction", "intro", "outro", "preview", "padding", "filler", "music_offtopic"))
                 modes.putString(category, "MANUAL");
             modes.commit();
+            quietOverlay("portrait");
             manualCategory("过场/开场动画", 1500, introEnd, "portrait-intro");
             manualCategory("鸣谢/结束画面", outroStart, outroEnd, "portrait-outro");
             if (fixtures) {
@@ -214,6 +243,7 @@ public final class AirbornePlaybackTest extends Instrumentation {
             SystemClock.sleep(2500);
             check(activity.getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE,
                 "Native fullscreen did not enter landscape");
+            quietOverlay("landscape");
             manualCategory("过场/开场动画", 1500, introEnd, "landscape-intro");
             manualCategory("鸣谢/结束画面", outroStart, outroEnd, "landscape-outro");
             sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
@@ -227,9 +257,11 @@ public final class AirbornePlaybackTest extends Instrumentation {
                     if(value instanceof Activity) activity = (Activity)value;
                 }
                 check(!hasCategoryTitle(activity.getWindow().getDecorView()), "Previous video badge leaked");
-                TextView marker = findText(activity.getWindow().getDecorView(), "空降助手 · 此视频暂无");
-                check(marker != null, "Unmarked video response has not arrived");
             } catch(Exception e) { throw new RuntimeException(e); } });
+            revealMarker();
+            final boolean[] unmarked = {false};
+            runOnMainSync(() -> unmarked[0] = findText(activity.getWindow().getDecorView(), "空降助手 · 此视频暂无") != null);
+            check(unmarked[0], "Unmarked video response has not arrived");
             evidence.append("PASS switch to unmarked video clears previous category\n");
             snapshot("airborne-test-unmarked");
             result.putString("stream", evidence.toString());

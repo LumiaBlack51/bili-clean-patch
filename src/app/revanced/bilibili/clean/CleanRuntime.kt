@@ -114,9 +114,10 @@ object CleanRuntime {
                 if (segment != null) seek(host, media, segment, true)
                 showManual(host, media, position)
                 // A host title/progress-view failure must not prevent the actionable button.
-                showMarker(host)
-                runCatching { ui.update(host, engine.markers(), media.duration) }
+                val controlsVisible = runCatching { ui.update(host, engine.markers(), media.duration) }
                     .onFailure { Log.w("BiliClean", "marker-ui type=${it.javaClass.simpleName}") }
+                    .getOrDefault(false)
+                if (controlsVisible) showMarker(host) else marker?.visibility = android.view.View.GONE
             } catch (e: Exception) {
                 status = "播放器暂不可用"
                 Log.w("BiliClean", "player-state type=${e.javaClass.simpleName}")

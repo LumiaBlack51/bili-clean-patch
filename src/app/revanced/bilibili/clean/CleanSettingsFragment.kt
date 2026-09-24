@@ -46,7 +46,7 @@ class CleanSettingsFragment : Fragment() {
             return control
         }
         toggle("过滤界面广告", "过滤已适配的开屏、推荐流、视频页和暂停广告。", Settings.CleanAds)
-        toggle("空降助手", "显示详情页分类标签、彩色进度条和片段详情，无账号门槛。", Settings.CleanAirborne)
+        toggle("空降助手", "显示详情页分类标签和彩色进度条。轻点视频呼出控件时显示片段入口，正常观看时隐藏；手动跳过按钮只在对应时段出现。", Settings.CleanAirborne)
         toggle("显示跳过提示", "跳过时显示目标时间。", Settings.CleanNotice)
         rows.addView(AirborneConfigDialog.rows(context))
         rows.addView(text("没有标记时正常播放；服务故障会单独提示。社区标记可能不准确，可随时关闭自动跳过。"))

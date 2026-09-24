@@ -31,16 +31,28 @@ class AirborneUi {
         titles.clear()
     }
 
-    fun update(host: Activity, marks: List<SkipEngine.Segment>, duration: Long) {
-        val root = host.findViewById<ViewGroup>(android.R.id.content) ?: return
+    /** Only the expanded native controls expose the optional details entry. */
+    fun update(host: Activity, marks: List<SkipEngine.Segment>, duration: Long): Boolean {
+        val root = host.findViewById<ViewGroup>(android.R.id.content) ?: return false
         val enabled = marks.filter { AirborneConfig.mode(host, it.category) != SkipEngine.Mode.DISABLED }
         val categories = AirborneConfig.categories.filter { category -> enabled.any { it.category == category.key } }
         val title = categories.firstOrNull()?.title.orEmpty() + if (categories.size > 1) " +${categories.size - 1}" else ""
         var foundTitle = false
+        var controlsVisible = false
+        fun actuallyVisible(view: View): Boolean {
+            if (!view.isShown || view.width == 0 || view.height == 0) return false
+            var current: View? = view
+            while (current != null) {
+                if (current.alpha <= 0.05f) return false
+                current = current.parent as? View
+            }
+            return true
+        }
         fun visit(view: View) {
             val name = if (view.id == View.NO_ID) "" else runCatching { host.resources.getResourceEntryName(view.id) }.getOrDefault("")
             // et1.a is the 9.12.0 mini timeline (no resource ID), verified in the pinned host.
             if (name in barIds || view.javaClass.name == "et1.a") {
+                if (name in barIds && actuallyVisible(view)) controlsVisible = true
                 val drawable = bars.getOrPut(view) {
                     MarkerDrawable(view).also { view.overlay.add(it) }
                 }
@@ -73,6 +85,7 @@ class AirborneUi {
             if (view is ViewGroup) for (i in 0 until view.childCount) visit(view.getChildAt(i))
         }
         visit(root)
+        return controlsVisible
     }
 
     private class MarkerDrawable(private val host: View) : Drawable() {
