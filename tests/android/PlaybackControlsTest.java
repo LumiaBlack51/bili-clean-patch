@@ -19,7 +19,11 @@ public final class PlaybackControlsTest extends Instrumentation {
     boolean updateMode;
     StringBuilder report = new StringBuilder();
     interface Work { void run() throws Exception; }
-    void ui(Work work) { runOnMainSync(() -> { try { work.run(); } catch (Exception e) { throw new RuntimeException(e); } }); }
+    void ui(Work work) {
+        java.util.concurrent.atomic.AtomicReference<Throwable> failure=new java.util.concurrent.atomic.AtomicReference<>();
+        runOnMainSync(() -> { try { work.run(); } catch (Throwable e) { failure.set(e); } });
+        if(failure.get()!=null)throw new RuntimeException(failure.get());
+    }
     Object api(String name, Class<?>[] types, Object... args) throws Exception { return playback.getMethod(name, types).invoke(null, args); }
     Object api(String name) throws Exception { return api(name, new Class<?>[0]); }
     Object value(String field) throws Exception { Field f = playback.getDeclaredField(field); f.setAccessible(true); return f.get(null); }
@@ -65,22 +69,25 @@ public final class PlaybackControlsTest extends Instrumentation {
         Dialog dialog=(Dialog)loader.loadClass("Du0.c").getConstructor(Context.class,callback).newInstance(activity,proxy);dialog.show();return dialog;
     }
     void navigationDispatchFixture() throws Exception {
-        Object box=container();Field navigation=box.getClass().getDeclaredField("n");navigation.setAccessible(true);Object original=navigation.get(box);
+        Object box=container();Method getter=box.getClass().getMethod("getPlayDirectorServiceV3");getter.setAccessible(true);Object service=getter.invoke(box);
+        Method controller=service.getClass().getMethod("c");controller.setAccessible(true);Object original=controller.invoke(service);
+        Class<?> controllerType=getTargetContext().getClassLoader().loadClass("tv.danmaku.biliplayerv2.service.k$a");
+        Method setter=service.getClass().getMethod("b",controllerType);setter.setAccessible(true);
         int[] calls={0,0};
-        Object proxy=Proxy.newProxyInstance(getTargetContext().getClassLoader(),new Class<?>[]{navigation.getType()},(p,m,a)->{
+        Object proxy=Proxy.newProxyInstance(getTargetContext().getClassLoader(),new Class<?>[]{controllerType},(p,m,a)->{
             if(m.getName().equals("hasNext")||m.getName().equals("hasPrevious"))return true;
-            if(m.getName().equals("playPrevious")){calls[0]++;return null;}
-            if(m.getName().equals("playNext")){calls[1]++;return null;}
+            if(m.getName().equals("switchToPrevious")){calls[0]++;return null;}
+            if(m.getName().equals("switchToNext")){calls[1]++;return null;}
             return m.invoke(original,a);
         });
         try {
-            ui(()->navigation.set(box,proxy));SystemClock.sleep(600);controlsVisible();
+            ui(()->setter.invoke(service,proxy));SystemClock.sleep(600);controlsVisible();
             for(String label:new String[]{"上一集","下一集"}){
                 final Rect r=new Rect();ui(()->{View v=find(activity.getWindow().getDecorView(),"biliclean_"+label);check(v!=null&&v.isEnabled(),label+" enabled when native playlist reports availability");int[] point=new int[2];v.getLocationOnScreen(point);r.set(point[0],point[1],point[0]+v.getWidth(),point[1]+v.getHeight());});
                 tap(r.centerX(),r.centerY());SystemClock.sleep(250);
             }
             check(calls[0]==1&&calls[1]==1,"Controlled playlist fixture: actual previous/next touches dispatch to matching native API");
-        } finally {ui(()->navigation.set(box,original));SystemClock.sleep(400);}
+        } finally {ui(()->setter.invoke(service,original));SystemClock.sleep(400);}
     }
     @Override public void onCreate(Bundle args) { super.onCreate(args);updateMode="true".equals(args.getString("update"));start(); }
     void updateCheck() {

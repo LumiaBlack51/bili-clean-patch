@@ -6,6 +6,9 @@ PASS Middle double tap neither seeks nor pauses/resumes
 PASS Center play button starts native playback
 PASS Previous episode control present
 PASS Next episode control present
+PASS 上一集 enabled when native playlist reports availability
+PASS 下一集 enabled when native playlist reports availability
+PASS Controlled playlist fixture: actual previous/next touches dispatch to matching native API
 PASS Native fullscreen control available
 PASS Fullscreen really entered landscape
 PASS Fullscreen right double tap +10s

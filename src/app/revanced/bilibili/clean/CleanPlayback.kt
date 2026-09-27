@@ -65,7 +65,18 @@ object CleanPlayback {
         }.onFailure { Log.w("BiliClean", "Playback binding failed", it) }
     }
     private fun container() = core.get()?.let { containers[it]?.get() }
-    private fun director() = container()?.let { invoke(it, "getVideoPlayDirectorService") }
+    private fun director() = container()?.let { container ->
+        runCatching { invoke(container, "getPlayDirectorServiceV3")?.let { invoke(it, "c") } }.getOrNull()
+            ?: runCatching { invoke(container, "getVideoPlayDirectorService") }.getOrNull()
+    }
+    private fun modernDirector(value: Any) = value.javaClass.methods.any { it.name == "switchToNext" }
+    private fun navigate(previous: Boolean) {
+        val nav = director() ?: return
+        cancelEndTimer()
+        invoke(nav, if (modernDirector(nav)) {
+            if (previous) "switchToPrevious" else "switchToNext"
+        } else { if (previous) "playPrevious" else "playNext" }, false)
+    }
     private fun controller() = container()?.let { invoke(it, "getPlayerCoreService") }
     private fun activeOwner(): Activity? = owner.get()?.takeIf { !it.isFinishing && !it.isDestroyed }
     private fun id(view: View) = runCatching { view.resources.getResourceEntryName(view.id) }.getOrDefault("")
@@ -123,9 +134,9 @@ object CleanPlayback {
                 }
                 val size = (52 * host.resources.displayMetrics.density).toInt()
                 fun add(control: View) { addView(control, LinearLayout.LayoutParams(size, size).apply { setMargins(size / 5, 0, size / 5, 0) }) }
-                add(button(android.R.drawable.ic_media_previous, "上一集") { director()?.let { cancelEndTimer(); invoke(it, "playPrevious", false) } })
+                add(button(android.R.drawable.ic_media_previous, "上一集") { navigate(true) })
                 add(button(android.R.drawable.ic_media_pause, "暂停或播放") { controller()?.let { invoke(it, if (player.isPlaying) "pause" else "resume") } })
-                add(button(android.R.drawable.ic_media_next, "下一集") { director()?.let { cancelEndTimer(); invoke(it, "playNext", false) } })
+                add(button(android.R.drawable.ic_media_next, "下一集") { navigate(false) })
             }
             root.addView(row, FrameLayout.LayoutParams(-2, -2)); controls = row
         }
@@ -138,7 +149,9 @@ object CleanPlayback {
         (row.getChildAt(1) as ImageButton).setImageResource(if (player.isPlaying) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play)
         val nav = runCatching { director() }.getOrNull()
         for ((index, method) in listOf(0 to "hasPrevious", 2 to "hasNext")) {
-            val available = nav != null && runCatching { invoke(nav, method) == true }.getOrDefault(false)
+            val available = nav != null && runCatching {
+                (if (modernDirector(nav)) invoke(nav, method, false) else invoke(nav, method)) == true
+            }.getOrDefault(false)
             row.getChildAt(index).isEnabled = available; row.getChildAt(index).alpha = if (available) 1f else .35f
         }
     }
