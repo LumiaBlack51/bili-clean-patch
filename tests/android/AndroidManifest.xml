@@ -3,4 +3,5 @@
     <application android:label="BiliClean controlled tests" />
     <instrumentation android:name="app.biliclean.tests.HostModelTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.AirbornePlaybackTest" android:targetPackage="tv.danmaku.bili" />
+    <instrumentation android:name="app.biliclean.tests.PlaybackControlsTest" android:targetPackage="tv.danmaku.bili" />
 </manifest>

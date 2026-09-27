@@ -49,6 +49,7 @@ if (!$delegateText.Contains('BiliClean minimal startup')) {
     [IO.File]::WriteAllText($delegate,$delegateText,[Text.UTF8Encoding]::new($false))
 }
 [IO.File]::WriteAllText($delegate,$delegateText,[Text.UTF8Encoding]::new($false))
+Replace-Once "$java/patches/main/ApplicationDelegate.java" 'printLifecycle(activity, "onActivityResumed", false);' 'printLifecycle(activity, "onActivityResumed", false); app.revanced.bilibili.clean.CleanUpdate.resumed(activity);'
 Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/settings/patch/SettingsResourcePatch.kt' '"app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment"' '"app.revanced.bilibili.clean.CleanSettingsFragment"'
 Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/settings/patch/SettingsResourcePatch.kt' '"@string/biliroaming_settings_title"' '"去广告与空降助手"'
 

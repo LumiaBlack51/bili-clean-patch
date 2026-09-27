@@ -1,0 +1,24 @@
+INSTRUMENTATION_RESULT: results=PASS Native Bilibili player bound
+PASS Portrait right double tap +10s: 120000 -> 130000
+PASS Portrait left double tap -10s
+PASS YouTube double taps preserve paused state
+PASS Middle double tap neither seeks nor pauses/resumes
+PASS Center play button starts native playback
+PASS Previous episode control present
+PASS Next episode control present
+PASS Native fullscreen control available
+PASS Fullscreen really entered landscape
+PASS Fullscreen right double tap +10s
+PASS Fullscreen left double tap -10s
+PASS Optional switch hides middle controls
+PASS Disabling feature restores native double-tap play/pause
+PASS End-of-video option in native timer menu
+PASS Native timer row arms completion timer
+PASS Reopening timer remembers end-of-video selection
+PASS Native timer off cancels end-of-video mode
+PASS Paused video does not trigger end timer
+PASS Actual video completion closes playback page
+PASS Completion timer clears after firing
+PASS Release comparison rejects current and prerelease versions
+
+INSTRUMENTATION_CODE: -1

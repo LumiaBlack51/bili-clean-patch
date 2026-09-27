@@ -49,6 +49,7 @@ object CleanRuntime {
     }
 
     private fun detach() {
+        CleanPlayback.clear()
         main.removeCallbacks(tick)
         (marker?.parent as? ViewGroup)?.removeView(marker)
         marker = null
@@ -74,6 +75,7 @@ object CleanRuntime {
             val media = player.get()
             if (host == null || host.isDestroyed || media == null) { detach(); return }
             if (ApplicationDelegate.getTopActivity() !== host) {
+                CleanPlayback.refresh(host, media)
                 marker?.visibility = android.view.View.GONE
                 manual?.visibility = android.view.View.GONE
                 ui.clear()
@@ -81,6 +83,7 @@ object CleanRuntime {
                 return
             }
             try {
+                CleanPlayback.refresh(host, media)
                 if (!Settings.CleanAirborne()) {
                     marker?.visibility = android.view.View.GONE
                     manual?.visibility = android.view.View.GONE
