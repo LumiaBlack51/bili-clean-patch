@@ -17,6 +17,7 @@ public final class PlaybackControlsTest extends Instrumentation {
     Object player;
     Activity activity;
     boolean updateMode;
+    long installDownload=-1;
     StringBuilder report = new StringBuilder();
     interface Work { void run() throws Exception; }
     void ui(Work work) {
@@ -89,7 +90,20 @@ public final class PlaybackControlsTest extends Instrumentation {
             check(calls[0]==1&&calls[1]==1,"Controlled playlist fixture: actual previous/next touches dispatch to matching native API");
         } finally {ui(()->setter.invoke(service,original));SystemClock.sleep(400);}
     }
-    @Override public void onCreate(Bundle args) { super.onCreate(args);updateMode="true".equals(args.getString("update"));start(); }
+    @Override public void onCreate(Bundle args) { super.onCreate(args);updateMode="true".equals(args.getString("update"));if(args.containsKey("installDownload"))installDownload=Long.parseLong(args.getString("installDownload"));start(); }
+    void openDownloadedInstaller() {
+        Bundle result=new Bundle();try {
+            Intent intent=new Intent().setClassName("tv.danmaku.bili","tv.danmaku.bili.MainActivityV2").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity=startActivitySync(intent);SystemClock.sleep(1500);
+            SharedPreferences prefs=getTargetContext().getSharedPreferences("biliclean_playback",0);
+            long pending=prefs.getLong("update_download",-1);
+            if(pending>=0&&pending!=installDownload)((android.app.DownloadManager)getTargetContext().getSystemService(Context.DOWNLOAD_SERVICE)).remove(pending);
+            prefs.edit().putLong("update_download",installDownload).commit();
+            Class<?> update=getTargetContext().getClassLoader().loadClass("app.revanced.bilibili.clean.CleanUpdate");
+            ui(()->update.getMethod("resumed",Activity.class).invoke(null,activity));SystemClock.sleep(2000);
+            result.putString("results","Reopened completed download in system installer; duplicate test request removed");finish(Activity.RESULT_OK,result);
+        }catch(Throwable e){result.putString("failure",android.util.Log.getStackTraceString(e));finish(Activity.RESULT_CANCELED,result);}
+    }
     void updateCheck() {
         Bundle result=new Bundle();
         try {
@@ -106,18 +120,22 @@ public final class PlaybackControlsTest extends Instrumentation {
             check(asset!=null,"Release provides installable APK asset");
             final org.json.JSONObject selected=asset;
             Method download=update.getDeclaredMethod("download",Activity.class,org.json.JSONObject.class);download.setAccessible(true);
-            ui(()->download.invoke(update.getField("INSTANCE").get(null),activity,selected));
             SharedPreferences prefs=getTargetContext().getSharedPreferences("biliclean_playback",0);
+            if(prefs.getLong("update_download",-1)<0)ui(()->download.invoke(update.getField("INSTANCE").get(null),activity,selected));
             long id=prefs.getLong("update_download",-1);check(id>=0,"Updater enqueues real release APK download");
             android.app.DownloadManager manager=(android.app.DownloadManager)getTargetContext().getSystemService(Context.DOWNLOAD_SERVICE);
             long until=SystemClock.uptimeMillis()+300000;int status=0;
-            while(SystemClock.uptimeMillis()<until){try(android.database.Cursor c=manager.query(new android.app.DownloadManager.Query().setFilterById(id))){if(c.moveToFirst())status=c.getInt(c.getColumnIndexOrThrow(android.app.DownloadManager.COLUMN_STATUS));}if(status==android.app.DownloadManager.STATUS_SUCCESSFUL||status==android.app.DownloadManager.STATUS_FAILED)break;SystemClock.sleep(1000);}
+            while(SystemClock.uptimeMillis()<until){try(android.database.Cursor c=manager.query(new android.app.DownloadManager.Query().setFilterById(id))){if(c.moveToFirst()){
+                status=c.getInt(c.getColumnIndexOrThrow(android.app.DownloadManager.COLUMN_STATUS));
+                android.util.Log.i("BiliCleanTest","download status="+status+" reason="+c.getInt(c.getColumnIndexOrThrow(android.app.DownloadManager.COLUMN_REASON))+" bytes="+c.getLong(c.getColumnIndexOrThrow(android.app.DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)));
+            }}if(status==android.app.DownloadManager.STATUS_SUCCESSFUL||status==android.app.DownloadManager.STATUS_FAILED)break;SystemClock.sleep(5000);}
             check(status==android.app.DownloadManager.STATUS_SUCCESSFUL,"GitHub APK download completes on AVD");
             SystemClock.sleep(4000);check(prefs.getLong("update_download",-1)==-1,"Updater hands downloaded APK to system installer");
             result.putString("results",report.toString());finish(Activity.RESULT_OK,result);
         }catch(Throwable e){result.putString("failure",android.util.Log.getStackTraceString(e));result.putString("results",report.toString());finish(Activity.RESULT_CANCELED,result);}
     }
     @Override public void onStart() {
+        if(installDownload>=0){openDownloadedInstaller();return;}
         if(updateMode){updateCheck();return;}
         Bundle result=new Bundle(); boolean previous=false;
         try {

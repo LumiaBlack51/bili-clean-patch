@@ -1,0 +1,7 @@
+INSTRUMENTATION_RESULT: results=PASS AVD anonymously reads public GitHub latest Release
+PASS Release provides installable APK asset
+PASS Updater enqueues real release APK download
+PASS GitHub APK download completes on AVD
+PASS Updater hands downloaded APK to system installer
+
+INSTRUMENTATION_CODE: -1
