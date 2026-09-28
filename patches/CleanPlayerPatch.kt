@@ -21,6 +21,8 @@ object CleanPlayerPatch : BytecodePatch(setOf(PlayerOnPreparedFingerprint)) {
         val runtime = "Lapp/revanced/bilibili/clean/CleanPlayback;"
         fun host(type: String, name: String) = context.findClass(type)?.mutableClass?.methods
             ?.singleOrNull { it.name == name } ?: throw PatchException("Missing pinned player API: $type $name")
+        host("Lfs1/I;", "onPlayerClockChanged").addInstructions(0,
+            "invoke-static/range {p0 .. p1}, $runtime->clock(Ljava/lang/Object;Ltv/danmaku/ijk/media/player/IMediaPlayer;)V")
         host("Lcom/bilibili/playerbizcommon/gesture/GestureService;", "bindPlayerContainer").addInstructions(0,
             "invoke-static/range {p1 .. p1}, $runtime->bind(Ljava/lang/Object;)V")
         host("Lcom/bilibili/playerbizcommon/gesture/GestureService\$j;", "onDoubleTap").addInstructions(0, """
@@ -74,5 +76,25 @@ object CleanPlayerPatch : BytecodePatch(setOf(PlayerOnPreparedFingerprint)) {
             return-object v0
         """.trimIndent())
         panelClass.methods.add(panelWrapper)
+        host("Lcom/bilibili/app/comm/timing/ui/TimingReminderSelectDialog\$a;", "l0").addInstructions(0, """
+            invoke-static {p0, p1}, $runtime->globalTimerItems(Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
+            move-result-object p1
+        """.trimIndent())
+        host("LNk/e;", "l").addInstructions(0, "invoke-static {}, $runtime->cancelEndTimer()V")
+        val globalClick = host("Lcom/bilibili/app/comm/timing/ui/c;", "invoke")
+        val globalWrapper = globalClick.cloneMutable(registerCount = 3, clearImplementation = true)
+        globalClick.name += "_BiliCleanOriginal"
+        globalWrapper.addInstructions("""
+            invoke-static {p0, p1}, $runtime->globalTimerClick(Ljava/lang/Object;Ljava/lang/Object;)Z
+            move-result v0
+            if-eqz v0, :native_global_timer
+            sget-object v0, Lkotlin/Unit;->INSTANCE:Lkotlin/Unit;
+            return-object v0
+            :native_global_timer
+            invoke-virtual {p0, p1}, $globalClick
+            move-result-object v0
+            return-object v0
+        """.trimIndent())
+        context.findClass("Lcom/bilibili/app/comm/timing/ui/c;")!!.mutableClass.methods.add(globalWrapper)
     }
 }

@@ -1,0 +1,6 @@
+INSTRUMENTATION_RESULT: stream=PASS real home bottom Settings button visible
+PASS actual native click opens BiliPreferencesActivity
+PASS selected home tab preserved
+PASS return from settings retains home
+
+INSTRUMENTATION_CODE: -1

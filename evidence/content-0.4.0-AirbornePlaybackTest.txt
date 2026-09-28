@@ -1,0 +1,24 @@
+INSTRUMENTATION_RESULT: stream=PASS real-video detail category
+PASS show-only does not seek position=887748
+PASS disabled does not seek position=888443
+PASS once skips first encounter position=1035085
+PASS once allows rewind after first skip position=888957
+PASS manual waits for click position=889003
+PASS manual button moves actual player position=1035468
+PASS once retains already handled marker position=888961
+PASS always skips marked interval position=1035468
+PASS always skips again after rewind position=1035468
+PASS once allows rewind position=889432
+PASS paused playback never auto-skips position=890079
+PASS resume triggers auto-skip position=1035468
+PASS details entry follows native controls portrait
+PASS manual 过场/开场动画 portrait-intro actual touch position=8000
+PASS manual 鸣谢/结束画面 portrait-outro actual touch position=1973525
+PASS manual 过场/开场动画 portrait-reattach actual touch position=8000
+PASS manual 过场/开场动画 controlled-mute actual touch position=8000
+PASS details entry follows native controls landscape
+PASS manual 过场/开场动画 landscape-intro actual touch position=8000
+PASS manual 鸣谢/结束画面 landscape-outro actual touch position=1973525
+PASS switch to unmarked video clears previous category
+
+INSTRUMENTATION_CODE: -1

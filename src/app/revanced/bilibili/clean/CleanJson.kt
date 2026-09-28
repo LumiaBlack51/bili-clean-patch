@@ -6,10 +6,12 @@ import app.revanced.bilibili.settings.Settings
 /** Exact 9.12 model names inspected in the input DEX; unknown objects pass through. */
 object CleanJson {
     @JvmStatic fun filter(value: Any?): Any? {
-        if (value == null || !Settings.CleanAds()) return value
+        if (value == null) return value
         try {
             val data = if (value.javaClass.name == "com.bilibili.okretro.GeneralResponse")
                 value.javaClass.getField("data").get(value) ?: return value else value
+            CleanContent.filterJson(data)
+            if (!Settings.CleanAds()) return value
             val fields = when (data.javaClass.name) {
                 "tv.danmaku.bili.splash.ad.model.SplashListResponse" -> listOf("splashList", "strategyList")
                 "tv.danmaku.bili.splash.ad.model.SplashShowResponse" -> listOf("strategyList")

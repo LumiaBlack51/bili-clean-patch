@@ -1,0 +1,13 @@
+INSTRUMENTATION_RESULT: results=PASS Native video ready for shared timer
+PASS Shared timer option visible: 播放到当前视频结束
+PASS Shared timer touch arms end-of-video mode
+PASS Only end-of-video row selected on reopen
+PASS Exactly one timer option selected
+PASS Shared timer option visible: title
+PASS Native Off row cancels end-of-video mode
+PASS Shared timer option visible: 播放到当前视频结束
+PASS Paused video keeps shared end timer armed
+PASS Actual completion closes details for shared timer
+PASS Shared end timer clears after completion
+
+INSTRUMENTATION_CODE: -1

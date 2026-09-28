@@ -1,0 +1,6 @@
+INSTRUMENTATION_RESULT: stream=PASS controlled host-model fixtures: actual Gson annotations, ad type, is_ad, ordinary and non-ad placeholder retention, disabled pass-through. Not live-ad/UI acceptance.
+PASS installed host pause-ad entry blocked: decodeViewEndPagePausedPage
+PASS installed host pause-ad entry blocked: requestPausedPage
+PASS pause-ad guard respects disabled ads setting
+
+INSTRUMENTATION_CODE: -1

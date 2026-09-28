@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 @Keep
 object CleanUpdate {
-    const val VERSION = "0.3.0"
+    const val VERSION = "0.4.0"
     const val REPOSITORY = "LumiaBlack51/bili-clean-patch"
     private val main = Handler(Looper.getMainLooper())
     private val worker = Executors.newSingleThreadExecutor()

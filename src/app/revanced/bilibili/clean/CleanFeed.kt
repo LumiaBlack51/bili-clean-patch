@@ -31,10 +31,15 @@ object CleanFeed {
                     realAd || type in setOf("ad", "cm", "special_s") ||
                         type?.startsWith("ad_") == true || type?.startsWith("cm_") == true
                 } else false
+                val cardType = if (item != null && base.isInstance(item)) base.getMethod("getCardType").invoke(item) as? String else null
+                val goto = if (item != null && base.isInstance(item)) gotoGetter.invoke(item) as? String else null
+                val banner = cardType == "banner" || cardType?.startsWith("banner_v") == true || goto == "banner"
+                val remove = if (banner) Settings.CleanHomeBanner() else
+                    (ad && Settings.CleanAds()) || (item != null && CleanContent.homeExtra(item, cardType, goto))
                 if (ad) ads++
-                if (!ad || !Settings.CleanAds()) filtered.add(item)
+                if (!remove) filtered.add(item)
             }
-            if (Settings.CleanAds() && ads > 0) itemsField.set(response, filtered)
+            if (filtered.size != items.size) itemsField.set(response, filtered)
             Log.i("BiliClean", "modern-feed items=${items.size} ads=$ads placeholders=$placeholders removed=${items.size - filtered.size} enabled=${Settings.CleanAds()}")
         } catch (e: Exception) { Log.w("BiliClean", "modern-feed unchanged: ${e.javaClass.simpleName}") }
     }
@@ -55,7 +60,6 @@ object CleanFeed {
                 filterModern(data)
                 return
             }
-            if (!Settings.CleanAds()) return
             val list = field(data, "items") as? MutableList<*>
             Log.i("BiliClean", "feed-response type=${data?.javaClass?.name} items=${list?.size ?: -1}")
             if (list == null) return
@@ -64,8 +68,12 @@ object CleanFeed {
             while (iterator.hasNext()) {
                 val item = iterator.next() ?: continue
                 val type = (field(item, "cardGoto") ?: field(item, "card_goto")) as? String
-                if (markedAd(field(item, "adInfo")) || type in setOf("ad", "cm", "special_s") ||
-                    type?.startsWith("cm_") == true || type?.startsWith("ad_") == true) {
+                val cardType = (field(item, "cardType") ?: field(item, "card_type")) as? String
+                val banner = cardType == "banner" || cardType?.startsWith("banner_v") == true || type == "banner"
+                val remove = if (banner) Settings.CleanHomeBanner() else
+                    (Settings.CleanAds() && (markedAd(field(item, "adInfo")) || CleanContent.adType(type))) ||
+                        CleanContent.homeExtra(item, cardType, type)
+                if (remove) {
                     iterator.remove(); removed++
                 }
             }

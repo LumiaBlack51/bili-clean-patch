@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.*;
 
 /** Runs only on the AVD, against actual host playback and injected touchscreen events. */
-public final class PlaybackControlsTest extends Instrumentation {
+public class PlaybackControlsTest extends Instrumentation {
     Class<?> playback, mediaType;
     Object player;
     Activity activity;
@@ -40,8 +40,9 @@ public final class PlaybackControlsTest extends Instrumentation {
         if (v instanceof ViewGroup) for (int i=0;i<((ViewGroup)v).getChildCount();i++) { View f=find(((ViewGroup)v).getChildAt(i),query); if(f!=null)return f; }
         return null;
     }
-    Rect bounds(View view) { Rect r=new Rect(); ui(() -> view.getGlobalVisibleRect(r)); return r; }
-    Rect playerBounds() { final Rect r = new Rect(); ui(() -> { View v=find(activity.getWindow().getDecorView(),"control_container"); if(v!=null)v.getGlobalVisibleRect(r); }); return r; }
+    void screenBounds(View view,Rect r) { int[] p=new int[2];view.getLocationOnScreen(p);r.set(p[0],p[1],p[0]+view.getWidth(),p[1]+view.getHeight()); }
+    Rect bounds(View view) { Rect r=new Rect(); ui(() -> screenBounds(view,r)); return r; }
+    Rect playerBounds() { final Rect r = new Rect(); ui(() -> { View v=find(activity.getWindow().getDecorView(),"control_container"); if(v!=null)screenBounds(v,r); }); return r; }
     void tap(float x,float y) {
         long now=SystemClock.uptimeMillis(); MotionEvent down=MotionEvent.obtain(now,now,0,x,y,0),up=MotionEvent.obtain(now,now+45,1,x,y,0);
         getUiAutomation().injectInputEvent(down,true); getUiAutomation().injectInputEvent(up,true); down.recycle();up.recycle();
@@ -55,7 +56,12 @@ public final class PlaybackControlsTest extends Instrumentation {
     void controlsVisible() {
         for(int tries=0;tries<3;tries++) {
             final boolean[] shown={false}; ui(()->{View v=find(activity.getWindow().getDecorView(),"biliclean_center_controls");shown[0]=v!=null&&v.isShown();});if(shown[0])return;
-            Rect r=playerBounds();tap(r.centerX(),r.top+r.height()*.22f);SystemClock.sleep(800);
+            Rect r=playerBounds();tap(r.centerX(),r.top+r.height()*.22f);
+            for(int poll=0;poll<8;poll++) {
+                SystemClock.sleep(200);
+                ui(()->{View v=find(activity.getWindow().getDecorView(),"biliclean_center_controls");shown[0]=v!=null&&v.isShown()&&v.getWidth()>0;});
+                if(shown[0])return;
+            }
         }
         throw new AssertionError("Single tap did not reveal middle controls");
     }
@@ -84,10 +90,11 @@ public final class PlaybackControlsTest extends Instrumentation {
         try {
             ui(()->setter.invoke(service,proxy));SystemClock.sleep(600);controlsVisible();
             for(String label:new String[]{"上一集","下一集"}){
+                controlsVisible();
                 final Rect r=new Rect();ui(()->{View v=find(activity.getWindow().getDecorView(),"biliclean_"+label);check(v!=null&&v.isEnabled(),label+" enabled when native playlist reports availability");int[] point=new int[2];v.getLocationOnScreen(point);r.set(point[0],point[1],point[0]+v.getWidth(),point[1]+v.getHeight());});
                 tap(r.centerX(),r.centerY());SystemClock.sleep(250);
             }
-            check(calls[0]==1&&calls[1]==1,"Controlled playlist fixture: actual previous/next touches dispatch to matching native API");
+            check(calls[0]==1&&calls[1]==1,"Controlled playlist fixture: actual previous/next touches dispatch to matching native API ("+calls[0]+","+calls[1]+")");
         } finally {ui(()->setter.invoke(service,original));SystemClock.sleep(400);}
     }
     @Override public void onCreate(Bundle args) { super.onCreate(args);updateMode="true".equals(args.getString("update"));if(args.containsKey("installDownload"))installDownload=Long.parseLong(args.getString("installDownload"));start(); }
@@ -158,7 +165,7 @@ public final class PlaybackControlsTest extends Instrumentation {
             check(!(Boolean)media("isPlaying"),"YouTube double taps preserve paused state");
             start=position();doubleTap(.5f);check(Math.abs(position()-start)<1500&&!(Boolean)media("isPlaying"),"Middle double tap neither seeks nor pauses/resumes");
             controlsVisible();capture("youtube-portrait");
-            final Rect play=new Rect();ui(()->find(activity.getWindow().getDecorView(),"biliclean_暂停或播放").getGlobalVisibleRect(play));
+            final Rect play=new Rect();ui(()->screenBounds(find(activity.getWindow().getDecorView(),"biliclean_暂停或播放"),play));
             tap(play.centerX(),play.centerY());SystemClock.sleep(900);check((Boolean)media("isPlaying"),"Center play button starts native playback");pause();
             // Both playlist controls exist; unavailable directions are explicitly disabled.
             ui(()->{check(find(activity.getWindow().getDecorView(),"biliclean_上一集")!=null,"Previous episode control present");check(find(activity.getWindow().getDecorView(),"biliclean_下一集")!=null,"Next episode control present");});
@@ -205,7 +212,7 @@ public final class PlaybackControlsTest extends Instrumentation {
             Class<?> update=loader.loadClass("app.revanced.bilibili.clean.CleanUpdate");Method newer=update.getMethod("newer",String.class,String.class);
             check((Boolean)newer.invoke(null,"v0.4.0","0.3.0")&&!(Boolean)newer.invoke(null,"v0.3.0","0.3.0")&&!(Boolean)newer.invoke(null,"v0.4.0-preview","0.3.0"),"Release comparison rejects current and prerelease versions");
             result.putString("results",report.toString());finish(Activity.RESULT_OK,result);
-        } catch(Throwable e) { result.putString("failure",android.util.Log.getStackTraceString(e));result.putString("results",report.toString());finish(Activity.RESULT_CANCELED,result); }
+        } catch(Throwable e) { try{capture("playback-failure");}catch(Throwable ignored){}result.putString("failure",android.util.Log.getStackTraceString(e));result.putString("results",report.toString());finish(Activity.RESULT_CANCELED,result); }
         finally { try {final boolean restore=previous;ui(()->api("setEnabled",new Class<?>[]{boolean.class},restore));}catch(Exception ignored){} }
     }
 }

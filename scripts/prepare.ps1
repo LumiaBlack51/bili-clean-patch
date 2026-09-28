@@ -50,6 +50,7 @@ if (!$delegateText.Contains('BiliClean minimal startup')) {
 }
 [IO.File]::WriteAllText($delegate,$delegateText,[Text.UTF8Encoding]::new($false))
 Replace-Once "$java/patches/main/ApplicationDelegate.java" 'printLifecycle(activity, "onActivityResumed", false);' 'printLifecycle(activity, "onActivityResumed", false); app.revanced.bilibili.clean.CleanUpdate.resumed(activity);'
+Replace-Once "$java/patches/main/ApplicationDelegate.java" 'app.revanced.bilibili.clean.CleanUpdate.resumed(activity);' 'app.revanced.bilibili.clean.CleanUpdate.resumed(activity); app.revanced.bilibili.clean.CleanPlayback.resumed(activity);'
 Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/settings/patch/SettingsResourcePatch.kt' '"app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment"' '"app.revanced.bilibili.clean.CleanSettingsFragment"'
 Replace-Once 'patches/src/main/kotlin/app/revanced/patches/bilibili/misc/settings/patch/SettingsResourcePatch.kt' '"@string/biliroaming_settings_title"' '"去广告与空降助手"'
 
@@ -65,7 +66,16 @@ object Settings {
 if ([IO.File]::ReadAllText((Join-Path $upstream "$java/settings/Settings.kt")).Contains('if (value) Utils.async { clearSplashConfigCache() }')) {
     Replace-Once "$java/settings/Settings.kt" 'if (value) Utils.async { clearSplashConfigCache() }' 'if (value) Utils.async { runCatching { java.io.File(Utils.getContext().filesDir, "splash2/splash.json").delete() } }'
 }
-Replace-Once "$java/settings/Settings.kt" 'object Settings {' $settings
+# Match the original core block even after optional settings were added on a prior run.
+if (![IO.File]::ReadAllText((Join-Path $upstream "$java/settings/Settings.kt")).Contains('@JvmField val CleanAds =')) {
+    Replace-Once "$java/settings/Settings.kt" 'object Settings {' $settings
+}
+Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanAirborne' @'
+    @JvmField val CleanHomeBanner = BooleanSetting(key = "clean_home_banner", defValue = true)
+    @JvmField val CleanPromotion = BooleanSetting(key = "clean_promotion", defValue = true)
+    @JvmField val CleanMall = BooleanSetting(key = "clean_mall", defValue = true)
+    @JvmField val CleanAirborne
+'@
 Replace-Once "$java/settings/Setting.kt" 'Accounts.userBlocked || (dependency != null && !dependency.get())' 'dependency != null && !dependency.get()'
 
 $patchTarget = Join-Path $upstream 'patches/src/main/kotlin/app/revanced/patches/bilibili/clean'

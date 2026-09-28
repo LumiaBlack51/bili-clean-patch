@@ -8,6 +8,7 @@ import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.json.fingerprints.PegasusParserFingerprint
 import app.revanced.patches.bilibili.utils.cloneMutable
+import com.android.tools.smali.dexlib2.AccessFlags
 
 @Patch(name = "Clean feed", compatiblePackages = [CompatiblePackage("tv.danmaku.bili", ["9.12.0"])])
 object CleanFeedPatch : BytecodePatch(setOf(PegasusParserFingerprint)) {
@@ -57,5 +58,51 @@ object CleanFeedPatch : BytecodePatch(setOf(PegasusParserFingerprint)) {
             return-object p1
         """.trimIndent())
         transport.methods.add(transportWrapper)
+        // Hook the model getter so both JSON parsers and cached Story responses are covered.
+        val story = context.findClass("Lcom/bilibili/video/story/api/StoryFeedResponse\$Data;")?.mutableClass
+            ?: throw PatchException("Unsupported Story model")
+        val storyItems = story.methods.singleOrNull { it.name == "getItems" && it.parameterTypes.isEmpty() && it.returnType == "Ljava/util/List;" }
+            ?: throw PatchException("Unsupported Story items getter")
+        fun hookList(method: app.revanced.patcher.util.proxy.mutableTypes.MutableMethod, hook: String) {
+            val static = AccessFlags.STATIC.isSet(method.accessFlags)
+            val count = method.parameterTypes.size + if (static) 0 else 1
+            val wrapper = method.cloneMutable(registerCount = count + 1, clearImplementation = true)
+            method.name += "_BiliCleanOriginal"
+            val invoke = if (static) "invoke-static" else if (AccessFlags.PRIVATE.isSet(method.accessFlags)) "invoke-direct" else "invoke-virtual"
+            val registers = if (count == 0) "" else (0 until count).joinToString(", ") { "p$it" }
+            wrapper.addInstructions("""
+                $invoke {$registers}, $method
+                move-result-object v0
+                invoke-static {v0}, Lapp/revanced/bilibili/clean/CleanContent;->$hook(Ljava/util/List;)Ljava/util/List;
+                move-result-object v0
+                return-object v0
+            """.trimIndent())
+            context.findClass(method.definingClass)!!.mutableClass.methods.add(wrapper)
+        }
+        hookList(storyItems, "filterStory")
+        // Filter the native navigation builder as well as JSON: local/default tabs use this path.
+        val manager = context.findClass("Ltv/danmaku/bili/ui/main2/resource/MainResourceManager;")?.mutableClass
+            ?: throw PatchException("Unsupported navigation manager")
+        val lists = manager.methods.filter { it.returnType == "Ljava/util/List;" && it.implementation != null }
+        if (lists.size != 5) throw PatchException("Unsupported navigation list methods")
+        lists.forEach { hookList(it, "filterTabs") }
+        val defaults = context.findClass("Ltv/danmaku/bili/ui/main2/resource/a;")?.mutableClass
+            ?: throw PatchException("Unsupported default navigation")
+        hookList(defaults.methods.single { it.name == "c" && it.parameterTypes.isEmpty() && it.returnType == "Ljava/util/List;" }, "filterTabs")
+        val clickClass = context.findClass("Lcom/bilibili/lib/homepage/widget/TabHost\$a;")?.mutableClass
+            ?: throw PatchException("Unsupported bottom tab click listener")
+        val click = clickClass.methods.single { it.name == "onClick" && it.parameterTypes == listOf("Landroid/view/View;") }
+        val clickWrapper = click.cloneMutable(registerCount = 3, clearImplementation = true)
+        click.name += "_BiliCleanOriginal"
+        clickWrapper.addInstructions("""
+            invoke-static {p1}, Lapp/revanced/bilibili/clean/CleanContent;->openSettings(Landroid/view/View;)Z
+            move-result v0
+            if-eqz v0, :original
+            return-void
+            :original
+            invoke-virtual {p0, p1}, $click
+            return-void
+        """.trimIndent())
+        clickClass.methods.add(clickWrapper)
     }
 }

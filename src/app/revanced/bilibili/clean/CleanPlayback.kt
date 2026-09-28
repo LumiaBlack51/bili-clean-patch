@@ -24,6 +24,7 @@ import app.revanced.bilibili.utils.Utils
 import tv.danmaku.ijk.media.player.IMediaPlayer
 import java.lang.ref.WeakReference
 import java.util.WeakHashMap
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /** Adapter for the pinned 9.12.0 host. No touch overlay covers the progress/volume gestures. */
 @Keep
@@ -49,8 +50,56 @@ object CleanPlayback {
         return method.invoke(obj, *args)
     }
     @JvmStatic fun bind(container: Any) {
-        runCatching { invoke(container, "getPlayerCoreService")?.let { containers[it] = WeakReference(container) } }
+        runCatching { invoke(container, "getPlayerCoreService")?.let {
+            val delegate = if (it.javaClass.name.startsWith("com.bilibili.ship.theseus.united.player.oldway.playercontainer.TheseusPlayerContainerProvider")) field(it, "a") ?: it else it
+            containers[delegate] = WeakReference(container)
+        } }
             .onFailure { Log.w("BiliClean", "Playback container unavailable", it) }
+    }
+    private fun attachedHost(box: Any): Activity? {
+        val top = ApplicationDelegate.getTopActivity() ?: return null
+        val view = runCatching {
+            val render = invoke(box, "getRenderContainerService") ?: return null
+            val panel = invoke(render, "getPanelContainer") ?: return null
+            invoke(panel, "getView") as? View
+        }.getOrNull() ?: return null
+        return top.takeIf { view.isAttachedToWindow && view.rootView === top.window.decorView }
+    }
+    /** Story -> details can transfer a prepared player without repeating onPrepared. */
+    @JvmStatic fun clock(callback: Any, player: IMediaPlayer?) {
+        // The host also emits synthetic clock ticks with a null media argument.
+        if (player == null) return
+        if (Looper.myLooper() != Looper.getMainLooper()) { main.post { clock(callback, player) }; return }
+        runCatching {
+            val activeCore = field(callback, "a") ?: return
+            attach(activeCore, player)
+        }.onFailure { Log.w("BiliClean", "Playback transfer failed", it) }
+    }
+    private fun attach(activeCore: Any, player: IMediaPlayer) {
+        val box = containers[activeCore]?.get()?.takeIf { attachedHost(it) != null }
+            ?: field(activeCore, "a")?.takeIf { attachedHost(it) != null } ?: return
+        val host = attachedHost(box) ?: return
+        if (core.get() === activeCore && media.get() === player && owner.get() === host) return
+        cancelEndTimer()
+        containers[activeCore] = WeakReference(box)
+        core = WeakReference(activeCore); media = WeakReference(player); owner = WeakReference(host)
+        CleanRuntime.onPrepared(player)
+        Log.i("BiliClean", "playback attached to ${host.javaClass.simpleName}")
+    }
+    @JvmStatic fun resumed(host: Activity) {
+        // A paused transferred player has no clock callbacks. Wait briefly for its view to attach.
+        val reference = WeakReference(host)
+        fun retry(attempt: Int) {
+            main.postDelayed({
+                val top = reference.get()
+                if (top != null && !top.isDestroyed && ApplicationDelegate.getTopActivity() === top) {
+                    runCatching { core.get()?.let { c -> media.get()?.let { attach(c, it) } } }
+                        .onFailure { Log.w("BiliClean", "Paused playback transfer failed", it) }
+                    if (owner.get() !== top && attempt < 12) retry(attempt + 1)
+                }
+            }, 250)
+        }
+        retry(0)
     }
     @JvmStatic fun prepared(callback: Any, player: IMediaPlayer) {
         runCatching {
@@ -90,12 +139,17 @@ object CleanPlayback {
         if (!current.isShown || current.width == 0 || current.height == 0) return false
         while (true) { if (current.alpha <= .05f) return false; current = current.parent as? View ?: return true }
     }
+    private fun screenBounds(view: View): Rect? {
+        if (!view.getGlobalVisibleRect(Rect())) return null
+        val point = IntArray(2); view.getLocationOnScreen(point)
+        return Rect(point[0], point[1], point[0] + view.width, point[1] + view.height)
+    }
     @JvmStatic fun doubleTap(event: MotionEvent): Boolean {
         if (!enabled()) return false
         val host = activeOwner() ?: return false
         if (ApplicationDelegate.getTopActivity() !== host) return false
         val surface = find(host.window.decorView, "control_container") ?: return false
-        val bounds = Rect(); if (!surface.getGlobalVisibleRect(bounds)) return false
+        val bounds = screenBounds(surface) ?: return false
         // Raw coordinates remain correct in portrait, landscape and inset video layouts.
         if (!bounds.contains(event.rawX.toInt(), event.rawY.toInt())) return false
         val fraction = (event.rawX - bounds.left) / bounds.width()
@@ -135,12 +189,12 @@ object CleanPlayback {
                 val size = (52 * host.resources.displayMetrics.density).toInt()
                 fun add(control: View) { addView(control, LinearLayout.LayoutParams(size, size).apply { setMargins(size / 5, 0, size / 5, 0) }) }
                 add(button(android.R.drawable.ic_media_previous, "上一集") { navigate(true) })
-                add(button(android.R.drawable.ic_media_pause, "暂停或播放") { controller()?.let { invoke(it, if (player.isPlaying) "pause" else "resume") } })
+                add(button(android.R.drawable.ic_media_pause, "暂停或播放") { controller()?.let { invoke(it, if (media.get()?.isPlaying == true) "pause" else "resume") } })
                 add(button(android.R.drawable.ic_media_next, "下一集") { navigate(false) })
             }
             root.addView(row, FrameLayout.LayoutParams(-2, -2)); controls = row
         }
-        val bounds = Rect(); surface.getGlobalVisibleRect(bounds)
+        val bounds = screenBounds(surface) ?: return
         val origin = IntArray(2); root.getLocationOnScreen(origin)
         row.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
         row.x = bounds.exactCenterX() - origin[0] - row.measuredWidth / 2f
@@ -186,6 +240,28 @@ object CleanPlayback {
             .newInstance(null, "播放到当前视频结束", 6)
         java.lang.reflect.Array.set(result, length, item); result
     }.getOrElse { Log.w("BiliClean", "Timer menu failed", it); original }
+    @JvmStatic fun globalTimerItems(adapter: Any, original: List<*>): List<*> = runCatching {
+        if (original.isEmpty()) return original // Native onStop clears its adapter.
+        val dialog = field(adapter, "c") ?: return original
+        if (field(dialog, "a") !== activeOwner()) return original
+        val type = original.first()!!.javaClass
+        val ctor = type.constructors.single()
+        val rows = original.map { item ->
+            item!!
+            ctor.newInstance(field(item, "a"), if (field(item, "b") == 2) 0 else field(item, "b"),
+                !armed && field(item, "c") == true, field(item, "d"))
+        }.toMutableList()
+        rows.add(ctor.newInstance(-2L, 2, armed, MutableStateFlow("播放到当前视频结束")))
+        rows
+    }.getOrElse { Log.w("BiliClean", "Global timer menu failed", it); original }
+    @JvmStatic fun globalTimerClick(listener: Any, item: Any): Boolean = runCatching {
+        if (item.javaClass.name != "com.bilibili.app.comm.timing.ui.TimingReminderSelectDialog\$b") return false
+        if (field(item, "a") != -2L) { cancelEndTimer(); return false }
+        val dialog = field(listener, "b") as Dialog
+        field(dialog, "j")?.let { invoke(it, "l", 0L, false) }
+        if (armEndTimer()) dialog.dismiss()
+        true
+    }.getOrElse { Log.w("BiliClean", "Global timer selection failed", it); false }
     @JvmStatic fun timerClick(listener: Any): Boolean = runCatching {
         val item = field(listener, "b") ?: return false
         if (field(item, "a") != 6) { cancelEndTimer(); return false }

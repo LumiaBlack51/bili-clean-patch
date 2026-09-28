@@ -62,6 +62,9 @@ class CleanSettingsFragment : Fragment() {
             return control
         }
         toggle("过滤界面广告", "过滤已适配的开屏、推荐流、视频页和暂停广告。", Settings.CleanAds)
+        toggle("隐藏首页横幅", "默认开启，移除首页推荐顶部的大横幅。修改后刷新首页。", Settings.CleanHomeBanner)
+        toggle("屏蔽创作推广", "默认开启，过滤推荐中的创作推广，以及竖屏流中的广告推广视频。修改后重新进入推荐流。", Settings.CleanPromotion)
+        toggle("隐藏会员购", "默认开启，将底部会员购替换为设置，并过滤会员购推荐卡片。关闭后重启客户端恢复原入口。", Settings.CleanMall)
         toggle("空降助手", "显示详情页分类标签和彩色进度条。轻点视频呼出控件时显示片段入口，正常观看时隐藏；手动跳过按钮只在对应时段出现。", Settings.CleanAirborne)
         toggle("显示跳过提示", "跳过时显示目标时间。", Settings.CleanNotice)
         rows.addView(AirborneConfigDialog.rows(context))
