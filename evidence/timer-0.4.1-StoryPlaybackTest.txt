@@ -1,0 +1,17 @@
+INSTRUMENTATION_RESULT: results=PASS Home activity resumed
+PASS Home recommendation contains a real Story video
+PASS Home recommendation opens native video player
+INFO Home route: Story then details
+PASS Story details button exists
+PASS Details route opened from homepage
+PASS Transferred player belongs to details activity
+PASS Details has a bound media player after handoff
+INFO Host reused the Story media player
+PASS Paused handoff repairs stale owner without another onPrepared event
+PASS Details right double tap +10 seconds after handoff
+PASS Details center control resumes transferred player
+PASS Current shared timer menu includes end-of-video option
+PASS Shared timer row arms end-of-video mode
+PASS Transferred video completion closes details before autoplay
+
+INSTRUMENTATION_CODE: -1

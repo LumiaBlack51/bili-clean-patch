@@ -1,0 +1,18 @@
+INSTRUMENTATION_RESULT: failure=java.lang.AssertionError: Controlled playlist fixture: actual previous/next touches dispatch to matching native API (1,0)
+	at app.biliclean.tests.PlaybackControlsTest.check(PlaybackControlsTest.java:36)
+	at app.biliclean.tests.PlaybackControlsTest.navigationDispatchFixture(PlaybackControlsTest.java:97)
+	at app.biliclean.tests.PlaybackControlsTest.onStart(PlaybackControlsTest.java:172)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2627)
+
+INSTRUMENTATION_RESULT: results=PASS Native Bilibili player bound
+PASS Portrait right double tap +10s: 120000 -> 130000
+PASS Portrait left double tap -10s
+PASS YouTube double taps preserve paused state
+PASS Middle double tap neither seeks nor pauses/resumes
+PASS Center play button starts native playback
+PASS Previous episode control present
+PASS Next episode control present
+PASS 上一集 enabled when native playlist reports availability
+PASS 下一集 enabled when native playlist reports availability
+
+INSTRUMENTATION_CODE: 0

@@ -80,7 +80,15 @@ object CleanPlayback {
             ?: field(activeCore, "a")?.takeIf { attachedHost(it) != null } ?: return
         val host = attachedHost(box) ?: return
         if (core.get() === activeCore && media.get() === player && owner.get() === host) return
-        cancelEndTimer()
+        if (armed) {
+            val nextIdentity = CleanMetadata.current(host)
+            if (armedCore.get() === activeCore && armedMedia.get() === player &&
+                (armedIdentity == null || nextIdentity == null || armedIdentity == nextIdentity)) {
+                // The same prepared player can move between details Activities.
+                armedOwner = WeakReference(host)
+                if (nextIdentity != null) armedIdentity = nextIdentity
+            } else cancelEndTimer()
+        }
         containers[activeCore] = WeakReference(box)
         core = WeakReference(activeCore); media = WeakReference(player); owner = WeakReference(host)
         CleanRuntime.onPrepared(player)
@@ -109,8 +117,16 @@ object CleanPlayback {
             owner = WeakReference(ApplicationDelegate.getTopActivity())
             // A timer belongs to the selected video, never a subsequently selected episode.
             val activity = owner.get()
-            if (armed && (armedCore.get() !== activeCore || armedMedia.get() !== player ||
-                    (armedIdentity != null && activity != null && CleanMetadata.current(activity) != armedIdentity))) cancelEndTimer()
+            if (armed) {
+                val nextIdentity = activity?.let(CleanMetadata::current)
+                if (armedCore.get() === activeCore && armedMedia.get() === player &&
+                    (armedIdentity == null || nextIdentity == null || armedIdentity == nextIdentity)) {
+                    if (activity != null) armedOwner = WeakReference(activity)
+                } else if (armedIdentity != null && nextIdentity == armedIdentity) {
+                    armedCore = WeakReference(activeCore); armedMedia = WeakReference(player)
+                    if (activity != null) armedOwner = WeakReference(activity)
+                } else cancelEndTimer()
+            }
         }.onFailure { Log.w("BiliClean", "Playback binding failed", it) }
     }
     private fun container() = core.get()?.let { containers[it]?.get() }
@@ -224,10 +240,16 @@ object CleanPlayback {
     @JvmStatic fun stateChanged(source: Any, state: Int): Boolean {
         if (state != 6 || !armed || source !== armedCore.get()) return false
         val host = armedOwner.get() ?: return false
-        if (armedIdentity != null && CleanMetadata.current(host) != armedIdentity) { cancelEndTimer(); return false }
+        val currentIdentity = CleanMetadata.current(host)
+        if (armedIdentity != null && currentIdentity != null && currentIdentity != armedIdentity) { cancelEndTimer(); return false }
         val player = armedMedia.get(); cancelEndTimer()
-        // Consume completion before native next-video observers run. Finish on the UI queue.
-        main.post { runCatching { player?.pause() }; if (!host.isDestroyed) host.finish() }
+        // Consume completion before native next-video observers run. Closing the whole
+        // Bilibili task also prevents an older details Activity from resuming playback.
+        main.post {
+            runCatching { player?.pause() }
+            if (!host.isDestroyed) runCatching { host.finishAffinity() }
+                .onFailure { Log.w("BiliClean", "Timer task close failed", it); host.finish() }
+        }
         Log.i("BiliClean", "end-of-video timer completed; autoplay suppressed")
         return true
     }
@@ -260,6 +282,7 @@ object CleanPlayback {
         val dialog = field(listener, "b") as Dialog
         field(dialog, "j")?.let { invoke(it, "l", 0L, false) }
         if (armEndTimer()) dialog.dismiss()
+        else Toast.makeText(dialog.context, "播放器尚未准备好，请稍后重试", Toast.LENGTH_SHORT).show()
         true
     }.getOrElse { Log.w("BiliClean", "Global timer selection failed", it); false }
     @JvmStatic fun timerClick(listener: Any): Boolean = runCatching {
@@ -271,6 +294,7 @@ object CleanPlayback {
         val client = field(dialog, "f")!!
         invoke(client, "getService")?.let { invoke(it, "startShutOffTiming", 0L, false) }
         if (armEndTimer()) dialog.dismiss()
+        else Toast.makeText(dialog.context, "播放器尚未准备好，请稍后重试", Toast.LENGTH_SHORT).show()
         true
     }.getOrElse { Log.w("BiliClean", "Timer selection failed", it); false }
     @JvmStatic fun timerOpened(dialog: Any) {
