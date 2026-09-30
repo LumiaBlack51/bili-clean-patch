@@ -32,11 +32,33 @@ object CleanContent {
             (uri.scheme in setOf("http", "https") && uri.host in setOf("mall.bilibili.com", "show.bilibili.com"))
     }
 
+    /** Commercial metadata can accompany an ordinary av with is_ad=false. */
+    internal fun paidPromotion(item: Any): Boolean {
+        val info = call(item, "getAdInfo") ?: field(item, "adInfo") ?: return false
+        if (info.javaClass.name !in setOf("com.bilibili.adcommon.data.AdInfo",
+                "com.bilibili.adcommon.data.model.FeedAdInfo")) return false
+        // These are the pinned host's commercial badge codes, not arbitrary nonzero values.
+        val mark = (call(info, "getCmMark") as? Number)?.toInt()
+        if (mark in setOf(1, 3, 5, 6, 7, 8) ||
+            (call(info, "getNatureAd") as? Number)?.toInt() == 1) return true
+        val extra = call(info, "getExtra") ?: field(info, "feedExtra") ?: return false
+        val card = field(extra, "card") ?: return false
+        // Story renders its rocket as a server-supplied image in ad_tag_style.
+        // Use the host's validity check; an empty ad slot/card is not a promotion.
+        return listOf(call(card, "getMarker"), call(card, "getAdTagStyleFullScreen")).any { style ->
+            style != null && runCatching {
+                Class.forName("com.bilibili.ad.adview.widget.marker.MarkLabelUtil")
+                    .getMethod("isShowMark", style.javaClass).invoke(null, style) == true
+            }.getOrDefault(false)
+        }
+    }
+
     internal fun homeExtra(item: Any, cardType: String?, goto: String?): Boolean {
         // Banner is a separate switch even when a banner contains an ad.
         if (cardType == "banner" || cardType?.startsWith("banner_v") == true || goto == "banner")
             return Settings.CleanHomeBanner()
         if (Settings.CleanMall() && mallUri(call(item, "getUri") ?: field(item, "uri"))) return true
+        if (Settings.CleanPaidPromotion() && paidPromotion(item)) return true
         if (!Settings.CleanPromotion()) return false
         val reason = runCatching {
             val base = Class.forName("com.bilibili.pegasus.data.base.BasePegasusData")
@@ -47,7 +69,7 @@ object CleanContent {
     }
 
     @Keep @JvmStatic fun filterStory(items: List<*>?): List<*>? {
-        if (items == null || (!Settings.CleanPromotion() && !Settings.CleanMall())) return items
+        if (items == null || (!Settings.CleanPromotion() && !Settings.CleanMall() && !Settings.CleanPaidPromotion())) return items
         return items.filter { item ->
             if (item == null || item.javaClass.name != "com.bilibili.video.story.StoryDetail") true
             else {
@@ -56,7 +78,8 @@ object CleanContent {
                         adType(field(item, "goto") as? String) || adType(field(item, "cardGoto") as? String) ||
                         field(item, "rcmdReason") == "创作推广")
                 val mall = Settings.CleanMall() && mallUri(field(item, "uri"))
-                !promoted && !mall
+                val paid = Settings.CleanPaidPromotion() && paidPromotion(item)
+                !promoted && !mall && !paid
             }
         }
     }

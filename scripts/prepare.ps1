@@ -70,11 +70,17 @@ if ([IO.File]::ReadAllText((Join-Path $upstream "$java/settings/Settings.kt")).C
 if (![IO.File]::ReadAllText((Join-Path $upstream "$java/settings/Settings.kt")).Contains('@JvmField val CleanAds =')) {
     Replace-Once "$java/settings/Settings.kt" 'object Settings {' $settings
 }
-Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanAirborne' @'
+if (![IO.File]::ReadAllText((Join-Path $upstream "$java/settings/Settings.kt")).Contains('@JvmField val CleanHomeBanner =')) {
+    Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanAirborne' @'
     @JvmField val CleanHomeBanner = BooleanSetting(key = "clean_home_banner", defValue = true)
     @JvmField val CleanPromotion = BooleanSetting(key = "clean_promotion", defValue = true)
     @JvmField val CleanMall = BooleanSetting(key = "clean_mall", defValue = true)
     @JvmField val CleanAirborne
+'@
+}
+Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanPromotion = BooleanSetting(key = "clean_promotion", defValue = true)' @'
+    @JvmField val CleanPromotion = BooleanSetting(key = "clean_promotion", defValue = true)
+    @JvmField val CleanPaidPromotion = BooleanSetting(key = "clean_paid_promotion", defValue = true)
 '@
 Replace-Once "$java/settings/Setting.kt" 'Accounts.userBlocked || (dependency != null && !dependency.get())' 'dependency != null && !dependency.get()'
 

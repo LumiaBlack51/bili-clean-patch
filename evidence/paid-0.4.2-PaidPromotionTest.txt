@@ -1,0 +1,31 @@
+PASS paid promotion setting defaults enabled
+PASS real JSON promotion metadata parsed com.bilibili.adcommon.data.AdInfo
+PASS real JSON promotion metadata parsed com.bilibili.adcommon.data.model.FeedAdInfo
+PASS home paid/general switches mask=0
+PASS installed Story paid/general switches mask=0
+PASS Story cached source retained mask=0
+PASS home paid/general switches mask=1
+PASS installed Story paid/general switches mask=1
+PASS Story cached source retained mask=1
+PASS home paid/general switches mask=2
+PASS installed Story paid/general switches mask=2
+PASS Story cached source retained mask=2
+PASS home paid/general switches mask=3
+PASS installed Story paid/general switches mask=3
+PASS Story cached source retained mask=3
+PASS home paid/general switches mask=4
+PASS installed Story paid/general switches mask=4
+PASS Story cached source retained mask=4
+PASS home paid/general switches mask=5
+PASS installed Story paid/general switches mask=5
+PASS Story cached source retained mask=5
+PASS home paid/general switches mask=6
+PASS installed Story paid/general switches mask=6
+PASS Story cached source retained mask=6
+PASS home paid/general switches mask=7
+PASS installed Story paid/general switches mask=7
+PASS Story cached source retained mask=7
+PASS legacy homepage promotion metadata filtered
+PASS legacy homepage switch restores promotion on fresh response
+PASS null Story response passes through
+

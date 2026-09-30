@@ -1,0 +1,4 @@
+PASS actual paid promotion switch is visible and enabled
+PASS actual switch can be turned off
+PASS disabled value survives host process restart
+PASS switch restored to enabled

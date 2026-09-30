@@ -1,0 +1,39 @@
+{
+  "source": "https://api.bilibili.com/x/web-interface/view?bvid=BV1j3bC6dEfC",
+  "checkedAt": "2026-10-01",
+  "metadata": {
+    "bvid": "BV1j3bC6dEfC",
+    "aid": 117098407859951,
+    "title": "最好的二人组是什么样的？",
+    "tid": 173,
+    "tname": "",
+    "desc": "",
+    "owner": {
+      "mid": 3632315987135156,
+      "name": "鱼饼不摸鱼",
+      "face": "https://i2.hdslb.com/bfs/face/6f3f83d757c6dfb90ad5d1a72bc43a31249925c5.jpg"
+    },
+    "duration": 30,
+    "rights": {
+      "bp": 0,
+      "elec": 0,
+      "download": 1,
+      "movie": 0,
+      "pay": 0,
+      "hd5": 0,
+      "no_reprint": 0,
+      "autoplay": 1,
+      "ugc_pay": 0,
+      "is_cooperation": 0,
+      "ugc_pay_preview": 0,
+      "no_background": 0,
+      "clean_mode": 0,
+      "is_stein_gate": 0,
+      "is_360": 0,
+      "no_share": 0,
+      "arc_pay": 0,
+      "free_watch": 0
+    }
+  },
+  "promotionVerification": "Public view metadata does not include feed promotion context; no paid-promotion status inferred."
+}
