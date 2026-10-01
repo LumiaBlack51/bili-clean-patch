@@ -18,8 +18,11 @@ $ads = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanAds
 $banner = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanHomeBanner -> (\w+)').Groups[1].Value
 $promotion = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanPromotion -> (\w+)').Groups[1].Value
 $paid = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanPaidPromotion -> (\w+)').Groups[1].Value
+$courses = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanSelectedCourses -> (\w+)').Groups[1].Value
+$storyCourses = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanStoryCourses -> (\w+)').Groups[1].Value
+$lockedUpower = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanLockedUpower -> (\w+)').Groups[1].Value
 $mall = [regex]::Match($settingsMap.Groups['body'].Value,'BooleanSetting CleanMall -> (\w+)').Groups[1].Value
-if (!$banner -or !$promotion -or !$mall -or !$paid) { throw 'Missing content setting mappings' }
+if (!$banner -or !$promotion -or !$mall -or !$paid -or !$courses -or !$storyCourses -or !$lockedUpower) { throw 'Missing content setting mappings' }
 $value = [regex]::Match($settingMap.Groups['body'].Value,'java.lang.Object value -> (\w+)').Groups[1].Value
 if (!$ads -or !$value) { throw 'Missing settings field mappings' }
 $runtimeMap = MappingBlock 'app.revanced.bilibili.clean.CleanRuntime'
@@ -37,6 +40,9 @@ static final String ADS = "$ads";
 static final String BANNER = "$banner";
 static final String PROMOTION = "$promotion";
 static final String PAID = "$paid";
+static final String COURSES = "$courses";
+static final String STORY_COURSES = "$storyCourses";
+static final String LOCKED_UPOWER = "$lockedUpower";
 static final String MALL = "$mall";
 static final String VALUE = "$value";
 static final String ENGINE_FIELD = "$engineField";
@@ -45,7 +51,7 @@ static final String SEGMENT_CATEGORY = "$segmentCategory";
 static final String SEGMENT_ACTION = "$segmentAction";
 }
 "@ | Set-Content "$out/GeneratedNames.java"
-& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java" "$root/tests/android/ContentFilterTest.java" "$root/tests/android/PaidPromotionTest.java" "$root/tests/android/NavigationTest.java" "$root/tests/android/AirbornePlaybackTest.java" "$root/tests/android/PlaybackControlsTest.java" "$root/tests/android/StoryPlaybackTest.java" "$root/tests/android/GlobalTimerTest.java" "$out/GeneratedNames.java"
+& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java" "$root/tests/android/ContentFilterTest.java" "$root/tests/android/PaidPromotionTest.java" "$root/tests/android/CourseFilterTest.java" "$root/tests/android/UpowerFilterTest.java" "$root/tests/android/NavigationTest.java" "$root/tests/android/AirbornePlaybackTest.java" "$root/tests/android/PlaybackControlsTest.java" "$root/tests/android/StoryPlaybackTest.java" "$root/tests/android/GlobalTimerTest.java" "$out/GeneratedNames.java"
 if ($LASTEXITCODE) { throw 'Test compilation failed' }
 & jar cf "$out/classes.jar" -C "$out/classes" .
 & "$bt/d8.bat" --lib $android --min-api 24 --output "$out/dex" "$out/classes.jar"

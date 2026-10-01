@@ -1,0 +1,28 @@
+{
+  "hostVersion": "9.12.0 (9120300)",
+  "hostApkSha256": "b9c62efed1452c21a070919a9d937428ab6b7308a4d9e066d282392f50333f31",
+  "inspection": "Read-only field annotations and DEX callers in the pinned official APK",
+  "model": "com.bilibili.video.story.StoryDetail",
+  "serializedFields": {
+    "upower_info": "getUpowerInfo(): StoryDetail.UpowerInfo",
+    "is_unlocked": "isUnlocked(): nullable Boolean"
+  },
+  "upowerFields": {
+    "is_preview": "isPreview(): boolean",
+    "show_paywall": "getShowPaywall(): boolean",
+    "is_iaa": "isIaa(): boolean",
+    "duration": "getDuration(): int, seconds",
+    "watch_time_length": "getWatchTimeLength(): long, milliseconds"
+  },
+  "hostEvidence": [
+    "StoryChargeBarState's compose callback hides charging UI with reason already_fully_unlocked when duration > 0 and watch_time_length >= duration * 1000",
+    "StoryPayWallState attaches the paywall only with show_paywall and without complete watch entitlement",
+    "StoryChargeUnlockManager.b invokes the rewarded-ad path for is_iaa=true",
+    "StoryChargeWidget.getTryOverType uses is_preview for trial state"
+  ],
+  "filter": "In Story only: native UpowerInfo, not IAA, preview or paywall, no explicit true unlock, no full-duration watch entitlement",
+  "unlockedPriority": true,
+  "unknownMetadataKept": true,
+  "titlesAndSupportUrlsAreNotLockEvidence": true,
+  "entitlementsModified": false
+}

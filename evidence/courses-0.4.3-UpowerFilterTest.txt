@@ -1,0 +1,28 @@
+PASS locked charging filter defaults enabled
+PASS charging preview locked
+PASS explicit locked preview
+PASS partial access locked
+PASS charging paywall locked
+PASS partial paywall just below duration locked
+PASS unknown duration cannot prove full access
+PASS duration multiplication uses long
+PASS explicit unlocked beats stale preview/paywall
+PASS full charging exclusive retained
+PASS full access exactly at duration retained
+PASS full access beats false unlocked flag
+PASS empty metadata retained
+PASS null metadata retained
+PASS false unlock without charging metadata retained
+PASS title and support URL alone retained
+PASS ad-unlock preview outside charging scope retained
+PASS ad-unlock full access retained
+PASS non-preview charging retained even with false unlock flag
+PASS large full duration retained
+PASS paywall object alone is not locked
+PASS installed Story getter filters mixed charging feed
+PASS charging filter retains immutable cached source
+PASS newly unlocked cached video restored without refetch
+PASS disabled charging filter restores cached locked videos
+PASS null Story response retained
+PASS charging filter leaves homepage unchanged
+

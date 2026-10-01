@@ -2,11 +2,13 @@
 
 独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**实验适配官方 9.12.0 (9120300)：AVD 启动、播放、设置和真实视频空降已通过；去广告通过真实宿主模型的受控测试，但线上真实广告样本、开屏和视频页覆盖尚未全面验收。不是稳定版。**
 
-仓库现已公开。[新版完整 APK：0.4.2 小火箭与付费推广过滤](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.2)。0.4.0 新增的三个默认开启开关是隐藏首页横幅、屏蔽创作推广、隐藏会员购，见 [功能与验证说明](docs/content-filters.md)。手势、播放到结束和自动更新说明见 [原生播放器功能](docs/playback-controls.md)；此前播完关闭修复和真机更新结果见 [0.4.1 记录](docs/release-0.4.1.md)。加密签名备份保留在 [0.1.0 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)。
+仓库现已公开。[新版完整 APK：0.4.3 竖屏内容过滤](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.3)。0.4.0 新增的三个默认开启开关是隐藏首页横幅、屏蔽创作推广、隐藏会员购，见 [功能与验证说明](docs/content-filters.md)。手势、播放到结束和自动更新说明见 [原生播放器功能](docs/playback-controls.md)；此前播完关闭修复和真机更新结果见 [0.4.1 记录](docs/release-0.4.1.md)。加密签名备份保留在 [0.1.0 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)。
 
 0.4.0 同时包含此前本地 0.3.1 的首页播放器迁移手势修复和新版共用定时关闭菜单，见 [修复与验证说明](docs/playback-handoff-fix.md)。
 
 **0.4.2** 新增可选的「屏蔽小火箭 / 付费推广」，默认开启，覆盖首页和竖屏流中的商业徽标、自然流商业视频及有效图片推广标记，包括 `is_ad=false` 的推广视频。识别规则、BV 核对及验证边界见 [功能记录](docs/paid-promotions.md)。
+
+**0.4.3** 新增默认开启、可独立关闭的「屏蔽竖屏课程」，过滤竖屏流中的所有课程、免费和试听片段；另新增「屏蔽指定课程」，按已核对的课程、课时和 AV 编号过滤两门指定课程及试听推荐，覆盖首页和竖屏推荐。同时新增「屏蔽未解锁充电专属」，只过滤竖屏中的未解锁充电专属，保留已解锁内容。手机小火箭漏屏蔽的安装版本排查和验证记录见 [指定课程说明](docs/selected-courses.md)。
 
 ## 当前实现
 

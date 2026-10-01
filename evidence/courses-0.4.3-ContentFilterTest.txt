@@ -1,0 +1,40 @@
+PASS new setting defaults enabled b
+PASS new setting defaults enabled c
+PASS new setting defaults enabled e
+PASS home independent switches mask=0
+PASS installed Story getter hook mask=0
+PASS Story source retained for switch restore mask=0
+PASS mall switch preserves VIP and similar domain mask=0
+PASS home independent switches mask=1
+PASS installed Story getter hook mask=1
+PASS Story source retained for switch restore mask=1
+PASS mall switch preserves VIP and similar domain mask=1
+PASS home independent switches mask=2
+PASS installed Story getter hook mask=2
+PASS Story source retained for switch restore mask=2
+PASS mall switch preserves VIP and similar domain mask=2
+PASS home independent switches mask=3
+PASS installed Story getter hook mask=3
+PASS Story source retained for switch restore mask=3
+PASS mall switch preserves VIP and similar domain mask=3
+PASS home independent switches mask=4
+PASS installed Story getter hook mask=4
+PASS Story source retained for switch restore mask=4
+PASS mall switch preserves VIP and similar domain mask=4
+PASS home independent switches mask=5
+PASS installed Story getter hook mask=5
+PASS Story source retained for switch restore mask=5
+PASS mall switch preserves VIP and similar domain mask=5
+PASS home independent switches mask=6
+PASS installed Story getter hook mask=6
+PASS Story source retained for switch restore mask=6
+PASS mall switch preserves VIP and similar domain mask=6
+PASS home independent switches mask=7
+PASS installed Story getter hook mask=7
+PASS Story source retained for switch restore mask=7
+PASS mall switch preserves VIP and similar domain mask=7
+PASS native bottom membership shop replaced with settings
+PASS cached source navigation retained
+PASS installed native navigation hook enabled/disabled
+PASS null list passes through
+

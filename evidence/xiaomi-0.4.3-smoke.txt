@@ -1,0 +1,10 @@
+PASS installed Xiaomi APK matches final candidate SHA-256 a1579d1ed1f5d1476f2881723e7e9cbacb6a26c9ffad30edbb3a9c8864b74b63
+PASS Xiaomi application starts and patch settings opens
+PASS installed patch settings displays version 0.4.3
+PASS 屏蔽小火箭 / 付费推广 enabled
+PASS 屏蔽竖屏课程 enabled
+PASS 屏蔽未解锁充电专属 enabled
+PASS 屏蔽指定课程 enabled
+PASS charging switch can be disabled on Xiaomi
+PASS charging switch persists disabled across Xiaomi process restart
+PASS charging switch restored enabled on Xiaomi

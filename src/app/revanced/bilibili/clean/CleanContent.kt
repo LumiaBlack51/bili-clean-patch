@@ -58,6 +58,7 @@ object CleanContent {
         if (cardType == "banner" || cardType?.startsWith("banner_v") == true || goto == "banner")
             return Settings.CleanHomeBanner()
         if (Settings.CleanMall() && mallUri(call(item, "getUri") ?: field(item, "uri"))) return true
+        if (Settings.CleanSelectedCourses() && CleanCourses.matches(item)) return true
         if (Settings.CleanPaidPromotion() && paidPromotion(item)) return true
         if (!Settings.CleanPromotion()) return false
         val reason = runCatching {
@@ -68,8 +69,23 @@ object CleanContent {
         return reason == "创作推广" || field(item, "rcmdReason") == "创作推广"
     }
 
+    /** UpowerInfo also serves ad-unlock content; only the charging preview/paywall is targeted. */
+    internal fun lockedUpower(item: Any): Boolean {
+        val info = call(item, "getUpowerInfo") ?: return false
+        if (info.javaClass.name != "com.bilibili.video.story.StoryDetail\$UpowerInfo") return false
+        // Explicit access wins over stale preview/paywall metadata.
+        if (call(item, "isUnlocked") == true || call(info, "isIaa") == true) return false
+        val duration = (call(info, "getDuration") as? Number)?.toLong() ?: 0L
+        val watchTime = (call(info, "getWatchTimeLength") as? Number)?.toLong() ?: 0L
+        // The pinned host calls this state already_fully_unlocked. Duration is seconds.
+        if (duration > 0L && watchTime >= duration * 1000L) return false
+        // Empty/unknown metadata and fully accessible exclusives must survive.
+        return call(info, "isPreview") == true || call(info, "getShowPaywall") == true
+    }
+
     @Keep @JvmStatic fun filterStory(items: List<*>?): List<*>? {
-        if (items == null || (!Settings.CleanPromotion() && !Settings.CleanMall() && !Settings.CleanPaidPromotion())) return items
+        if (items == null || (!Settings.CleanPromotion() && !Settings.CleanMall() && !Settings.CleanPaidPromotion() &&
+                    !Settings.CleanSelectedCourses() && !Settings.CleanStoryCourses() && !Settings.CleanLockedUpower())) return items
         return items.filter { item ->
             if (item == null || item.javaClass.name != "com.bilibili.video.story.StoryDetail") true
             else {
@@ -79,7 +95,11 @@ object CleanContent {
                         field(item, "rcmdReason") == "创作推广")
                 val mall = Settings.CleanMall() && mallUri(field(item, "uri"))
                 val paid = Settings.CleanPaidPromotion() && paidPromotion(item)
-                !promoted && !mall && !paid
+                // Use the host's course classification, including free courses and previews.
+                val course = (Settings.CleanStoryCourses() && call(item, "isCheese") == true) ||
+                    (Settings.CleanSelectedCourses() && CleanCourses.matches(item))
+                val locked = Settings.CleanLockedUpower() && lockedUpower(item)
+                !promoted && !mall && !paid && !course && !locked
             }
         }
     }

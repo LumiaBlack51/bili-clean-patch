@@ -1,0 +1,63 @@
+PASS selected course switch defaults enabled
+PASS all Story courses switch defaults enabled
+PASS home identity/counterexample 0
+PASS home identity/counterexample 1
+PASS home identity/counterexample 2
+PASS home identity/counterexample 3
+PASS home identity/counterexample 4
+PASS home identity/counterexample 5
+PASS home identity/counterexample 6
+PASS home identity/counterexample 7
+PASS home identity/counterexample 8
+PASS home identity/counterexample 9
+PASS home identity/counterexample 10
+PASS home identity/counterexample 11
+PASS home identity/counterexample 12
+PASS home identity/counterexample 13
+PASS home identity/counterexample 14
+PASS home identity/counterexample 15
+PASS Story identity/counterexample 0
+PASS Story identity/counterexample 1
+PASS Story identity/counterexample 2
+PASS Story identity/counterexample 3
+PASS Story identity/counterexample 4
+PASS Story identity/counterexample 5
+PASS Story identity/counterexample 6
+PASS Story identity/counterexample 7
+PASS Story identity/counterexample 8
+PASS Story identity/counterexample 9
+PASS Story identity/counterexample 10
+PASS Story identity/counterexample 11
+PASS Story identity/counterexample 12
+PASS Story identity/counterexample 13
+PASS Story identity/counterexample 14
+PASS Story identity/counterexample 15
+PASS Story identity/counterexample 16
+PASS Story identity/counterexample 17
+PASS Story identity/counterexample 18
+PASS Story identity/counterexample 19
+PASS Story identity/counterexample 20
+PASS Story identity/counterexample 21
+PASS Story identity/counterexample 22
+PASS Story identity/counterexample 23
+PASS home mixed feed filtered with other filters disabled
+PASS installed Story getter removes selected courses
+PASS Story source list retained
+PASS home disabled switch restores fresh response
+PASS Story disabled switch restores cached courses
+PASS legacy homepage course URI/preview filtered, other course retained
+PASS all Story courses classification/counterexample 0
+PASS all Story courses classification/counterexample 1
+PASS all Story courses classification/counterexample 2
+PASS all Story courses classification/counterexample 3
+PASS all Story courses classification/counterexample 4
+PASS all Story courses classification/counterexample 5
+PASS all Story courses classification/counterexample 6
+PASS all Story courses classification/counterexample 7
+PASS all Story courses classification/counterexample 8
+PASS all Story courses classification/counterexample 9
+PASS installed Story getter removes all course types
+PASS all course filtering retains cached source
+PASS all Story course switch leaves homepage unchanged
+PASS all Story course switch off restores cached courses
+

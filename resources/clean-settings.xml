@@ -4,6 +4,9 @@
         <androidx.preference.SwitchPreferenceCompat android:key="clean_home_banner" android:title="隐藏首页横幅" android:defaultValue="true" />
         <androidx.preference.SwitchPreferenceCompat android:key="clean_promotion" android:title="屏蔽创作推广" android:defaultValue="true" />
         <androidx.preference.SwitchPreferenceCompat android:key="clean_paid_promotion" android:title="屏蔽小火箭 / 付费推广" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_story_courses" android:title="屏蔽竖屏课程" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_locked_upower" android:title="屏蔽未解锁充电专属" android:defaultValue="true" />
+        <androidx.preference.SwitchPreferenceCompat android:key="clean_selected_courses" android:title="屏蔽指定课程" android:defaultValue="true" />
         <androidx.preference.SwitchPreferenceCompat android:key="clean_mall" android:title="隐藏会员购" android:defaultValue="true" />
         <androidx.preference.SwitchPreferenceCompat android:key="clean_ads" android:title="过滤界面广告" android:summary="过滤已适配位置；实际覆盖范围见测试记录" android:defaultValue="true" />
         <androidx.preference.SwitchPreferenceCompat android:key="clean_airborne" android:title="空降助手" android:summary="显示社区广告标记，无账号等级或大会员门槛" android:defaultValue="true" />

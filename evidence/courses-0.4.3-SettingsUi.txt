@@ -1,0 +1,10 @@
+PASS all Story courses switch initially enabled
+PASS selected course switch initially enabled
+PASS locked charging switch initially enabled
+PASS paid promotion switch remains enabled
+PASS all Story course switch turns off in real UI
+PASS all Story course switch persists off after process restart
+PASS all Story course switch restored enabled
+PASS locked charging switch turns off in real UI
+PASS locked charging switch persists after process restart
+PASS locked charging switch restored enabled

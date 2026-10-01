@@ -3,6 +3,8 @@
     <application android:label="BiliClean controlled tests" />
     <instrumentation android:name="app.biliclean.tests.ContentFilterTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.PaidPromotionTest" android:targetPackage="tv.danmaku.bili" />
+    <instrumentation android:name="app.biliclean.tests.CourseFilterTest" android:targetPackage="tv.danmaku.bili" />
+    <instrumentation android:name="app.biliclean.tests.UpowerFilterTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.NavigationTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.HostModelTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.AirbornePlaybackTest" android:targetPackage="tv.danmaku.bili" />

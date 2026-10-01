@@ -82,6 +82,18 @@ Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanPromotion = Bo
     @JvmField val CleanPromotion = BooleanSetting(key = "clean_promotion", defValue = true)
     @JvmField val CleanPaidPromotion = BooleanSetting(key = "clean_paid_promotion", defValue = true)
 '@
+Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanMall = BooleanSetting(key = "clean_mall", defValue = true)' @'
+    @JvmField val CleanMall = BooleanSetting(key = "clean_mall", defValue = true)
+    @JvmField val CleanSelectedCourses = BooleanSetting(key = "clean_selected_courses", defValue = true)
+'@
+Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanSelectedCourses = BooleanSetting(key = "clean_selected_courses", defValue = true)' @'
+    @JvmField val CleanSelectedCourses = BooleanSetting(key = "clean_selected_courses", defValue = true)
+    @JvmField val CleanStoryCourses = BooleanSetting(key = "clean_story_courses", defValue = true)
+'@
+Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanStoryCourses = BooleanSetting(key = "clean_story_courses", defValue = true)' @'
+    @JvmField val CleanStoryCourses = BooleanSetting(key = "clean_story_courses", defValue = true)
+    @JvmField val CleanLockedUpower = BooleanSetting(key = "clean_locked_upower", defValue = true)
+'@
 Replace-Once "$java/settings/Setting.kt" 'Accounts.userBlocked || (dependency != null && !dependency.get())' 'dependency != null && !dependency.get()'
 
 $patchTarget = Join-Path $upstream 'patches/src/main/kotlin/app/revanced/patches/bilibili/clean'
