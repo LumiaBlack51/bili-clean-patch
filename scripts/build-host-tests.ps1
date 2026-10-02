@@ -51,7 +51,7 @@ static final String SEGMENT_CATEGORY = "$segmentCategory";
 static final String SEGMENT_ACTION = "$segmentAction";
 }
 "@ | Set-Content "$out/GeneratedNames.java"
-& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/HostModelTest.java" "$root/tests/android/ContentFilterTest.java" "$root/tests/android/PaidPromotionTest.java" "$root/tests/android/CourseFilterTest.java" "$root/tests/android/UpowerFilterTest.java" "$root/tests/android/NavigationTest.java" "$root/tests/android/AirbornePlaybackTest.java" "$root/tests/android/PlaybackControlsTest.java" "$root/tests/android/StoryPlaybackTest.java" "$root/tests/android/GlobalTimerTest.java" "$out/GeneratedNames.java"
+& javac -encoding UTF-8 -source 8 -target 8 -cp $android -d "$out/classes" "$root/tests/android/SplashEntryTest.java" "$root/tests/android/HostModelTest.java" "$root/tests/android/ContentFilterTest.java" "$root/tests/android/PaidPromotionTest.java" "$root/tests/android/CourseFilterTest.java" "$root/tests/android/UpowerFilterTest.java" "$root/tests/android/NavigationTest.java" "$root/tests/android/AirbornePlaybackTest.java" "$root/tests/android/PlaybackControlsTest.java" "$root/tests/android/StoryPlaybackTest.java" "$root/tests/android/GlobalTimerTest.java" "$out/GeneratedNames.java"
 if ($LASTEXITCODE) { throw 'Test compilation failed' }
 & jar cf "$out/classes.jar" -C "$out/classes" .
 & "$bt/d8.bat" --lib $android --min-api 24 --output "$out/dex" "$out/classes.jar"

@@ -1,0 +1,4 @@
+PASS fixture uses actual SplashOrder JSON annotations
+PASS baseline: enabled ads filter still returns legacy cached order
+PASS baseline: enabled ads filter still returns KSplash prepared hot order
+

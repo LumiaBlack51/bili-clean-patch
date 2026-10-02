@@ -61,3 +61,45 @@
 `official-package.txt`、`official-signature.txt`、`official-sha256.txt` 记录实际输入包。`official-first-launch.png` 是首次协议界面；`official-video-open.png` 和 `official-startup-errors.txt` 记录首次 ANR。复测的 `official-retest-main.png`、`official-marked-video.png`、`official-playback-time.png` 显示原版首页及不同播放画面；`official-playback.mp4` 是实际 20 秒连续录屏。
 
 这些证据仅证明原版基线，不证明补丁版通过。
+
+## 0.4.4 后台返回开屏缓存修复（2026-10-02）
+
+用户报告：退回桌面再进入 B 站，偶尔再次出现开屏广告。连接手机为 OPPO PLQ110，原安装包与 0.4.3 发布 APK 的 SHA-256 一致，且「过滤界面广告」开启。
+
+原有 `CleanJson` 只清理旧模型的 JSON 广告列表；设置变更回调只删除 `splash2/splash.json`，无法覆盖已选中/预载的内存素材。固定原版 9.12.0 中还存在两套开屏实现：
+
+- 旧 `SplashManager.b` 可以直接返回 `Wo1.b.b` 中的预载素材；`SplashManager.a` 根据已选中的素材创建广告页，恢复的 `HotSplashActivity` 也调用它。
+- KSplash 的 `BusinessSplashViewModel.c` 可直接返回 StateFlow 中准备好的热启动素材，`a` 负责冷热启动素材选择；这条路径不经过旧 JSON 模型过滤。
+- R8 共用回调 `bf.d.invoke` 的开屏分支会选择其中一套热启动路径。新补丁只在该分支的 `ip1.a.a()` 特性判断之前插入拦截，保留同一方法中的其他分支。
+
+`CleanSplashPatch` 在上述四个素材/页面入口和一个热启动分支检查 `CleanAds`，开启时使用宿主既有的“无广告”空返回或返回 `Unit`，不读取缓存、不创建广告页、不等待热启动素材。关闭时继续原来的指令。匹配固定类、完整签名、静态标志及分支布局；不支持的宿主结构使补丁构建失败。
+
+### 对照与回归
+
+独立模拟器保留 0.4.3，包哈希为 `a1579d1ed1f5d1476f2881723e7e9cbacb6a26c9ffad30edbb3a9c8864b74b63`。`SplashEntryTest -e baseline true` 在广告开关开启时向实际宿主缓存放入受控素材，确认旧版仍从两套缓存返回这些对象。证据：[旧版对照](../evidence/splash-entry-baseline-0.4.3.txt)。
+
+同一模拟器更新到 0.4.4 后，同一缓存测试通过 25 项检查：旧素材在 COLD/HOT/CALL_UP 来源均被拦截，已选中的旧素材不能创建页面，KSplash 热启动缓存被拦截，选择入口先于原逻辑返回，共用热启动分支先于路由/等待返回。反复关闭/开启过滤，关闭时两套缓存可继续返回原对象，KSplash 缓存对象本身没有被改写。测试结束恢复测试开关和注入缓存。证据：[新版测试](../evidence/splash-entry-0.4.4.txt)。
+
+| 回归套件 | 通过检查数 |
+| --- | ---: |
+| HostModelTest（含暂停广告） | 4 |
+| ContentFilterTest | 39 |
+| PaidPromotionTest | 30 |
+| CourseFilterTest | 62 |
+| UpowerFilterTest | 27 |
+| NavigationTest | 4 |
+
+共 191 项新入口与广告/内容/导航检查通过；`scripts/test.ps1` 核心空降测试及完整 Gradle 构建通过。独立测试 APK 只装在模拟器，不包含在交付 APK，也未安装到手机。
+
+### 手机验证与交付
+
+使用同证书 `adb install -r --no-incremental` 覆盖更新 OPPO，未卸载或清理应用数据。安装后手机 APK 哈希与产物一致；设置页显示「当前补丁 0.4.4」且原广告开关仍开启。
+
+- 冷启动进入首页正常。
+- 首页退回桌面，分别停留 3、15、45 秒，通过桌面启动入口返回，均正常显示原首页，日志出现 `splash-entry blocked`，未观察到开屏广告或目标进程的 `FATAL EXCEPTION`。
+- 设置页退回桌面，通过系统最近任务中的 B 站卡片返回，原设置页保留，未观察到开屏广告；可继续进入补丁设置。
+- 手机界面与日志留在忽略的 `local/`；只保存不含账号数据的验证汇总到 [手机返回汇总](../evidence/splash-phone-return-0.4.4.json)。
+
+交付：`BiliClean-0.4.4-bilibili-9.12.0-arm64.apk`、`manifest.json`、`SHA256SUMS.txt`，保存于本地 `local/release-0.4.4/` 和 [GitHub 0.4.4 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.4)。APK SHA-256：`d79b5e304cf7d4d00b7d09866ea52744009ecab1edd1f7958b7e6ae4d99660a5`；证书 SHA-256 仍为 `c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8`。
+
+边界：缓存对照使用受控宿主对象，未捕获用户此前偶发的线上广告素材；短时真机返回测试不能证明所有投放类型、后台时长或后续宿主版本均已覆盖。本次证据证明已适配的两套缓存开屏入口会被拦截。

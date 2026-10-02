@@ -1,0 +1,23 @@
+[
+  {
+    "backgroundSeconds": 3,
+    "homeVisible": true,
+    "launchState": "HOT",
+    "splashBlockLogCount": 1,
+    "fatalExceptionCount": 0
+  },
+  {
+    "backgroundSeconds": 15,
+    "homeVisible": true,
+    "launchState": "HOT",
+    "splashBlockLogCount": 2,
+    "fatalExceptionCount": 0
+  },
+  {
+    "backgroundSeconds": 45,
+    "homeVisible": true,
+    "launchState": "HOT",
+    "splashBlockLogCount": 1,
+    "fatalExceptionCount": 0
+  }
+]

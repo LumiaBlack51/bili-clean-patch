@@ -1,0 +1,37 @@
+[
+  {
+    "suite": "SplashEntryTest",
+    "passed": 25,
+    "status": "passed"
+  },
+  {
+    "suite": "HostModelTest",
+    "passed": 4,
+    "status": "passed"
+  },
+  {
+    "suite": "ContentFilterTest",
+    "passed": 39,
+    "status": "passed"
+  },
+  {
+    "suite": "PaidPromotionTest",
+    "passed": 30,
+    "status": "passed"
+  },
+  {
+    "suite": "CourseFilterTest",
+    "passed": 62,
+    "status": "passed"
+  },
+  {
+    "suite": "UpowerFilterTest",
+    "passed": 27,
+    "status": "passed"
+  },
+  {
+    "suite": "NavigationTest",
+    "passed": 4,
+    "status": "passed"
+  }
+]
