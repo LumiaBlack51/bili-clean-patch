@@ -50,6 +50,85 @@ public class PlaybackControlsTest extends Instrumentation {
     void doubleTap(float fraction) { Rect r=playerBounds(); float x=r.left+r.width()*fraction,y=r.top+r.height()*.70f;tap(x,y);SystemClock.sleep(85);tap(x,y);SystemClock.sleep(1100); }
     void seek(long position) throws Exception { ui(() -> mediaType.getMethod("seekTo",long.class).invoke(player,position));SystemClock.sleep(1300); }
     void pause() { ui(() -> core("pause"));SystemClock.sleep(250); }
+    void prepareGesturePosition() throws Exception {
+        seek(120000);ui(() -> core("resume"));
+        long initial=position(),until=SystemClock.uptimeMillis()+30000;
+        while(position()<initial+500&&SystemClock.uptimeMillis()<until)SystemClock.sleep(250);
+        check(position()>=initial+500,"Playback advances after seek before touchscreen checks");
+        pause();
+    }
+    /** Real hook and attached host window, controlled media/feedback outcomes. AVD only. */
+    void hapticDispatchFixture() {
+        ui(() -> {
+            ViewGroup root=activity.findViewById(android.R.id.content);
+            View original=find(activity.getWindow().getDecorView(),"control_container");
+            int originalId=original.getId();
+            Field mediaField=playback.getDeclaredField("media");mediaField.setAccessible(true);
+            Object originalMedia=mediaField.get(null);
+            boolean originalEnabled=(Boolean)api("enabled");
+            class FeedbackView extends View {
+                int calls,kind,flags; boolean supported=true,fail=false;
+                FeedbackView() { super(activity); }
+                @Override public boolean performHapticFeedback(int effect,int options) {
+                    calls++;kind=effect;flags=options;
+                    if(fail)throw new IllegalStateException("controlled unavailable haptics");
+                    return supported;
+                }
+            }
+            FeedbackView surface=new FeedbackView();
+            long[] state={120000,300000,0}; // position, duration, seek count
+            boolean[] failSeek={false};
+            Object fakePlayer=Proxy.newProxyInstance(mediaType.getClassLoader(),new Class<?>[]{mediaType},(p,m,a)->{
+                switch(m.getName()) {
+                    case "getCurrentPosition": return state[0];
+                    case "getDuration": return state[1];
+                    case "seekTo": if(failSeek[0])throw new IllegalStateException("controlled seek failure");state[0]=((Number)a[0]).longValue();state[2]++;return null;
+                    case "isPlaying": return false;
+                    default: throw new AssertionError("Unexpected player call: "+m.getName());
+                }
+            });
+            try {
+                original.setId(View.NO_ID);surface.setId(originalId);
+                root.addView(surface,new ViewGroup.LayoutParams(400,200));surface.layout(0,0,400,200);
+                mediaField.set(null,new WeakReference<>(fakePlayer));
+                class Gesture {
+                    boolean at(float fraction) throws Exception {
+                        int[] point=new int[2];surface.getLocationOnScreen(point);long now=SystemClock.uptimeMillis();
+                        MotionEvent event=MotionEvent.obtain(now,now,MotionEvent.ACTION_UP,point[0]+400*fraction,point[1]+100,0);
+                        try { return (Boolean)api("doubleTap",new Class<?>[]{MotionEvent.class},event); }
+                        finally { event.recycle(); }
+                    }
+                }
+                Gesture gesture=new Gesture();
+                check(gesture.at(.9f)&&state[0]==130000&&surface.calls==1,"Right seek requests exactly one haptic");
+                check(surface.kind==(Build.VERSION.SDK_INT>=34?HapticFeedbackConstants.SEGMENT_TICK:HapticFeedbackConstants.CLOCK_TICK)&&surface.flags==0,"Short step haptic uses no setting override flags");
+                gesture.at(.1f);check(state[0]==120000&&surface.calls==2,"Left seek requests exactly one haptic");
+                gesture.at(.9f);gesture.at(.9f);check(state[0]==140000&&surface.calls==4,"Repeated seeks each request one haptic");
+                long seeks=state[2];
+                check(gesture.at(.5f)&&state[2]==seeks&&surface.calls==4,"Middle double tap is consumed without seek or haptic");
+                check(!gesture.at(1.1f)&&state[2]==seeks&&surface.calls==4,"Outside player does not seek or vibrate");
+                api("setEnabled",new Class<?>[]{boolean.class},false);
+                check(!gesture.at(.9f)&&state[2]==seeks&&surface.calls==4,"Disabled gestures leave native handling and haptics unchanged");
+                api("setEnabled",new Class<?>[]{boolean.class},true);
+                state[0]=0;gesture.at(.1f);check(state[2]==seeks&&surface.calls==4,"At start backward no-op produces no haptic");
+                state[0]=299999;gesture.at(.9f);check(state[2]==seeks&&surface.calls==4,"At end forward no-op produces no haptic");
+                state[0]=2000;gesture.at(.1f);check(state[0]==0&&surface.calls==5,"Clamped backward seek still ticks once");
+                state[0]=298000;gesture.at(.9f);check(state[0]==299999&&surface.calls==6,"Clamped forward seek still ticks once");
+                state[1]=0;seeks=state[2];gesture.at(.1f);check(state[2]==seeks&&surface.calls==6,"Unknown duration produces no seek or haptic");
+                state[1]=300000;mediaField.set(null,new WeakReference<>(null));gesture.at(.1f);
+                check(state[2]==seeks&&surface.calls==6,"Missing player produces no seek or haptic");
+                mediaField.set(null,new WeakReference<>(fakePlayer));failSeek[0]=true;gesture.at(.1f);
+                check(state[2]==seeks&&surface.calls==6,"Failed seek produces no success haptic");
+                failSeek[0]=false;surface.supported=false;gesture.at(.1f);
+                check(state[0]==289999&&surface.calls==7,"Unsupported or disabled haptics do not prevent seek");
+                surface.fail=true;gesture.at(.1f);
+                check(state[0]==279999&&surface.calls==8,"Haptic exception does not prevent seek or escape hook");
+            } finally {
+                mediaField.set(null,originalMedia);root.removeView(surface);original.setId(originalId);
+                api("setEnabled",new Class<?>[]{boolean.class},originalEnabled);
+            }
+        });
+    }
     void capture(String file) throws Exception {
         Bitmap bitmap=getUiAutomation().takeScreenshot();try(FileOutputStream out=new FileOutputStream(new File(getTargetContext().getExternalFilesDir(null),file+".png"))){bitmap.compress(Bitmap.CompressFormat.PNG,100,out);}finally{bitmap.recycle();}
     }
@@ -159,7 +238,7 @@ public class PlaybackControlsTest extends Instrumentation {
                 SystemClock.sleep(500);
             }
             check(player!=null&&activity!=null,"Native Bilibili player bound");SystemClock.sleep(4000);
-            pause();seek(120000); long start=position();doubleTap(.90f);long after=position();
+            pause();hapticDispatchFixture();prepareGesturePosition(); long start=position();doubleTap(.90f);long after=position();
             check(Math.abs(after-start-10000)<1500,"Portrait right double tap +10s: "+start+" -> "+after);
             start=position();doubleTap(.10f);after=position();check(Math.abs(after-start+10000)<1500,"Portrait left double tap -10s");
             check(!(Boolean)media("isPlaying"),"YouTube double taps preserve paused state");
@@ -173,7 +252,7 @@ public class PlaybackControlsTest extends Instrumentation {
             final Rect expand=new Rect();ui(()->{View v=find(activity.getWindow().getDecorView(),"gemini_halfscreen_expand");if(v!=null)v.getGlobalVisibleRect(expand);});
             check(!expand.isEmpty(),"Native fullscreen control available");ui(()->find(activity.getWindow().getDecorView(),"gemini_halfscreen_expand").performClick());SystemClock.sleep(2500);
             check(activity.getResources().getConfiguration().orientation==android.content.res.Configuration.ORIENTATION_LANDSCAPE,"Fullscreen really entered landscape");
-            pause();seek(120000);start=position();doubleTap(.9f);check(Math.abs(position()-start-10000)<1500,"Fullscreen right double tap +10s");
+            pause();prepareGesturePosition();start=position();doubleTap(.9f);check(Math.abs(position()-start-10000)<1500,"Fullscreen right double tap +10s");
             start=position();doubleTap(.1f);check(Math.abs(position()-start+10000)<1500,"Fullscreen left double tap -10s");controlsVisible();capture("youtube-fullscreen");
             ui(()->api("setEnabled",new Class<?>[]{boolean.class},false));SystemClock.sleep(700);
             ui(()->{View v=find(activity.getWindow().getDecorView(),"biliclean_center_controls");check(v==null||!v.isShown(),"Optional switch hides middle controls");});

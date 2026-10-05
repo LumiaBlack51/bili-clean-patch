@@ -34,7 +34,7 @@ class CleanSettingsFragment : Fragment() {
             setTextColor(TextView(context).textColors); isChecked = CleanPlayback.enabled()
             setOnCheckedChangeListener { _, enabled -> CleanPlayback.setEnabled(enabled) }
         })
-        rows.addView(text("可选开启：双击左侧后退 10 秒，双击右侧快进 10 秒；关闭双击暂停。单击视频显示中间的上一集、播放/暂停、下一集。"))
+        rows.addView(text("可选开启：双击左侧后退 10 秒，双击右侧快进 10 秒，跳转时轻震一下（跟随系统触感设置）；关闭双击暂停。单击视频显示中间的上一集、播放/暂停、下一集。"))
         rows.addView(text("定时关闭：在视频的定时关闭菜单选择「播放到当前视频结束」，结束后关闭播放页，不再自动连播。"))
         rows.addView(Switch(context).apply {
             text = "自动检查更新"; textSize = 17f; minHeight = padding * 3

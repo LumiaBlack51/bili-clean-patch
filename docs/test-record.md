@@ -103,3 +103,23 @@
 交付：`BiliClean-0.4.4-bilibili-9.12.0-arm64.apk`、`manifest.json`、`SHA256SUMS.txt`，保存于本地 `local/release-0.4.4/` 和 [GitHub 0.4.4 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.4)。APK SHA-256：`d79b5e304cf7d4d00b7d09866ea52744009ecab1edd1f7958b7e6ae4d99660a5`；证书 SHA-256 仍为 `c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8`。
 
 边界：缓存对照使用受控宿主对象，未捕获用户此前偶发的线上广告素材；短时真机返回测试不能证明所有投放类型、后台时长或后续宿主版本均已覆盖。本次证据证明已适配的两套缓存开屏入口会被拦截。
+
+## 0.4.5 双击跳转触感（2026-10-05）
+
+在现有 YouTube 风格手势中，每次有效的左右双击跳转增加一次系统短促步进触感。中间、播放器外、关闭手势、无有效时长、没有播放器、seek 抛出异常以及已到首尾的无位移操作不触发。临近边界的跳转仍触发一次；不支持触感、系统关闭触感或触感 API 异常不影响跳转。Android 14+ 使用 `SEGMENT_TICK`，旧系统使用 `CLOCK_TICK`，不使用忽略触感设置的标志。
+
+### AVD 验收
+
+完整 Gradle 构建、核心空降策略测试、独立 instrumentation 编译和 APK 签名验证通过。在专用 Android 36.1 AVD 上：
+
+- `PlaybackControlsTest` 通过 43 项检查，其中 16 项覆盖触感分发策略、边界和异常；其余覆盖真实视频横竖屏 ±10 秒、暂停状态、中央/列表控制、关闭手势、原生定时菜单、实际播放完成关闭和更新版本比较。[测试输出](../evidence/haptic-playback-0.4.5.txt)。
+- AVD 系统振动服务记录到真实触屏操作的 `performHapticFeedback(constant=26)`，来源为 `tv.danmaku.bili`，`usage=TOUCH`、`flags=0`、状态 `finished`。[系统记录](../evidence/haptic-avd-vibrator-0.4.5.txt)。这证明系统调用路径，不代表能感知模拟器马达。
+- 开屏缓存入口的 25 项回归通过，确认本次打包保留了 0.4.4 的后台返回广告修复。[测试输出](../evidence/haptic-splash-0.4.5.txt)。
+- 补充运行 `StoryPlaybackTest` 未取得有效验收：首轮首页点击被通知权限提示遮挡，拒绝 AVD 的通知请求后，下一轮推荐列表未找到测试要求的 Story 卡片。失败发生在播放器迁移前置条件，不能记为迁移回归通过；待真机补充首页进入播放后的操作验证。本次没有修改该迁移实现。
+- 首次运行被 Android 的全屏首次使用提示遮挡，后续又遇到 seek 后视频缓冲。仅在测试 AVD 确认全屏提示，并将测试准备改成等待视频实际前进后暂停，再执行触屏断言；最终完整通过，不修改应用以迁就测试。
+
+候选 APK SHA-256：`2be50bf0ff6a679bd1e016599d1bcd4640be48127043e9fcadf3877c6673a0c0`。签名证书 SHA-256：`c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8`，与 0.4.4 相同。文件位于本地忽略目录 `local/release-0.4.5/`。
+
+### 手机与发布状态
+
+待手机无其他 Codex 工作占用后进行同签名覆盖更新和真机验证，再提交代码及发布 GitHub Release。已设置本聊天每 5 分钟自动检查并接续。独立测试 APK 只装 AVD，手机不安装 instrumentation；不清除应用数据。手感强弱需要用户亲自感受，不能由模拟器或远程日志代替。

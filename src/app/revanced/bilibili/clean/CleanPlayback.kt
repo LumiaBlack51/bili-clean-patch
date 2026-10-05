@@ -6,10 +6,12 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.Gravity
+import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -173,9 +175,18 @@ object CleanPlayback {
         if (delta != 0L) runCatching {
             media.get()?.let { player ->
                 if (player.duration > 0) {
-                    val target = (player.currentPosition + delta).coerceIn(0, (player.duration - 1).coerceAtLeast(0))
-                    player.seekTo(target)
-                    Toast.makeText(host, if (delta > 0) "快进 10 秒" else "后退 10 秒", Toast.LENGTH_SHORT).show()
+                    val position = player.currentPosition
+                    val target = (position + delta).coerceIn(0, (player.duration - 1).coerceAtLeast(0))
+                    if (target != position) {
+                        player.seekTo(target)
+                        // One short tick per accepted seek, honoring system/view haptic settings.
+                        // Missing hardware or a haptic failure must not affect playback.
+                        runCatching {
+                            surface.performHapticFeedback(if (Build.VERSION.SDK_INT >= 34)
+                                HapticFeedbackConstants.SEGMENT_TICK else HapticFeedbackConstants.CLOCK_TICK)
+                        }.onFailure { Log.w("BiliClean", "Gesture haptic unavailable", it) }
+                        Toast.makeText(host, if (delta > 0) "快进 10 秒" else "后退 10 秒", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }.onFailure { Log.w("BiliClean", "Gesture seek failed", it) }

@@ -1,0 +1,26 @@
+PASS fixture uses actual SplashOrder JSON annotations
+PASS disabled splash guard repeat=0
+PASS disabled legacy selector returns preloaded order repeat=0
+PASS disabled KSplash hot selector returns cached order repeat=0
+PASS enabled splash guard repeat=0
+PASS legacy cached order blocked for COLD repeat=0
+PASS legacy cached order blocked for HOT repeat=0
+PASS legacy cached order blocked for CALL_UP repeat=0
+PASS already selected legacy order cannot create ad page repeat=0
+PASS KSplash prepared memory order blocked repeat=0
+PASS KSplash guard does not mutate shared cache repeat=0
+PASS KSplash cold/hot selection intercepted before original repeat=0
+PASS shared hot-start branch returns before routing or wait repeat=0
+PASS disabled splash guard repeat=1
+PASS disabled legacy selector returns preloaded order repeat=1
+PASS disabled KSplash hot selector returns cached order repeat=1
+PASS enabled splash guard repeat=1
+PASS legacy cached order blocked for COLD repeat=1
+PASS legacy cached order blocked for HOT repeat=1
+PASS legacy cached order blocked for CALL_UP repeat=1
+PASS already selected legacy order cannot create ad page repeat=1
+PASS KSplash prepared memory order blocked repeat=1
+PASS KSplash guard does not mutate shared cache repeat=1
+PASS KSplash cold/hot selection intercepted before original repeat=1
+PASS shared hot-start branch returns before routing or wait repeat=1
+
