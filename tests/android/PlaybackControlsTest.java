@@ -29,6 +29,7 @@ public class PlaybackControlsTest extends Instrumentation {
     Object api(String name) throws Exception { return api(name, new Class<?>[0]); }
     Object value(String field) throws Exception { Field f = playback.getDeclaredField(field); f.setAccessible(true); return f.get(null); }
     Object ref(String field) throws Exception { return ((WeakReference<?>)value(field)).get(); }
+    Object feedback(String name) throws Exception { Object overlay=value("seekFeedback");Field f=overlay.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(overlay); }
     Object media(String name) throws Exception { return mediaType.getMethod(name).invoke(player); }
     Object container() throws Exception { Object c=ref("core");Field f=c.getClass().getDeclaredField("a");f.setAccessible(true);return f.get(c); }
     Object core(String name) throws Exception { Object box=container();Method getter=box.getClass().getMethod("getPlayerCoreService");getter.setAccessible(true);Object c=getter.invoke(box);Method m=c.getClass().getMethod(name);m.setAccessible(true);return m.invoke(c); }
@@ -101,30 +102,40 @@ public class PlaybackControlsTest extends Instrumentation {
                 }
                 Gesture gesture=new Gesture();
                 check(gesture.at(.9f)&&state[0]==130000&&surface.calls==1,"Right seek requests exactly one haptic");
+                check((Integer)feedback("seconds")==10&&(Boolean)feedback("forward")&&feedback("surface")==surface,"Right seek draws 10 seconds on the actual player surface");
                 check(surface.kind==(Build.VERSION.SDK_INT>=34?HapticFeedbackConstants.SEGMENT_TICK:HapticFeedbackConstants.CLOCK_TICK)&&surface.flags==0,"Short step haptic uses no setting override flags");
                 gesture.at(.1f);check(state[0]==120000&&surface.calls==2,"Left seek requests exactly one haptic");
+                check((Integer)feedback("seconds")==10&&!(Boolean)feedback("forward"),"Changing direction resets animation to 10 seconds on the left");
                 gesture.at(.9f);gesture.at(.9f);check(state[0]==140000&&surface.calls==4,"Repeated seeks each request one haptic");
+                check((Integer)feedback("seconds")==20,"Consecutive forward seeks accumulate 20 seconds");
+                gesture.at(.9f);check((Integer)feedback("seconds")==30&&state[0]==150000,"Third forward seek shows 30 seconds and advances playback");
+                gesture.at(.9f);check((Integer)feedback("seconds")==40&&state[0]==160000&&surface.calls==6,"Fourth forward seek shows 40 seconds with one tick per seek");
+                Bitmap drawing=Bitmap.createBitmap(400,200,Bitmap.Config.ARGB_8888);
+                ((android.graphics.drawable.Drawable)value("seekFeedback")).draw(new Canvas(drawing));
+                check(Color.alpha(drawing.getPixel(20,100))==0&&Color.alpha(drawing.getPixel(390,100))>0,"Forward animation is translucent and stays on the right side");drawing.recycle();
                 long seeks=state[2];
-                check(gesture.at(.5f)&&state[2]==seeks&&surface.calls==4,"Middle double tap is consumed without seek or haptic");
-                check(!gesture.at(1.1f)&&state[2]==seeks&&surface.calls==4,"Outside player does not seek or vibrate");
+                check(gesture.at(.5f)&&state[2]==seeks&&surface.calls==6&&(Integer)feedback("seconds")==40,"Middle double tap is consumed without seek, haptic or animation increment");
+                check(!gesture.at(1.1f)&&state[2]==seeks&&surface.calls==6,"Outside player does not seek or vibrate");
                 api("setEnabled",new Class<?>[]{boolean.class},false);
-                check(!gesture.at(.9f)&&state[2]==seeks&&surface.calls==4,"Disabled gestures leave native handling and haptics unchanged");
+                check(!gesture.at(.9f)&&state[2]==seeks&&surface.calls==6,"Disabled gestures leave native handling and haptics unchanged");
+                check(feedback("surface")==null&&(Integer)feedback("seconds")==0,"Disabling gestures immediately removes pending animation");
                 api("setEnabled",new Class<?>[]{boolean.class},true);
-                state[0]=0;gesture.at(.1f);check(state[2]==seeks&&surface.calls==4,"At start backward no-op produces no haptic");
-                state[0]=299999;gesture.at(.9f);check(state[2]==seeks&&surface.calls==4,"At end forward no-op produces no haptic");
-                state[0]=2000;gesture.at(.1f);check(state[0]==0&&surface.calls==5,"Clamped backward seek still ticks once");
-                state[0]=298000;gesture.at(.9f);check(state[0]==299999&&surface.calls==6,"Clamped forward seek still ticks once");
-                state[1]=0;seeks=state[2];gesture.at(.1f);check(state[2]==seeks&&surface.calls==6,"Unknown duration produces no seek or haptic");
+                state[0]=0;gesture.at(.1f);check(state[2]==seeks&&surface.calls==6&&feedback("surface")==null,"At start backward no-op produces no haptic or animation");
+                state[0]=299999;gesture.at(.9f);check(state[2]==seeks&&surface.calls==6&&feedback("surface")==null,"At end forward no-op produces no haptic or animation");
+                state[0]=2000;gesture.at(.1f);check(state[0]==0&&surface.calls==7,"Clamped backward seek still ticks once");
+                state[0]=298000;gesture.at(.9f);check(state[0]==299999&&surface.calls==8,"Clamped forward seek still ticks once");
+                state[1]=0;seeks=state[2];gesture.at(.1f);check(state[2]==seeks&&surface.calls==8,"Unknown duration produces no seek or haptic");
                 state[1]=300000;mediaField.set(null,new WeakReference<>(null));gesture.at(.1f);
-                check(state[2]==seeks&&surface.calls==6,"Missing player produces no seek or haptic");
+                check(state[2]==seeks&&surface.calls==8,"Missing player produces no seek or haptic");
                 mediaField.set(null,new WeakReference<>(fakePlayer));failSeek[0]=true;gesture.at(.1f);
-                check(state[2]==seeks&&surface.calls==6,"Failed seek produces no success haptic");
+                check(state[2]==seeks&&surface.calls==8&&(Boolean)feedback("forward"),"Failed seek produces no success haptic or animation");
                 failSeek[0]=false;surface.supported=false;gesture.at(.1f);
-                check(state[0]==289999&&surface.calls==7,"Unsupported or disabled haptics do not prevent seek");
+                check(state[0]==289999&&surface.calls==9,"Unsupported or disabled haptics do not prevent seek");
                 surface.fail=true;gesture.at(.1f);
-                check(state[0]==279999&&surface.calls==8,"Haptic exception does not prevent seek or escape hook");
+                check(state[0]==279999&&surface.calls==10&&(Integer)feedback("seconds")==20,"Haptic exception does not prevent seek or animation");
             } finally {
                 mediaField.set(null,originalMedia);root.removeView(surface);original.setId(originalId);
+                check(feedback("surface")==null,"Detaching player surface removes animation and callbacks");
                 api("setEnabled",new Class<?>[]{boolean.class},originalEnabled);
             }
         });
@@ -143,6 +154,24 @@ public class PlaybackControlsTest extends Instrumentation {
             }
         }
         throw new AssertionError("Single tap did not reveal middle controls");
+    }
+    void realSeekAnimation(String orientation) throws Exception {
+        SystemClock.sleep(1500);
+        long start=position();
+        for(int step=1;step<=4;step++) {
+            Rect r=playerBounds();float x=r.left+r.width()*.90f,y=r.top+r.height()*.70f;
+            tap(x,y);SystemClock.sleep(85);tap(x,y);SystemClock.sleep(300);
+            final int expected=step*10;
+            ui(()->check((Integer)feedback("seconds")==expected&&(Boolean)feedback("forward"),orientation+" actual touches show "+expected+" seconds"));
+            if(step==4)capture("seek-animation-"+orientation);
+            SystemClock.sleep(220);
+        }
+        SystemClock.sleep(800);
+        check(Math.abs(position()-start-40000)<1800,orientation+" repeated touchscreen seeks advance 40 seconds");
+        SystemClock.sleep(700);
+        ui(()->check(feedback("surface")==null,orientation+" animation fades and removes itself after idle"));
+        doubleTap(.1f);
+        ui(()->check((Integer)feedback("seconds")==10&&!(Boolean)feedback("forward"),orientation+" new backward burst starts at 10 seconds"));
     }
     Dialog timerDialog() throws Exception {
         ClassLoader loader=getTargetContext().getClassLoader();Object container=container();
@@ -238,10 +267,14 @@ public class PlaybackControlsTest extends Instrumentation {
                 SystemClock.sleep(500);
             }
             check(player!=null&&activity!=null,"Native Bilibili player bound");SystemClock.sleep(4000);
-            pause();hapticDispatchFixture();prepareGesturePosition(); long start=position();doubleTap(.90f);long after=position();
+            pause();hapticDispatchFixture();prepareGesturePosition();
+            check((Boolean)api("enabled"),"YouTube gestures remain enabled after controlled fixture");
+            Rect ready=playerBounds();check(ready.width()>0&&ready.height()>0,"Real player touch bounds ready: "+ready.toShortString());
+            long start=position();doubleTap(.90f);long after=position();
             check(Math.abs(after-start-10000)<1500,"Portrait right double tap +10s: "+start+" -> "+after);
             start=position();doubleTap(.10f);after=position();check(Math.abs(after-start+10000)<1500,"Portrait left double tap -10s");
             check(!(Boolean)media("isPlaying"),"YouTube double taps preserve paused state");
+            realSeekAnimation("portrait");
             start=position();doubleTap(.5f);check(Math.abs(position()-start)<1500&&!(Boolean)media("isPlaying"),"Middle double tap neither seeks nor pauses/resumes");
             controlsVisible();capture("youtube-portrait");
             final Rect play=new Rect();ui(()->screenBounds(find(activity.getWindow().getDecorView(),"biliclean_暂停或播放"),play));
@@ -254,6 +287,7 @@ public class PlaybackControlsTest extends Instrumentation {
             check(activity.getResources().getConfiguration().orientation==android.content.res.Configuration.ORIENTATION_LANDSCAPE,"Fullscreen really entered landscape");
             pause();prepareGesturePosition();start=position();doubleTap(.9f);check(Math.abs(position()-start-10000)<1500,"Fullscreen right double tap +10s");
             start=position();doubleTap(.1f);check(Math.abs(position()-start+10000)<1500,"Fullscreen left double tap -10s");controlsVisible();capture("youtube-fullscreen");
+            realSeekAnimation("landscape");
             ui(()->api("setEnabled",new Class<?>[]{boolean.class},false));SystemClock.sleep(700);
             ui(()->{View v=find(activity.getWindow().getDecorView(),"biliclean_center_controls");check(v==null||!v.isShown(),"Optional switch hides middle controls");});
             pause();doubleTap(.9f);check((Boolean)media("isPlaying"),"Disabling feature restores native double-tap play/pause");pause();

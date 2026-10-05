@@ -1,24 +1,41 @@
 INSTRUMENTATION_RESULT: results=PASS Native Bilibili player bound
 PASS Right seek requests exactly one haptic
+PASS Right seek draws 10 seconds on the actual player surface
 PASS Short step haptic uses no setting override flags
 PASS Left seek requests exactly one haptic
+PASS Changing direction resets animation to 10 seconds on the left
 PASS Repeated seeks each request one haptic
-PASS Middle double tap is consumed without seek or haptic
+PASS Consecutive forward seeks accumulate 20 seconds
+PASS Third forward seek shows 30 seconds and advances playback
+PASS Fourth forward seek shows 40 seconds with one tick per seek
+PASS Forward animation is translucent and stays on the right side
+PASS Middle double tap is consumed without seek, haptic or animation increment
 PASS Outside player does not seek or vibrate
 PASS Disabled gestures leave native handling and haptics unchanged
-PASS At start backward no-op produces no haptic
-PASS At end forward no-op produces no haptic
+PASS Disabling gestures immediately removes pending animation
+PASS At start backward no-op produces no haptic or animation
+PASS At end forward no-op produces no haptic or animation
 PASS Clamped backward seek still ticks once
 PASS Clamped forward seek still ticks once
 PASS Unknown duration produces no seek or haptic
 PASS Missing player produces no seek or haptic
-PASS Failed seek produces no success haptic
+PASS Failed seek produces no success haptic or animation
 PASS Unsupported or disabled haptics do not prevent seek
-PASS Haptic exception does not prevent seek or escape hook
+PASS Haptic exception does not prevent seek or animation
+PASS Detaching player surface removes animation and callbacks
 PASS Playback advances after seek before touchscreen checks
-PASS Portrait right double tap +10s: 120664 -> 130664
+PASS YouTube gestures remain enabled after controlled fixture
+PASS Real player touch bounds ready: [0,128][1080,736]
+PASS Portrait right double tap +10s: 120642 -> 130642
 PASS Portrait left double tap -10s
 PASS YouTube double taps preserve paused state
+PASS portrait actual touches show 10 seconds
+PASS portrait actual touches show 20 seconds
+PASS portrait actual touches show 30 seconds
+PASS portrait actual touches show 40 seconds
+PASS portrait repeated touchscreen seeks advance 40 seconds
+PASS portrait animation fades and removes itself after idle
+PASS portrait new backward burst starts at 10 seconds
 PASS Middle double tap neither seeks nor pauses/resumes
 PASS Center play button starts native playback
 PASS Previous episode control present
@@ -31,6 +48,13 @@ PASS Fullscreen really entered landscape
 PASS Playback advances after seek before touchscreen checks
 PASS Fullscreen right double tap +10s
 PASS Fullscreen left double tap -10s
+PASS landscape actual touches show 10 seconds
+PASS landscape actual touches show 20 seconds
+PASS landscape actual touches show 30 seconds
+PASS landscape actual touches show 40 seconds
+PASS landscape repeated touchscreen seeks advance 40 seconds
+PASS landscape animation fades and removes itself after idle
+PASS landscape new backward burst starts at 10 seconds
 PASS Optional switch hides middle controls
 PASS Disabling feature restores native double-tap play/pause
 PASS End-of-video option in native timer menu

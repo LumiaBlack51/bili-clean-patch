@@ -1,0 +1,33 @@
+INSTRUMENTATION_RESULT: failure=java.lang.AssertionError: Portrait right double tap +10s: 120664 -> 120664
+	at app.biliclean.tests.PlaybackControlsTest.check(PlaybackControlsTest.java:37)
+	at app.biliclean.tests.PlaybackControlsTest.onStart(PlaybackControlsTest.java:271)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2627)
+
+INSTRUMENTATION_RESULT: results=PASS Native Bilibili player bound
+PASS Right seek requests exactly one haptic
+PASS Right seek draws 10 seconds on the actual player surface
+PASS Short step haptic uses no setting override flags
+PASS Left seek requests exactly one haptic
+PASS Changing direction resets animation to 10 seconds on the left
+PASS Repeated seeks each request one haptic
+PASS Consecutive forward seeks accumulate 20 seconds
+PASS Third forward seek shows 30 seconds and advances playback
+PASS Fourth forward seek shows 40 seconds with one tick per seek
+PASS Forward animation is translucent and stays on the right side
+PASS Middle double tap is consumed without seek, haptic or animation increment
+PASS Outside player does not seek or vibrate
+PASS Disabled gestures leave native handling and haptics unchanged
+PASS Disabling gestures immediately removes pending animation
+PASS At start backward no-op produces no haptic or animation
+PASS At end forward no-op produces no haptic or animation
+PASS Clamped backward seek still ticks once
+PASS Clamped forward seek still ticks once
+PASS Unknown duration produces no seek or haptic
+PASS Missing player produces no seek or haptic
+PASS Failed seek produces no success haptic or animation
+PASS Unsupported or disabled haptics do not prevent seek
+PASS Haptic exception does not prevent seek or animation
+PASS Detaching player surface removes animation and callbacks
+PASS Playback advances after seek before touchscreen checks
+
+INSTRUMENTATION_CODE: 0

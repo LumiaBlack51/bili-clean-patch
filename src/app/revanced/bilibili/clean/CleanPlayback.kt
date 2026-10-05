@@ -37,6 +37,7 @@ object CleanPlayback {
     private var media = WeakReference<IMediaPlayer>(null)
     private var owner = WeakReference<Activity>(null)
     private var controls: LinearLayout? = null
+    private val seekFeedback = CleanSeekFeedback()
     private var armed = false
     private var armedIdentity: Pair<Long, Long>? = null
     private var armedCore = WeakReference<Any>(null)
@@ -44,7 +45,10 @@ object CleanPlayback {
     private var armedOwner = WeakReference<Activity>(null)
     fun prefs() = Utils.getContext().getSharedPreferences("biliclean_playback", Context.MODE_PRIVATE)
     @JvmStatic fun enabled() = prefs().getBoolean("youtube_gestures", false)
-    @JvmStatic fun setEnabled(value: Boolean) { prefs().edit().putBoolean("youtube_gestures", value).apply() }
+    @JvmStatic fun setEnabled(value: Boolean) {
+        prefs().edit().putBoolean("youtube_gestures", value).apply()
+        if (!value) seekFeedback.clear()
+    }
     internal fun field(obj: Any, name: String): Any? = obj.javaClass.getDeclaredField(name).apply { isAccessible = true }.get(obj)
     internal fun invoke(obj: Any, name: String, vararg args: Any?): Any? {
         val method = obj.javaClass.methods.first { it.name == name && it.parameterTypes.size == args.size }
@@ -185,7 +189,8 @@ object CleanPlayback {
                             surface.performHapticFeedback(if (Build.VERSION.SDK_INT >= 34)
                                 HapticFeedbackConstants.SEGMENT_TICK else HapticFeedbackConstants.CLOCK_TICK)
                         }.onFailure { Log.w("BiliClean", "Gesture haptic unavailable", it) }
-                        Toast.makeText(host, if (delta > 0) "快进 10 秒" else "后退 10 秒", Toast.LENGTH_SHORT).show()
+                        runCatching { seekFeedback.show(surface, player, delta) }
+                            .onFailure { Log.w("BiliClean", "Gesture animation unavailable", it) }
                     }
                 }
             }
@@ -203,7 +208,7 @@ object CleanPlayback {
         if (!show) { controls?.visibility = View.GONE; return }
         var row = controls
         if (row == null || row.parent !== root) {
-            clear()
+            clearControls()
             row = LinearLayout(host).apply {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER
                 tag = "biliclean_center_controls"
@@ -236,7 +241,8 @@ object CleanPlayback {
             row.getChildAt(index).isEnabled = available; row.getChildAt(index).alpha = if (available) 1f else .35f
         }
     }
-    fun clear() { (controls?.parent as? ViewGroup)?.removeView(controls); controls = null }
+    private fun clearControls() { (controls?.parent as? ViewGroup)?.removeView(controls); controls = null }
+    fun clear() { clearControls(); seekFeedback.clear() }
     @JvmStatic fun cancelEndTimer() { armed = false; armedIdentity = null; armedCore.clear(); armedMedia.clear(); armedOwner.clear() }
     @JvmStatic fun isEndTimerArmed() = armed
     @JvmStatic fun armEndTimer(): Boolean {

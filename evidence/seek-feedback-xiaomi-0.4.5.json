@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-05",
+  "deviceModel": "Xiaomi 13 Pro / 2210132C",
+  "androidVersion": "16",
+  "api": 36,
+  "package": "tv.danmaku.bili",
+  "hostVersion": "9.12.0",
+  "patchVersion": "0.4.5",
+  "apkSha256": "f6b7ce2c5b2239377a710cc63c9f7b2d832840c0b62ac0573d510552162a91f6",
+  "certificateSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "installation": "same-signature adb install -r --no-incremental, keeping data; installed APK pulled and hash verified",
+  "entry": "home normal recommendation -> native video details -> native fullscreen; does not validate Story-to-details migration",
+  "method": "ADB shell touchscreen event injection; native progress screenshots; dumpsys vibrator_manager record differences; no instrumentation/APK on phone",
+  "cases": [
+    {
+      "case": "portrait-right-paused",
+      "doubleTaps": 4,
+      "segmentTickRequests": 4,
+      "finishedEffects": 4,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": 40,
+      "systemRecords": [
+        "10-05 12:24:49.503 |   effect |             finished | duration:    90ms | start: 12:24:49.506 | end: 12:24:49.592 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:24:50.639 |   effect |             finished | duration:    91ms | start: 12:24:50.643 | end: 12:24:50.729 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:24:51.709 |   effect |             finished | duration:    96ms | start: 12:24:51.715 | end: 12:24:51.805 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:24:52.740 |   effect |             finished | duration:    93ms | start: 12:24:52.745 | end: 12:24:52.832 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null"
+      ],
+      "nativePositionBefore": "00:48",
+      "nativePositionAfter": "01:28",
+      "pausedBeforeAndAfter": true
+    },
+    {
+      "case": "portrait-left-paused",
+      "doubleTaps": 4,
+      "segmentTickRequests": 4,
+      "finishedEffects": 4,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": 40,
+      "systemRecords": [
+        "10-05 12:25:10.705 |   effect |             finished | duration:    97ms | start: 12:25:10.713 | end: 12:25:10.802 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:25:11.745 |   effect |             finished | duration:    93ms | start: 12:25:11.751 | end: 12:25:11.838 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:25:12.808 |   effect |             finished | duration:    94ms | start: 12:25:12.813 | end: 12:25:12.903 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:25:13.866 |   effect |             finished | duration:    94ms | start: 12:25:13.871 | end: 12:25:13.959 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null"
+      ],
+      "nativePositionBefore": "01:28",
+      "nativePositionAfter": "00:48",
+      "pausedBeforeAndAfter": true
+    },
+    {
+      "case": "landscape-right-final",
+      "doubleTaps": 4,
+      "segmentTickRequests": 4,
+      "finishedEffects": 4,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": 40,
+      "systemRecords": [
+        "10-05 12:28:30.090 |   effect |             finished | duration:    98ms | start: 12:28:30.104 | end: 12:28:30.189 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:28:31.029 |   effect |             finished | duration:    95ms | start: 12:28:31.033 | end: 12:28:31.124 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:28:32.021 |   effect |             finished | duration:    95ms | start: 12:28:32.028 | end: 12:28:32.116 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:28:33.215 |   effect |             finished | duration:    91ms | start: 12:28:33.221 | end: 12:28:33.306 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null"
+      ],
+      "nativePositionBefore": "02:48",
+      "nativePositionAfter": "03:28",
+      "pausedBeforeAndAfter": true
+    },
+    {
+      "case": "landscape-left-tight",
+      "doubleTaps": 4,
+      "segmentTickRequests": 4,
+      "finishedEffects": 4,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": 40,
+      "systemRecords": [
+        "10-05 12:32:35.942 |   effect |             finished | duration:    94ms | start: 12:32:35.948 | end: 12:32:36.036 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:32:36.933 |   effect |             finished | duration:    92ms | start: 12:32:36.939 | end: 12:32:37.025 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:32:37.792 |   effect |             finished | duration:    91ms | start: 12:32:37.795 | end: 12:32:37.883 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null",
+        "10-05 12:32:38.555 |   effect |             finished | duration:    93ms | start: 12:32:38.561 | end: 12:32:38.647 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null"
+      ],
+      "nativePositionBefore": "02:48",
+      "nativePositionAfter": "02:08",
+      "pausedBeforeAndAfter": true
+    },
+    {
+      "case": "portrait-middle",
+      "doubleTaps": 1,
+      "segmentTickRequests": 0,
+      "finishedEffects": 0,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": null,
+      "systemRecords": [],
+      "nativePositionBefore": "00:48",
+      "nativePositionAfter": "00:48",
+      "pausedBeforeAndAfter": true
+    },
+    {
+      "case": "landscape-middle-final",
+      "doubleTaps": 1,
+      "segmentTickRequests": 0,
+      "finishedEffects": 0,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": null,
+      "systemRecords": [],
+      "nativePositionBefore": "02:48",
+      "nativePositionAfter": "02:48",
+      "pausedBeforeAndAfter": true
+    },
+    {
+      "case": "gestures-disabled-right",
+      "doubleTaps": 1,
+      "segmentTickRequests": 0,
+      "finishedEffects": 0,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": null,
+      "systemRecords": []
+    },
+    {
+      "case": "gestures-disabled-left",
+      "doubleTaps": 1,
+      "segmentTickRequests": 0,
+      "finishedEffects": 0,
+      "ignoredForSettings": 0,
+      "animationFinalSeconds": null,
+      "systemRecords": []
+    },
+    {
+      "case": "system-haptics-off",
+      "doubleTaps": 1,
+      "segmentTickRequests": 1,
+      "finishedEffects": 0,
+      "ignoredForSettings": 1,
+      "animationFinalSeconds": 10,
+      "systemRecords": [
+        "10-05 12:33:14.374 |   effect | ignored_for_settings | duration:     6ms | start:              | end: 12:33:14.380 | scale:     NONE (adaptive=1.00) | flags:    0 | usage: TOUCH | tv.danmaku.bili (uid=<redacted>, deviceId=0) | reason: performHapticFeedback(constant=26): ViewRootImpl#performHapticFeedback | played: Prebaked=TICK(MEDIUM, with fallback) | original: null"
+      ]
+    }
+  ],
+  "observations": [
+    "Side feedback is translucent with directional arrows; no bottom seek Toast in captures.",
+    "Landscape backward captures show 10, 20, 30, 40 seconds; idle captures show feedback removed.",
+    "All four repeated-seek acceptance cases retained paused state and moved exactly 40 seconds by native displayed progress.",
+    "Middle double taps retained pause and position, without additional segment tick or side animation.",
+    "Disabled gesture cases showed no added side animation or segment tick; native handling remains.",
+    "System haptics disabled: seek and animation succeed, request ignored_for_settings with no finished effect.",
+    "Final crash buffer contained no tv.danmaku.bili crash mention."
+  ],
+  "testToolLimitations": [
+    "Early separate adb input tap processes did not reliably produce double taps; fixed-timing single shell process used for acceptance.",
+    "Per-step capture caused one 1249 ms interval, correctly resetting the 1200 ms accumulation window; tighter injection repeated successfully without changing APK.",
+    "Fullscreen entry resumed playback; exploratory runs discarded for pause/position acceptance, then native pause confirmed and repeated."
+  ],
+  "restored": {
+    "youtubeGestures": false,
+    "automaticUpdates": true,
+    "accelerometer_rotation": 1,
+    "user_rotation": 0,
+    "screen_off_timeout": 600000,
+    "haptic_feedback_enabled": 1,
+    "shellHelperRemoved": true
+  },
+  "accountDataExported": false,
+  "screenshotsPublished": false,
+  "serialPublished": false,
+  "limitations": "System records verify effects, not human sensation. One real video on Android 16; pre-14 fallback and Story migration not phone-tested."
+}
