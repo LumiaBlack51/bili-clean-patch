@@ -1,0 +1,9 @@
+
+I/Finsky:background( 6188): [51] RF: starting postprocessing for com.google.android.apps.accessibility.voiceaccess.dm
+E/GMBootStrap_Producer( 7875): processName:tv.danmaku.bili,MallIDLEWorker=>launchWithWorker=>call block
+I/ActivityManager(  716): Killing 8004:tv.danmaku.bili:download/u0a227 (adj 0): stop com.google.android.webview due to installPackageLI
+I/ActivityManager(  716): Killing 7875:tv.danmaku.bili/u0a227 (adj 0): stop com.google.android.webview due to installPackageLI
+W/ActivityManager(  716): Crash of app tv.danmaku.bili running instrumentation ComponentInfo{app.biliclean.tests/app.biliclean.tests.NavigationTest}
+I/ActivityManager(  716): Killing 8260:tv.danmaku.bili:pushservice/u0a227 (adj 0): stop tv.danmaku.bili due to finished inst
+I/Finsky:background( 6188): [51] RF: starting postprocessing for com.google.android.apps.accessibility.voiceaccess.apk
+

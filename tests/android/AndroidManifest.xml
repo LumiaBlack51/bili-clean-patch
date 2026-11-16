@@ -12,5 +12,6 @@
     <instrumentation android:name="app.biliclean.tests.AirbornePlaybackTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.PlaybackControlsTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.StoryPlaybackTest" android:targetPackage="tv.danmaku.bili" />
+    <instrumentation android:name="app.biliclean.tests.ManualStoryEntryTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.GlobalTimerTest" android:targetPackage="tv.danmaku.bili" />
 </manifest>

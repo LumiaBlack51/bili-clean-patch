@@ -80,6 +80,18 @@ object CleanFeedPatch : BytecodePatch(setOf(PegasusParserFingerprint)) {
             context.findClass(method.definingClass)!!.mutableClass.methods.add(wrapper)
         }
         hookList(storyItems, "filterStory")
+        // Scope the clicked video exemption to its native Story screen, and install it
+        // before onCreate can consume cached/network items. No permanent ID whitelist.
+        val activity = context.findClass("Lcom/bilibili/video/story/StoryVideoActivity;")?.mutableClass
+            ?: throw PatchException("Unsupported Story activity")
+        val create = activity.methods.singleOrNull { it.name == "onCreate" &&
+            it.parameterTypes == listOf("Landroid/os/Bundle;") && it.returnType == "V" }
+            ?: throw PatchException("Unsupported Story creation")
+        val destroy = activity.methods.singleOrNull { it.name == "onDestroy" &&
+            it.parameterTypes.isEmpty() && it.returnType == "V" }
+            ?: throw PatchException("Unsupported Story destruction")
+        create.addInstructions(0, "invoke-static/range {p0 .. p0}, Lapp/revanced/bilibili/clean/CleanStoryEntry;->entered(Landroid/app/Activity;)V")
+        destroy.addInstructions(0, "invoke-static/range {p0 .. p0}, Lapp/revanced/bilibili/clean/CleanStoryEntry;->leaving(Landroid/app/Activity;)V")
         // Filter the native navigation builder as well as JSON: local/default tabs use this path.
         val manager = context.findClass("Ltv/danmaku/bili/ui/main2/resource/MainResourceManager;")?.mutableClass
             ?: throw PatchException("Unsupported navigation manager")

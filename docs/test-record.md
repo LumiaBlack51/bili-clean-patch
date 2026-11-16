@@ -143,3 +143,11 @@
 - 已拉取安装包复核，SHA-256 与最终产物完全一致，证书与 0.4.4 一致。测试后移除 shell 临时工具，恢复系统旋转、休眠和触感设置，并把「YouTube 风格手势」恢复原值关闭；自动检查更新仍开启。独立测试 APK 只装 AVD。
 
 发布资产为 `BiliClean-0.4.5-bilibili-9.12.0-arm64.apk`、`manifest.json` 和 `SHA256SUMS.txt`，见 [GitHub 0.4.5 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.5)。安装到小米的就是该最终 APK。本次没有在 Android 14 以下真机验证触感回退，也没有覆盖所有播放器来源、Story 迁移或长期观看场景。
+
+## 0.4.7 主动打开竖屏视频免过滤（2026-11-16）
+
+通过原生 Story 页的进入和销毁 hook，按用户选择的 AV/BV 编号保留入口视频，继续过滤后续推荐；退出后删除放行记录。包含此前本地 0.4.6 的购物袋功能。规则、原因与验证边界见 [专项说明](manual-story-entry.md)。
+
+最终发布 APK 在 Android 36.1 AVD 通过 333 项检查：入口规则 103、真实竖屏播放与生命周期 11、购物袋 28、内容过滤 39、小火箭 30、课程 62、充电专属 27、宿主广告模型 4、开屏 25、原生导航 4。首次导航测试被模拟器后台 WebView 更新终止，同一 APK 复测通过；原始输出和系统原因均保留。核心策略、完整构建、重复 prepare、固定原包校验及 APK v2/v3 签名校验通过。安装包哈希与发布产物一致，沿用旧签名。
+
+发布文件 `BiliClean-0.4.7-bilibili-9.12.0-arm64.apk`，SHA-256：`65c2dbe6fe00edb570a30eebf042aa38ad90871aa3ab1f3ebe120ecba885c15c`。受控商业模型检查与真实普通视频播放分别验收，未复现用户当次线上商业视频或取得当次崩溃栈；本轮只测试 AVD。见 [完整汇总](../evidence/manual-entry-0.4.7-verification.json) 和 [发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.7)。

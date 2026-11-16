@@ -1,0 +1,13 @@
+INSTRUMENTATION_RESULT: results=PASS native portrait Story screen opened
+PASS installed onCreate hook registers the real entry owner
+PASS cached source list remains intact
+PASS installed onCreate hook protects entry before recommendations
+PASS portrait entry binds real native media
+PASS portrait video playback advances for five seconds
+PASS portrait screen stays open without filtering exit
+PASS native portrait screen destroyed on exit
+PASS installed onDestroy hook releases the entry owner
+PASS cached source list remains intact
+PASS installed onDestroy hook removes entry exemption
+
+INSTRUMENTATION_CODE: -1

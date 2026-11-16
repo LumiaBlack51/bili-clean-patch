@@ -99,8 +99,14 @@ object CleanContent {
         if (items == null || (!Settings.CleanPromotion() && !Settings.CleanMall() && !Settings.CleanPaidPromotion() &&
                     !Settings.CleanSelectedCourses() && !Settings.CleanStoryCourses() && !Settings.CleanLockedUpower() &&
                     !Settings.CleanShoppingBag())) return items
+        val selected = CleanStoryEntry.selections()
         return items.filter { item ->
             if (item == null || item.javaClass.name != "com.bilibili.video.story.StoryDetail") true
+            // Match the entry identity, never the first row of each recommendation page.
+            else if (selected.isNotEmpty() && selected.any { (aid, bvid) ->
+                    (aid > 0L && (call(item, "getAid") as? Number)?.toLong() == aid) ||
+                        (bvid != null && call(item, "getBvid") == bvid)
+                }) true
             else {
                 val promoted = Settings.CleanPromotion() &&
                     (call(field(item, "adInfo"), "isAd") == true || call(item, "getGotoIsAd") == true ||

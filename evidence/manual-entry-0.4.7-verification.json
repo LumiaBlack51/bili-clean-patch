@@ -1,0 +1,80 @@
+{
+  "patchVersion": "0.4.7",
+  "verifiedDate": "2026-11-16",
+  "hostPackage": "tv.danmaku.bili",
+  "hostVersion": "9.12.0",
+  "hostVersionCode": 9120300,
+  "apk": "BiliClean-0.4.7-bilibili-9.12.0-arm64.apk",
+  "size": 227718325,
+  "sha256": "65c2dbe6fe00edb570a30eebf042aa38ad90871aa3ab1f3ebe120ecba885c15c",
+  "installedApkSha256": "65c2dbe6fe00edb570a30eebf042aa38ad90871aa3ab1f3ebe120ecba885c15c",
+  "signerSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "emulator": "Dedicated bili-clean-api36, Android 36.1",
+  "assertionsPassed": 333.0,
+  "tests": [
+    {
+      "suite": "ManualStoryEntryTest",
+      "passed": 103,
+      "status": "passed"
+    },
+    {
+      "suite": "ShoppingBagTest",
+      "passed": 28,
+      "status": "passed"
+    },
+    {
+      "suite": "ContentFilterTest",
+      "passed": 39,
+      "status": "passed"
+    },
+    {
+      "suite": "PaidPromotionTest",
+      "passed": 30,
+      "status": "passed"
+    },
+    {
+      "suite": "CourseFilterTest",
+      "passed": 62,
+      "status": "passed"
+    },
+    {
+      "suite": "UpowerFilterTest",
+      "passed": 27,
+      "status": "passed"
+    },
+    {
+      "suite": "HostModelTest",
+      "passed": 4,
+      "status": "passed"
+    },
+    {
+      "suite": "SplashEntryTest",
+      "passed": 25,
+      "status": "passed"
+    },
+    {
+      "suite": "NavigationTest",
+      "passed": 4,
+      "status": "passed"
+    },
+    {
+      "suite": "live",
+      "passed": 11,
+      "status": "passed"
+    }
+  ],
+  "corePolicyGroupsPassed": 3,
+  "prepareIdempotent": true,
+  "signatureSchemesVerified": [
+    "v2",
+    "v3"
+  ],
+  "crashBufferEmpty": true,
+  "navigationInitialInterruption": "Android ActivityManager terminated the app during a background com.google.android.webview installPackageLI; identical APK rerun passed",
+  "accountDataExported": false,
+  "phoneUpdatedThisRun": false,
+  "limitations": [
+    "Commercial metadata is controlled real-host-model coverage; the reported live commercial video and original crash were not reproduced.",
+    "Live playback opened a real native Story screen using explicit entry arguments; only AVD was tested in this run."
+  ]
+}

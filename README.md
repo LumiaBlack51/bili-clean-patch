@@ -2,7 +2,7 @@
 
 独立于 PiliPlus 的 Android 原版哔哩哔哩静态补丁项目。保留宿主界面，第一阶段实现界面广告过滤和社区广告片段自动跳过。**实验适配官方 9.12.0 (9120300)：AVD 启动、播放、设置和真实视频空降已通过；去广告通过真实宿主模型的受控测试，但线上真实广告样本、开屏和视频页覆盖尚未全面验收。不是稳定版。**
 
-仓库现已公开。[新版完整 APK：0.4.5 双击跳转动画与触感](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.5)。0.4.0 新增的三个默认开启开关是隐藏首页横幅、屏蔽创作推广、隐藏会员购，见 [功能与验证说明](docs/content-filters.md)。手势、播放到结束和自动更新说明见 [原生播放器功能](docs/playback-controls.md)；此前播完关闭修复和真机更新结果见 [0.4.1 记录](docs/release-0.4.1.md)。加密签名备份保留在 [0.1.0 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)。
+仓库现已公开。[新版完整 APK：0.4.7 主动打开视频免过滤](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.4.7)。0.4.0 新增的三个默认开启开关是隐藏首页横幅、屏蔽创作推广、隐藏会员购，见 [功能与验证说明](docs/content-filters.md)。手势、播放到结束和自动更新说明见 [原生播放器功能](docs/playback-controls.md)；此前播完关闭修复和真机更新结果见 [0.4.1 记录](docs/release-0.4.1.md)。加密签名备份保留在 [0.1.0 发布页](https://github.com/LumiaBlack51/bili-clean-patch/releases/tag/v0.1.0-avd-preview)。
 
 0.4.0 同时包含此前本地 0.3.1 的首页播放器迁移手势修复和新版共用定时关闭菜单，见 [修复与验证说明](docs/playback-handoff-fix.md)。
 
@@ -16,7 +16,9 @@
 
 ## 当前实现
 
-本地 **0.4.6** 新增默认开启、可独立关闭的「屏蔽购物袋视频」，过滤竖屏推荐中的购物袋入口视频，包括正常内容附带购物袋的情况；普通文字链接和游戏等其他入口不触发此规则。识别范围与验证方法见 [说明](docs/shopping-bag.md)。上方 0.4.5 仍为已发布版本。
+**0.4.7** 为主动打开的竖屏视频增加页面内放行：按进入参数中的 AV/BV 编号保留该视频，即使命中推广、小火箭、购物袋、课程或未解锁充电规则；后续滑动推荐仍正常过滤，退出播放页面后撤销放行。无需新增开关，也不会改变宿主的解锁权限。实现与 AVD 验证见 [说明](docs/manual-story-entry.md)。
+
+同时包含此前本地 **0.4.6** 的默认开启、可独立关闭的「屏蔽购物袋视频」，过滤竖屏推荐中的购物袋入口视频，包括正常内容附带购物袋的情况；普通文字链接和游戏等其他入口不触发此规则。识别范围与验证方法见 [说明](docs/shopping-bag.md)。
 
 - 固定 BiliRoamingX GPL-3.0 源码提交，使用 ReVanced 静态补丁和现有设置入口。
 - 可选 YouTube 风格左右双击跳转 10 秒，附带累计秒数动画和系统触感、单击中间播放控制；原生定时菜单支持播放到当前视频结束；通过本仓库 GitHub Release 自动检查更新。

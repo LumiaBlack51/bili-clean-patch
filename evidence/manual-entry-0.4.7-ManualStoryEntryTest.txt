@@ -1,0 +1,106 @@
+INSTRUMENTATION_RESULT: results=PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=0
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=0
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=0
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=0
+PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=1
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=1
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=1
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=1
+PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=2
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=2
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=2
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=2
+PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=3
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=3
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=3
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=3
+PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=4
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=4
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=4
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=4
+PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=5
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=5
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=5
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=5
+PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=6
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=6
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=6
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=6
+PASS cached source list remains intact
+PASS entry and recommendation both filtered before explicit open rule=7
+PASS cached source list remains intact
+PASS clicked AV survives while earlier recommendation stays filtered rule=7
+PASS cached source list remains intact
+PASS next-page first recommendation stays filtered rule=7
+PASS cached source list remains intact
+PASS entry exemption cleared on exit rule=7
+PASS cached source list remains intact
+PASS supported native entry identity 0
+PASS cached source list remains intact
+PASS supported native entry identity 1
+PASS cached source list remains intact
+PASS supported native entry identity 2
+PASS cached source list remains intact
+PASS supported native entry identity 3
+PASS cached source list remains intact
+PASS supported native entry identity 4
+PASS cached source list remains intact
+PASS supported native entry identity 5
+PASS cached source list remains intact
+PASS supported native entry identity 6
+PASS cached source list remains intact
+PASS BV entry protects AV-only response
+PASS cached source list remains intact
+PASS AV entry protects BV-only cached response
+PASS cached source list remains intact
+PASS unknown/invalid/unrelated route grants no exemption 0
+PASS cached source list remains intact
+PASS unknown/invalid/unrelated route grants no exemption 1
+PASS cached source list remains intact
+PASS unknown/invalid/unrelated route grants no exemption 2
+PASS cached source list remains intact
+PASS unknown/invalid/unrelated route grants no exemption 3
+PASS cached source list remains intact
+PASS unknown/invalid/unrelated route grants no exemption 4
+PASS cached source list remains intact
+PASS unknown/invalid/unrelated route grants no exemption 5
+PASS cached source list remains intact
+PASS unknown/invalid/unrelated route grants no exemption 6
+PASS cached source list remains intact
+PASS closing one stacked entry keeps the other explicit entry
+PASS cached source list remains intact
+PASS new entry replaces old identity without permanent whitelist
+PASS cached source list remains intact
+PASS empty Story response remains empty
+PASS null Story response remains null
+
+INSTRUMENTATION_CODE: -1
+
