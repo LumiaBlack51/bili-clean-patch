@@ -19,7 +19,10 @@ if ($LASTEXITCODE) { throw 'Submodule checkout failed' }
 
 function Replace-Once([string]$relative, [string]$before, [string]$after) {
     $path = Join-Path $upstream $relative
-    $text = [IO.File]::ReadAllText($path)
+    # Match across Windows/Unix checkouts, including previously generated source files.
+    $text = [IO.File]::ReadAllText($path).Replace("`r`n", "`n")
+    $before = $before.Replace("`r`n", "`n")
+    $after = $after.Replace("`r`n", "`n")
     if ($text.Contains($after) -and ($after.Contains($before) -or !$text.Contains($before))) { return }
     if (!$text.Contains($before)) { throw "Source mismatch: $relative" }
     [IO.File]::WriteAllText($path, $text.Replace($before, $after), [Text.UTF8Encoding]::new($false))
@@ -93,6 +96,10 @@ Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanSelectedCourse
 Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanStoryCourses = BooleanSetting(key = "clean_story_courses", defValue = true)' @'
     @JvmField val CleanStoryCourses = BooleanSetting(key = "clean_story_courses", defValue = true)
     @JvmField val CleanLockedUpower = BooleanSetting(key = "clean_locked_upower", defValue = true)
+'@
+Replace-Once "$java/settings/Settings.kt" '    @JvmField val CleanPaidPromotion = BooleanSetting(key = "clean_paid_promotion", defValue = true)' @'
+    @JvmField val CleanPaidPromotion = BooleanSetting(key = "clean_paid_promotion", defValue = true)
+    @JvmField val CleanShoppingBag = BooleanSetting(key = "clean_shopping_bag", defValue = true)
 '@
 Replace-Once "$java/settings/Setting.kt" 'Accounts.userBlocked || (dependency != null && !dependency.get())' 'dependency != null && !dependency.get()'
 

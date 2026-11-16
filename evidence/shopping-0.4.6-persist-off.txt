@@ -1,0 +1,3 @@
+INSTRUMENTATION_RESULT: stream=PASS shopping setting persisted across process restart: false
+
+INSTRUMENTATION_CODE: -1

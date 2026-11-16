@@ -102,7 +102,9 @@ public final class ContentFilterTest extends Instrumentation {
             check(tabs.invoke(null,new Object[]{null})==null,"null list passes through");
             result.putString("stream",checks.toString());
         } catch(Throwable e) {
-            result.putString("stream",checks+"FAIL "+e+" cause="+e.getCause()+"\n"); result.putString("failure",e.toString());
+            java.io.StringWriter trace = new java.io.StringWriter();
+            e.printStackTrace(new java.io.PrintWriter(trace));
+            result.putString("stream",checks+"FAIL "+trace+"\n"); result.putString("failure",e.toString());
         } finally {
             try { if(value!=null) for(int i=0;i<4;i++) if(settings[i]!=null && previous[i]!=null) value.set(settings[i],previous[i]); }
             catch(Exception e) { result.putString("failure","restore: "+e); }

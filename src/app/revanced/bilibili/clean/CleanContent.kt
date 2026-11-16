@@ -83,9 +83,22 @@ object CleanContent {
         return call(info, "isPreview") == true || call(info, "getShowPaywall") == true
     }
 
+    /** The same model also carries game/VIP/other diversion entries: not every cart object is shopping. */
+    internal fun shoppingBag(item: Any): Boolean {
+        if (item.javaClass.name != "com.bilibili.video.story.StoryDetail") return false
+        val cart = call(item, "getCartIconInfo") ?: return false
+        if (cart.javaClass.name != "com.bilibili.video.story.StoryDetail\$CartIconInfo" ||
+            call(cart, "isValid") != true) return false
+        // Native StoryDiversionEntryWidget routes goto=cart to the product cart. Ad/anchor_ad
+        // entries may render the same shopping icon; use its structured label, never video text.
+        return call(cart, "getEntryGoto") == "cart" ||
+            (call(cart, "getEntryText") as? String)?.trim() == "购物"
+    }
+
     @Keep @JvmStatic fun filterStory(items: List<*>?): List<*>? {
         if (items == null || (!Settings.CleanPromotion() && !Settings.CleanMall() && !Settings.CleanPaidPromotion() &&
-                    !Settings.CleanSelectedCourses() && !Settings.CleanStoryCourses() && !Settings.CleanLockedUpower())) return items
+                    !Settings.CleanSelectedCourses() && !Settings.CleanStoryCourses() && !Settings.CleanLockedUpower() &&
+                    !Settings.CleanShoppingBag())) return items
         return items.filter { item ->
             if (item == null || item.javaClass.name != "com.bilibili.video.story.StoryDetail") true
             else {
@@ -95,11 +108,12 @@ object CleanContent {
                         field(item, "rcmdReason") == "创作推广")
                 val mall = Settings.CleanMall() && mallUri(field(item, "uri"))
                 val paid = Settings.CleanPaidPromotion() && paidPromotion(item)
+                val shopping = Settings.CleanShoppingBag() && shoppingBag(item)
                 // Use the host's course classification, including free courses and previews.
                 val course = (Settings.CleanStoryCourses() && call(item, "isCheese") == true) ||
                     (Settings.CleanSelectedCourses() && CleanCourses.matches(item))
                 val locked = Settings.CleanLockedUpower() && lockedUpower(item)
-                !promoted && !mall && !paid && !course && !locked
+                !promoted && !mall && !paid && !shopping && !course && !locked
             }
         }
     }

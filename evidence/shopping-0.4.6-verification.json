@@ -1,0 +1,60 @@
+{
+  "patchVersion": "0.4.6",
+  "sourceBaseCommit": "2c2cecfb6782dabfe6a9205304f57d7cf33b7c81",
+  "sourceHasUncommittedChanges": true,
+  "hostPackage": "tv.danmaku.bili",
+  "hostVersion": "9.12.0",
+  "hostVersionCode": 9120300,
+  "apk": "BiliClean-0.4.6-bilibili-9.12.0-arm64.apk",
+  "size": 227505156,
+  "sha256": "3351eec4725c047f07760006f960576cbec12ba3f9e8012b3d2163dcf9f6e5f9",
+  "signerSha256": "c57bb6b4cbf047a27e5782a5c1fc4e823beaae5f31232a79aa460b0f12d29fd8",
+  "verifiedDate": "2026-10-27",
+  "tests": [
+    {
+      "suite": "ShoppingBagTest",
+      "passed": 28
+    },
+    {
+      "suite": "ContentFilterTest",
+      "passed": 39
+    },
+    {
+      "suite": "PaidPromotionTest",
+      "passed": 30
+    },
+    {
+      "suite": "CourseFilterTest",
+      "passed": 62
+    },
+    {
+      "suite": "UpowerFilterTest",
+      "passed": 27
+    },
+    {
+      "suite": "HostModelTest",
+      "passed": 4
+    },
+    {
+      "suite": "SplashEntryTest",
+      "passed": 25
+    },
+    {
+      "suite": "NavigationTest",
+      "passed": 4
+    },
+    {
+      "suite": "Shopping setting UI and restart persistence",
+      "passed": 10
+    }
+  ],
+  "phoneInstallation": "OPPO PLQ110: same-signature update, installed hash verified, first install time retained, native setting visible and enabled",
+  "instrumentationInstalledOnPhone": false,
+  "accountDataExported": false,
+  "releaseStatus": "Local validated artifact; GitHub Release not published",
+  "limitations": [
+    "Story shopping cart model only; homepage shopping badge model not verified",
+    "Reported live recommendation not reproduced",
+    "Initial native navigation initialization/ANR failures followed by passing reruns on identical APK; initial cause undetermined"
+  ]
+}

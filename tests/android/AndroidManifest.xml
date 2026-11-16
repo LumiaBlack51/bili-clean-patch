@@ -4,6 +4,7 @@
     <instrumentation android:name="app.biliclean.tests.SplashEntryTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.ContentFilterTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.PaidPromotionTest" android:targetPackage="tv.danmaku.bili" />
+    <instrumentation android:name="app.biliclean.tests.ShoppingBagTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.CourseFilterTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.UpowerFilterTest" android:targetPackage="tv.danmaku.bili" />
     <instrumentation android:name="app.biliclean.tests.NavigationTest" android:targetPackage="tv.danmaku.bili" />

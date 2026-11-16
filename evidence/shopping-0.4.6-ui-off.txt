@@ -1,0 +1,6 @@
+INSTRUMENTATION_RESULT: stream=PASS native patch settings entry visible
+PASS native settings entry clickable
+PASS independent shopping toggle visible in real settings
+PASS native shopping switch changed to false
+
+INSTRUMENTATION_CODE: -1

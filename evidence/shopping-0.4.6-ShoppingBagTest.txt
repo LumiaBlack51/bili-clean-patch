@@ -1,0 +1,29 @@
+PASS shopping setting defaults enabled
+PASS shopping/non-shopping/invalid entry 0
+PASS shopping/non-shopping/invalid entry 1
+PASS shopping/non-shopping/invalid entry 2
+PASS shopping/non-shopping/invalid entry 3
+PASS shopping/non-shopping/invalid entry 4
+PASS shopping/non-shopping/invalid entry 5
+PASS shopping/non-shopping/invalid entry 6
+PASS shopping/non-shopping/invalid entry 7
+PASS shopping/non-shopping/invalid entry 8
+PASS shopping/non-shopping/invalid entry 9
+PASS shopping/non-shopping/invalid entry 10
+PASS shopping/non-shopping/invalid entry 11
+PASS shopping/non-shopping/invalid entry 12
+PASS shopping/non-shopping/invalid entry 13
+PASS shopping/non-shopping/invalid entry 14
+PASS actual JSON cart satisfies host visibility validity
+PASS shopping bag filtered even on native non-ad card
+PASS ordinary link/title/uploader/BV alone never matches
+PASS ordinary link/title/uploader/BV alone never matches
+PASS ordinary link/title/uploader/BV alone never matches
+PASS installed Story getter removes every valid shopping entry
+PASS cached source preserved
+PASS switch off restores cached shopping videos
+PASS switch on reapplies to same cached list
+PASS other promotion filter remains independent when shopping switch is off
+PASS all applicable switches off restore shopping ad
+PASS null response preserved
+

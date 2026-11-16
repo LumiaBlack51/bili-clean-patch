@@ -65,6 +65,7 @@ class CleanSettingsFragment : Fragment() {
         toggle("隐藏首页横幅", "默认开启，移除首页推荐顶部的大横幅。修改后刷新首页。", Settings.CleanHomeBanner)
         toggle("屏蔽创作推广", "默认开启，过滤推荐中的创作推广，以及竖屏流中的广告推广视频。修改后重新进入推荐流。", Settings.CleanPromotion)
         toggle("屏蔽小火箭 / 付费推广", "默认开启，过滤首页推荐和竖屏流中带商业推广标记的视频。修改后刷新首页或重新进入竖屏流；其他广告开关仍可过滤同一视频。", Settings.CleanPaidPromotion)
+        toggle("屏蔽购物袋视频", "默认开启，过滤竖屏推荐中带购物袋入口的视频，包括正常内容附带购物袋的情况。简介或评论中的普通链接不触发此规则；游戏等其他入口保留。关闭后重新进入竖屏流恢复，其他过滤开关仍独立生效。", Settings.CleanShoppingBag)
         toggle("屏蔽竖屏课程", "默认开启，过滤竖屏推荐中的所有课程，包括免费课程和试听片段。关闭后其他过滤开关仍独立生效。修改后重新进入竖屏流。", Settings.CleanStoryCourses)
         toggle("屏蔽未解锁充电专属", "默认开启，只过滤竖屏推荐中尚未解锁的充电专属视频，保留已解锁的视频。修改后重新进入竖屏流。", Settings.CleanLockedUpower)
         toggle("屏蔽指定课程", "默认开启，屏蔽首页和竖屏中的「基层中国的运行逻辑」和「中国经济治理、结构与增长」课程及试听推荐。修改后刷新首页或重新进入竖屏流。", Settings.CleanSelectedCourses)
